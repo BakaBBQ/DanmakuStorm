@@ -1,5 +1,6 @@
 package com.github.bakabbq.bullets;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.*;
@@ -15,6 +16,8 @@ public class Bullet {
     public Body body;
     public BulletDef bd;
 
+
+
     Fixture fixture;
     public Bullet(BulletDef bd, World world, float x, float y, float angle){
         this.bd = bd;
@@ -24,8 +27,12 @@ public class Bullet {
         FixtureDef fd = bd.fixtureD;
         this.fixture = body.createFixture(fd);
         body.setTransform(x, y, angle);
+        setSprite();
     }
 
+    public int getAngleFix(){
+        return bd.angleFix;
+    }
 
 
     public TextureRegion getTexture(){
@@ -48,5 +55,25 @@ public class Bullet {
     public void setSpeed(float speed){
         float forceAngle = (body.getAngle() + 270f) / 180f * (float)Math.PI;
         body.applyLinearImpulse(MathUtils.cos(forceAngle) * speed, MathUtils.sin(forceAngle) * speed, body.getPosition().x, body.getPosition().y, true);
+    }
+
+    public void update(){
+        sprite.setPosition(body.getPosition().x, body.getPosition().y);
+    }
+
+    public Sprite getSprite(){
+        return sprite;
+    }
+
+    public int getAlpha(){
+        return bd.alpha;
+    }
+
+    public Sprite sprite;
+    public void setSprite(){
+        sprite = new Sprite(bd.texture);
+        sprite.setOrigin(bd.texture.getRegionWidth()/2,bd.texture.getRegionHeight()/2);
+        sprite.setRotation(180);
+        bd.modifySprite(sprite);
     }
 }

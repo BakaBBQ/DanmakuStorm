@@ -9,6 +9,8 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.github.bakabbq.GdxGround;
 import com.github.bakabbq.bullets.Bullet;
+import com.github.bakabbq.bullets.BulletDef;
+import com.github.bakabbq.bullets.PlayerBullet;
 import com.github.bakabbq.shooters.BulletShooter;
 
 /**
@@ -106,12 +108,14 @@ public class DanmakuPlayer {
     }
 
     public void updateShoot(){
-        if(timer % 5 != 0)
-            return;
-        if (Gdx.input.isKeyPressed(Input.Keys.Z)) {
+        if(timer % 8 == 0 && Gdx.input.isKeyPressed(Input.Keys.Z))
             for(DanmakuOption singleOption : options)
-                singleOption.shoot(Bullet.debugBullet);
-        }
+                singleOption.shoot(PlayerBullet.reimuHoming);
+
+        if(timer % 12 == 0 && Gdx.input.isKeyPressed(Input.Keys.Z))
+            shoot(PlayerBullet.reimuAmulet);
+
+
     }
 
     private final float  MAX_VELOCITY=100f;
@@ -125,7 +129,6 @@ public class DanmakuPlayer {
 
         if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)){
             if (slowMode == false)
-
                 onSlowMode();
             generalV = 1.4f;
 
@@ -203,4 +206,10 @@ public class DanmakuPlayer {
             singleOption.refresh(options.size);
         }
     }
+
+    public void shoot(BulletDef bd){
+        ground.addPlayerBullet(bd,getX(),getY(),180).setSpeed(100);
+    }
+
+
 }

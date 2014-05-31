@@ -102,6 +102,6 @@ public class DanmakuOption {
     }
 
     public void shoot(BulletDef bd){
-        player.ground.addPlayerBullet(bd,this.x,this.y,180).setSpeed(10000 * 10);
+        player.ground.addPlayerBullet(bd,this.x,this.y,180).setSpeed(10000 * 50);
     }
 }

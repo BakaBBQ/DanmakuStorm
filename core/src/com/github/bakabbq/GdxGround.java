@@ -101,7 +101,7 @@ public class GdxGround extends ApplicationAdapter {
         for(int i = 0; i < 30 ; i ++){
             addBullet(Bullet.debugBullet, 200f, 200f, i * 12).setSpeed(10000 * 2);
         }
-        addShooter(new DebugShooter(this), 200, 200);
+        //addShooter(new DebugShooter(this), 200, 200);
 
 	}
 
@@ -137,9 +137,11 @@ public class GdxGround extends ApplicationAdapter {
          */
 
 
+        /*
         background.begin();
         //background.draw(backgroundImage,0,0);
         background.end();
+         */
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
@@ -148,8 +150,10 @@ public class GdxGround extends ApplicationAdapter {
 
         batch.draw(player.getTexture(), player.getX() - 8, player.getY() - 16);
         //batch.draw(majong, player.getX(), player.getY());
-
+        Color c = batch.getColor();
         for(Bullet singleBullet : bullets){
+
+            batch.setColor(c.r, c.g, c.b, ((float) singleBullet.getAlpha()) / 255f);
             batch.draw(
                     singleBullet.getTexture(),
                     singleBullet.getX(),
@@ -160,9 +164,15 @@ public class GdxGround extends ApplicationAdapter {
                     singleBullet.getTexture().getRegionHeight(),
                     1f,
                     1f,
-                    singleBullet.body.getAngle() - 180
+                    singleBullet.body.getAngle() - 180 + singleBullet.getAngleFix()
             );
+
+            batch.draw(majong, singleBullet.getX(), singleBullet.getY());
+
+            //singleBullet.getSprite().draw(batch);
+
         }
+        batch.setColor(c.r, c.g, c.b, 1);
 
         for(DanmakuOption singleOption : player.options){
             batch.draw(
@@ -184,6 +194,8 @@ public class GdxGround extends ApplicationAdapter {
         }
 
 
+
+
         batch.end();
 
         ui.begin();
@@ -195,7 +207,7 @@ public class GdxGround extends ApplicationAdapter {
             playerBody.setTransform(320,240,100);
             collisionListener.goBack = false;
         }
-        playerMovement();
+        //playerMovement();
         for(DanmakuOption singleOption : player.options){
             singleOption.update();
         }
@@ -208,6 +220,7 @@ public class GdxGround extends ApplicationAdapter {
 
     private void removeGarbageBullets(){
         for (Bullet singleBullet : bullets){
+            singleBullet.update();
             if(singleBullet.getX() > 700 || singleBullet.getX() < -100 || singleBullet.getY() > 580 || singleBullet.getY() < -100)
                 destroyBullet(singleBullet);
         }

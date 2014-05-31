@@ -2,6 +2,7 @@ package com.github.bakabbq.bullets;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -19,9 +20,16 @@ import com.badlogic.gdx.physics.box2d.Shape;
 public class BulletDef {
     public int textureX = 1;
     public int textureY = 2;
+    public int alpha = 255;
+    public int angleFix = 0;
+    public int origin_x = -1;
+    public int origin_y = -1;
     public FixtureDef fixtureD; // the fixture for bullet creation
-    private Texture bulletSheet = new Texture(Gdx.files.internal("bullets/bullet1.png"));
+    protected Texture bulletSheet = new Texture(Gdx.files.internal("bullets/bullet1.png"));
     public TextureRegion texture;
+
+
+    public Sprite sprite;
 
     public BulletDef(){
         fixtureD = new FixtureDef();
@@ -49,4 +57,11 @@ public class BulletDef {
         this.texture = tr;
         return tr;
     }
+
+    public void modifySprite(Sprite spt){
+
+    }
+
+
+
 }
