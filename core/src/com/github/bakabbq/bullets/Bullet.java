@@ -15,11 +15,10 @@ public class Bullet {
     public static BulletOval ovalBullet = new BulletOval();
     public Body body;
     public BulletDef bd;
-
-
-
+    public Sprite sprite;
     Fixture fixture;
-    public Bullet(BulletDef bd, World world, float x, float y, float angle){
+
+    public Bullet(BulletDef bd, World world, float x, float y, float angle) {
         this.bd = bd;
         BodyDef bodydef = new BodyDef();
         bodydef.type = BodyDef.BodyType.DynamicBody;
@@ -30,16 +29,15 @@ public class Bullet {
         setSprite();
     }
 
-    public int getAngleFix(){
+    public int getAngleFix() {
         return bd.angleFix;
     }
 
-
-    public TextureRegion getTexture(){
+    public TextureRegion getTexture() {
         return bd.texture;
     }
 
-    public float getX(){
+    public float getX() {
         return body.getPosition().x;
     }
 
@@ -47,48 +45,52 @@ public class Bullet {
         return body.getPosition().y;
     }
 
-    public int getXOffset(){return bd.xOffset;}
-    public int getYOffset(){return bd.yOffset;}
+    public int getXOffset() {
+        return bd.xOffset;
+    }
 
-    public int getOriginX(){
-        if(bd.origin_x == -1)
+    public int getYOffset() {
+        return bd.yOffset;
+    }
+
+    public int getOriginX() {
+        if (bd.origin_x == -1)
             return getTexture().getRegionWidth() / 2;
         return bd.origin_x;
     }
 
-    public int getOriginY(){
-        if(bd.origin_y == -1)
+    public int getOriginY() {
+        if (bd.origin_y == -1)
             return getTexture().getRegionHeight() / 2;
         return bd.origin_y;
     }
 
-    public void setSpeed(float angle, float speed){
-        float forceAngle = (angle + 270f) / 180f * (float)Math.PI;
+    public void setSpeed(float angle, float speed) {
+        float forceAngle = (angle + 270f) / 180f * (float) Math.PI;
         body.applyLinearImpulse(MathUtils.cos(forceAngle) * speed, MathUtils.sin(forceAngle) * speed, body.getPosition().x, body.getPosition().y, true);
     }
 
-    public void setSpeed(float speed){
-        float forceAngle = (body.getAngle() + 270f) / 180f * (float)Math.PI;
+    public void setSpeed(float speed) {
+        float forceAngle = (body.getAngle() + 270f) / 180f * (float) Math.PI;
         body.applyLinearImpulse(MathUtils.cos(forceAngle) * speed, MathUtils.sin(forceAngle) * speed, body.getPosition().x, body.getPosition().y, true);
     }
 
-    public void update(){
+    public void update() {
         sprite.setPosition(body.getPosition().x, body.getPosition().y);
         this.bd.modifyBullet(this);
     }
 
-    public Sprite getSprite(){
+    public Sprite getSprite() {
         return sprite;
     }
 
-    public int getAlpha(){
+    public int getAlpha() {
         return bd.alpha;
     }
 
-    public Sprite sprite;
-    public void setSprite(){
+    public void setSprite() {
         sprite = new Sprite(bd.texture);
-        sprite.setOrigin(bd.texture.getRegionWidth()/2,bd.texture.getRegionHeight()/2);
+        sprite.setOrigin(bd.texture.getRegionWidth() / 2, bd.texture.getRegionHeight() / 2);
         sprite.setRotation(180);
         bd.modifySprite(sprite);
     }

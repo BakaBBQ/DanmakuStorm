@@ -9,27 +9,28 @@ import com.badlogic.gdx.physics.box2d.Shape;
 /**
  * Created by LBQ on 5/30/14.
  */
-public class BulletReimuHoming extends BulletDef{
-    public void setTextureIndex(){
+public class BulletReimuHoming extends BulletDef {
+    public void setTextureIndex() {
         bulletSheet = new Texture(Gdx.files.internal("players/reimu.png"));
         textureX = 0;
         textureY = 10;
         alpha = 180;
         angleFix = 90;
     }
+
     @Override
-    public Shape getShape(){
+    public Shape getShape() {
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(5/5,1.4f);
+        shape.setAsBox(5 / 5, 1.4f);
         return shape;
     }
 
     @Override
-    public void modifySprite(Sprite spt){
+    public void modifySprite(Sprite spt) {
         spt.setAlpha(180f);
     }
 
     @Override
-    public void modifyBullet(Bullet bullet){
+    public void modifyBullet(Bullet bullet) {
     }
 }

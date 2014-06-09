@@ -1,6 +1,5 @@
 package com.github.bakabbq;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.*;
 
 /**
@@ -8,15 +7,16 @@ import com.badlogic.gdx.physics.box2d.*;
  */
 public class BulletCollisionListener implements ContactListener {
     public boolean goBack = false;
+
     @Override
     public void beginContact(Contact contact) {
         goBack = false;
         Body bodyA = contact.getFixtureA().getBody();
         Body bodyB = contact.getFixtureB().getBody();
-        if(bodyA.getLinearDamping() >= 5){
+        if (bodyA.getLinearDamping() >= 5) {
             //goBack = true;
         }
-        if(bodyB.getLinearDamping() >= 5){
+        if (bodyB.getLinearDamping() >= 5) {
             //goBack = true;
         }
     }

@@ -8,15 +8,16 @@ import com.github.bakabbq.spellcards.SpellCard;
 /**
  * Created by LBQ on 6/9/14.
  */
-public class ThBoss extends EnemyShooter{
+public class ThBoss extends EnemyShooter {
     public String name = "";
     public Array<SpellCard> spellCards = new Array();
+
     public ThBoss(GdxGround ground) {
         super(ground);
         initSpellCards();
     }
 
-    void initSpellCards(){
+    void initSpellCards() {
 
     }
 }

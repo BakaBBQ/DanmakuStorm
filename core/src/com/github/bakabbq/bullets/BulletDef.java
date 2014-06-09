@@ -10,10 +10,10 @@ import com.badlogic.gdx.physics.box2d.Shape;
 
 /**
  * Created by BBQ on 5/27/14.
- *
- *
- *
- *
+ * <p/>
+ * <p/>
+ * <p/>
+ * <p/>
  * The Intention of BulletDef is designed for a bullet database
  * after initialization, use fixture for creating bodies and use getTexture() to get the graphics for rendering
  */
@@ -27,13 +27,11 @@ public class BulletDef {
     public int xOffset = 0;
     public int yOffset = 0;
     public FixtureDef fixtureD; // the fixture for bullet creation
-    protected Texture bulletSheet = new Texture(Gdx.files.internal("bullets/bullet1.png"));
     public TextureRegion texture;
-
-
     public Sprite sprite;
+    protected Texture bulletSheet = new Texture(Gdx.files.internal("bullets/bullet1.png"));
 
-    public BulletDef(){
+    public BulletDef() {
         fixtureD = new FixtureDef();
         fixtureD.density = 0.7f;
         fixtureD.friction = 0.0f;
@@ -44,32 +42,31 @@ public class BulletDef {
         updateTexture();
     }
 
-    public void setTextureIndex(){
+    public void setTextureIndex() {
         Gdx.app.log("Debug", "Debug Bullet Used");
     }
 
-    public Shape getShape(){
+    public Shape getShape() {
         CircleShape shape = new CircleShape();
         shape.setRadius(1.6f);
         return shape;
     }
 
-    public TextureRegion updateTexture(){
+    public TextureRegion updateTexture() {
         TextureRegion tr;
-        tr = new TextureRegion(bulletSheet,textureX * 16,textureY * 16,16,16);
+        tr = new TextureRegion(bulletSheet, textureX * 16, textureY * 16, 16, 16);
         this.texture = tr;
         return tr;
     }
 
-    public void modifySprite(Sprite spt){
+    public void modifySprite(Sprite spt) {
 
     }
 
     //called once per frame
-    public void modifyBullet(Bullet bullet){
+    public void modifyBullet(Bullet bullet) {
 
     }
-
 
 
 }

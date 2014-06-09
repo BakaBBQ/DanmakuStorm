@@ -5,11 +5,12 @@ package com.github.bakabbq;
  */
 public class Pixel {
     public final static int CONVERSION_FACTOR = 5;
-    public static float p2m(float pixels){
+
+    public static float p2m(float pixels) {
         return pixels * CONVERSION_FACTOR;
     }
 
-    public static float m2p(float meters){
+    public static float m2p(float meters) {
         return meters / CONVERSION_FACTOR;
     }
 }
