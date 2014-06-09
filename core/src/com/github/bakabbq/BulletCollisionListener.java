@@ -10,7 +10,6 @@ public class BulletCollisionListener implements ContactListener {
     public boolean goBack = false;
     @Override
     public void beginContact(Contact contact) {
-        Gdx.app.log("Collision", "I seek a collision!");
         goBack = false;
         Body bodyA = contact.getFixtureA().getBody();
         Body bodyB = contact.getFixtureB().getBody();

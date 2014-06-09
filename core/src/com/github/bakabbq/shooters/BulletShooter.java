@@ -37,7 +37,9 @@ public class BulletShooter {
 
     public void update(){
         timer += 1;
-        if(timer >= Integer.MAX_VALUE)
+        if(timer >= Integer.MAX_VALUE){
             timer = 0;
+        }
+
     }
 }

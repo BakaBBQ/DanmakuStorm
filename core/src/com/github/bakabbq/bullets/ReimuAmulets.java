@@ -29,7 +29,7 @@ public class ReimuAmulets extends BulletDef{
 
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(8,6);
+        shape.setAsBox(1.6f,1.2f);
         return shape;
     }
 

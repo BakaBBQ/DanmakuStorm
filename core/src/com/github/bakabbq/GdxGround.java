@@ -42,6 +42,7 @@ public class GdxGround extends ApplicationAdapter {
 
     TextureRegion[] enemyFrames;
 
+
     ModelBatch modelBatch;
     Model model;
     ModelInstance modelInstance;
@@ -72,9 +73,9 @@ public class GdxGround extends ApplicationAdapter {
         menuBackground = new Texture(Gdx.files.internal("menus/menuBackground.png"));
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 640, 480);
-        camera.position.x -= 128;
-        camera.position.y -= 15;
-        camera.zoom = 1.0f;
+        camera.zoom = 0.2f;
+        camera.position.x -= 320 - 320/5;
+        camera.position.y -= 240 - 240/5;
         camera.update();
 
 
@@ -82,7 +83,7 @@ public class GdxGround extends ApplicationAdapter {
         backgroundImage = new Texture(Gdx.files.internal("backgrounds/stg6bg.png"));
 
         modelBatch = new ModelBatch();
-        world = new World(new Vector2(0,-30), true);
+        world = new World(new Vector2(0,0), true);
         create_player_body();
 
         imc = new PerspectiveCamera(67,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -121,6 +122,11 @@ public class GdxGround extends ApplicationAdapter {
             addBullet(Bullet.debugBullet, 200f, 200f, i * 12).setSpeed(10000 * 2);
         }
         addShooter(new DebugShooter(this), 200, 200);
+
+        EnemyShooter shooter = new EnemyShooter(this);
+        shooter.x = 10;
+        shooter.y = 10;
+        addEnemy(shooter);
 
 	}
 
@@ -169,8 +175,36 @@ public class GdxGround extends ApplicationAdapter {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
 
-        batch.draw(player.getTexture(), player.getX() - 8, player.getY() - 16);
-        //batch.draw(majong, player.getX(), player.getY());
+        batch.draw(
+                player.getTexture(),
+                player.getX() - 8,
+                player.getY() - 16,
+                player.getTexture().getRegionWidth() / 2,
+                player.getTexture().getRegionHeight() / 2,
+                player.getTexture().getRegionWidth(),
+                player.getTexture().getRegionHeight(),
+                0.2f,
+                0.2f,
+                0
+
+        );
+
+        for(EnemyShooter singleEnemy : enemies){
+            batch.draw(
+                    singleEnemy.texture,
+                    singleEnemy.x,
+                    singleEnemy.y,
+                    singleEnemy.texture.getRegionWidth() / 2,
+                    singleEnemy.texture.getRegionHeight() / 2,
+                    singleEnemy.texture.getRegionWidth(),
+                    singleEnemy.texture.getRegionHeight(),
+                    0.2f,
+                    0.2f,
+                    0
+            );
+            singleEnemy.update();
+        }
+
         Color c = batch.getColor();
         for(Bullet singleBullet : bullets){
 
@@ -183,14 +217,12 @@ public class GdxGround extends ApplicationAdapter {
                     singleBullet.getOriginY(),
                     singleBullet.getTexture().getRegionWidth(),
                     singleBullet.getTexture().getRegionHeight(),
-                    1f,
-                    1f,
+                    0.2f,
+                    0.2f,
                     singleBullet.body.getAngle() - 180 + singleBullet.getAngleFix()
             );
 
-            //batch.draw(majong, singleBullet.getX(), singleBullet.getY());
 
-            //singleBullet.getSprite().draw(batch);
 
         }
         batch.setColor(c.r, c.g, c.b, 1);
@@ -201,18 +233,16 @@ public class GdxGround extends ApplicationAdapter {
                     singleOption.x,
                     singleOption.y,
                     singleOption.texture.getRegionWidth() / 2,
-                    singleOption.texture.getRegionWidth() / 2,
+                    singleOption.texture.getRegionHeight() / 2,
                     singleOption.texture.getRegionWidth(),
                     singleOption.texture.getRegionHeight(),
-                    1f,
-                    1f,
+                    0.2f,
+                    0.2f,
                     singleOption.angle
             );
         }
 
-        for(EnemyShooter singleEnemy : enemies){
 
-        }
 
 
 
@@ -220,7 +250,7 @@ public class GdxGround extends ApplicationAdapter {
         batch.end();
 
         ui.begin();
-        ui.draw(menuBackground, 0, 0);
+        //ui.draw(menuBackground, 0, 0);
         ui.end();
 
         world.step(1/60f, 6, 2);
@@ -256,71 +286,11 @@ public class GdxGround extends ApplicationAdapter {
 
     float MAX_VELOCITY = 100f;
     private void playerMovement(){
-        /*
-        Vector2 vel = this.playerBody.getLinearVelocity();
-        Vector2 pos = this.playerBody.getPosition();
-
-
-        //slow mode when pressing shift
-        float generalV = 10f;
-        if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)){
-            generalV = 1.4f;
-        }
-        //this.playerBody.setLinearVelocity(0f,0f);
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && vel.x > -MAX_VELOCITY) {
-            //this.playerBody.setLinearVelocity(-generalV, 0.0f);
-            this.playerBody.applyLinearImpulse(-generalV, 0, pos.x, pos.y, true);
-            //this.playerBody.setLinearVelocity(-0.80f,0f);
-        }
-
-// apply right impulse, but only if max velocity is not reached yet
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && vel.x < MAX_VELOCITY) {
-            this.playerBody.applyLinearImpulse(generalV, 0, pos.x, pos.y, true);
-            //this.playerBody.setLinearVelocity(generalV, 0.0f);
-            //this.playerBody.setLinearVelocity(0.80f,0f);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.UP) && vel.x < MAX_VELOCITY) {
-            this.playerBody.applyLinearImpulse(0, generalV, pos.x, pos.y, true);
-            //this.playerBody.setLinearVelocity(0.0f, generalV);
-            //this.playerBody.setLinearVelocity(0.80f,0f);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && vel.x < MAX_VELOCITY) {
-            //this.playerBody.setLinearVelocity(0.0f, -generalV);
-            this.playerBody.applyLinearImpulse(0, -generalV, pos.x, pos.y, true);
-            //this.playerBody.setLinearVelocity(0.80f,0f);
-        }
-         */
     }
 
 
 
 
-    /*
-    private Body addBullet(float x, float y, float angle){
-        BodyDef bulletDef = new BodyDef();
-        bulletDef.type = BodyDef.BodyType.DynamicBody;
-        bulletDef.position.set(x,y);
-        Body bulletBody;
-        bulletBody = world.createBody(bulletDef);
-        FixtureDef bulletFixture = new FixtureDef();
-        bulletFixture.density = 0.7f;
-        bulletFixture.friction = 0.0f;
-        //bulletFixture.restitution = 0.8f;
-        bulletFixture.filter.groupIndex = -1;
-        CircleShape shape = new CircleShape();
-        shape.setRadius(8.0f);
-        bulletFixture.shape = shape;
-        shape.dispose();
-        Fixture fixture = bulletBody.createFixture(bulletFixture);
-        bulletBody.setTransform(bulletBody.getPosition().x,bulletBody.getPosition().y,angle);
-        //bulletBody.applyLinearImpulse(0,-16.0f,bulletBody.getPosition().x,bulletBody.getPosition().y,true);
-        float forceAngle = (bulletBody.getAngle() + 270f) / 180f * (float)Math.PI;
-        int speed = 10000 * 10;
-        bulletBody.applyLinearImpulse(MathUtils.cos(forceAngle) * speed, MathUtils.sin(forceAngle) * speed, bulletBody.getPosition().x, bulletBody.getPosition().y, true);
-        bulletBodies.add(bulletBody);
-        return bulletBody;
-    }
-     */
 
     public Bullet addBullet(BulletDef bd, float x, float y, float angle){
         Bullet bullet;

@@ -50,7 +50,7 @@ public class BulletDef {
 
     public Shape getShape(){
         CircleShape shape = new CircleShape();
-        shape.setRadius(8f);
+        shape.setRadius(1.6f);
         return shape;
     }
 
@@ -62,6 +62,11 @@ public class BulletDef {
     }
 
     public void modifySprite(Sprite spt){
+
+    }
+
+    //called once per frame
+    public void modifyBullet(Bullet bullet){
 
     }
 

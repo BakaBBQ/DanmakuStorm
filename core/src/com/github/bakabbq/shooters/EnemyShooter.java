@@ -20,6 +20,8 @@ public class EnemyShooter extends BulletShooter {
     public int textureId;
     public EnemyShooter(GdxGround ground) {
         super(ground);
+        this.stateId = 0;
+        this.stateTimer = 0;
         setTextureIndexes();
         updateTexture();
     }
@@ -34,7 +36,7 @@ public class EnemyShooter extends BulletShooter {
         frameId = 0;
         switch(stateId){
             case 0:
-                frameId = stateTimer % 5;
+                frameId = stateTimer % 4;
                 break;
             case 1:
             case 2:
@@ -49,6 +51,9 @@ public class EnemyShooter extends BulletShooter {
     }
     public void update(){
         super.update();
+        if(this.timer % 5 == 0)
+            this.stateTimer += 1;
+        updateTexture();
     }
 
     public TextureRegion getTexture(){

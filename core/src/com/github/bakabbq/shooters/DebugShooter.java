@@ -17,7 +17,7 @@ public class DebugShooter extends BulletShooter{
     public void update(){
         super.update();
         if(timer % 60 == 0){
-            nwayShoot(60, MathUtils.random(0,180), 10000);
+            nwayShoot(60, MathUtils.random(0,180), 100);
         }
     }
 }

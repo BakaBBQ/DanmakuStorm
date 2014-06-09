@@ -13,7 +13,6 @@ public class PlayerBullet extends Bullet {
         super(bd, world, x, y, angle);
         bd.fixtureD.density = 0.4f;
         bd.fixtureD.friction = 0.5f;
-        bd.fixtureD.filter.groupIndex = 1;
         this.fixture = body.createFixture(bd.fixtureD);
         body.setLinearDamping(0f);
         body.setTransform(x, y, angle);

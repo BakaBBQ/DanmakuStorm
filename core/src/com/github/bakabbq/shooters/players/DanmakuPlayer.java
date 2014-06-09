@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.github.bakabbq.GdxGround;
+import com.github.bakabbq.Pixel;
 import com.github.bakabbq.bullets.Bullet;
 import com.github.bakabbq.bullets.BulletDef;
 import com.github.bakabbq.bullets.PlayerBullet;
@@ -108,12 +109,12 @@ public class DanmakuPlayer {
     }
 
     public void updateShoot(){
-        if(timer % 8 == 0 && Gdx.input.isKeyPressed(Input.Keys.Z))
+        if(timer % 4 == 0 && Gdx.input.isKeyPressed(Input.Keys.Z))
             for(DanmakuOption singleOption : options)
                 singleOption.shoot(PlayerBullet.reimuHoming);
 
         if(timer % 12 == 0 && Gdx.input.isKeyPressed(Input.Keys.Z))
-            shoot(PlayerBullet.reimuAmulet, 0, 30);
+            shoot(PlayerBullet.reimuAmulet, 0, (int)Pixel.m2p(30));
 
 
     }
@@ -125,12 +126,12 @@ public class DanmakuPlayer {
 
 
         //slow mode when pressing shift
-        float generalV = 10f;
+        float generalV = 0.5f;
 
         if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)){
             if (slowMode == false)
                 onSlowMode();
-            generalV = 1.4f;
+            generalV = 0.3f;
 
         } else{
             slowMode = false;
@@ -212,7 +213,11 @@ public class DanmakuPlayer {
     }
 
     public void shoot(BulletDef bd, int xOff, int yOff){
-        ground.addPlayerBullet(bd,getX() + xOff,getY() + yOff,180).setSpeed(1000000);
+        ground.addPlayerBullet(bd,getX() + xOff,getY() + yOff,180).setSpeed(600);
+    }
+
+    public void shoot(BulletDef bd, int xOff, int yOff, int speed){
+        ground.addPlayerBullet(bd,getX() + xOff,getY() + yOff,180).setSpeed(speed);
     }
 
 

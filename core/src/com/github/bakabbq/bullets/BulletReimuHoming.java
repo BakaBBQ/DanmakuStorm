@@ -20,12 +20,16 @@ public class BulletReimuHoming extends BulletDef{
     @Override
     public Shape getShape(){
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(5,7);
+        shape.setAsBox(5/5,1.4f);
         return shape;
     }
 
     @Override
     public void modifySprite(Sprite spt){
         spt.setAlpha(180f);
+    }
+
+    @Override
+    public void modifyBullet(Bullet bullet){
     }
 }

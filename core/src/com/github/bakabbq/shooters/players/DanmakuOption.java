@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.github.bakabbq.GdxGround;
+import com.github.bakabbq.Pixel;
 import com.github.bakabbq.bullets.BulletDef;
 
 /**
@@ -44,8 +45,8 @@ public class DanmakuOption {
     }
 
     public void stopMoving(){
-        rel_x = DanmakuPlayer.option_positions[player.getOptionsCnt() - 1][id].x;
-        rel_y = DanmakuPlayer.option_positions[player.getOptionsCnt() - 1][id].y;
+        rel_x = Pixel.m2p(DanmakuPlayer.option_positions[player.getOptionsCnt() - 1][id].x);
+        rel_y = Pixel.m2p(DanmakuPlayer.option_positions[player.getOptionsCnt() - 1][id].y);
         target_x = ori_x = idealPosition().x;
         target_y = ori_y = idealPosition().y;
     }
@@ -102,6 +103,6 @@ public class DanmakuOption {
     }
 
     public void shoot(BulletDef bd){
-        player.ground.addPlayerBullet(bd,this.x,this.y,180).setSpeed(10000 * 50);
+        player.ground.addPlayerBullet(bd,this.x,this.y,180).setSpeed(350);
     }
 }

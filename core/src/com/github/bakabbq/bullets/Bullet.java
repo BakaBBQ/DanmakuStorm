@@ -74,6 +74,7 @@ public class Bullet {
 
     public void update(){
         sprite.setPosition(body.getPosition().x, body.getPosition().y);
+        this.bd.modifyBullet(this);
     }
 
     public Sprite getSprite(){
