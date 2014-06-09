@@ -113,7 +113,7 @@ public class DanmakuPlayer {
                 singleOption.shoot(PlayerBullet.reimuHoming);
 
         if(timer % 12 == 0 && Gdx.input.isKeyPressed(Input.Keys.Z))
-            shoot(PlayerBullet.reimuAmulet);
+            shoot(PlayerBullet.reimuAmulet, 0, 30);
 
 
     }
@@ -208,7 +208,11 @@ public class DanmakuPlayer {
     }
 
     public void shoot(BulletDef bd){
-        ground.addPlayerBullet(bd,getX(),getY(),180).setSpeed(100);
+        ground.addPlayerBullet(bd,getX(),getY(),180).setSpeed(10000);
+    }
+
+    public void shoot(BulletDef bd, int xOff, int yOff){
+        ground.addPlayerBullet(bd,getX() + xOff,getY() + yOff,180).setSpeed(1000000);
     }
 
 

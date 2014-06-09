@@ -47,6 +47,21 @@ public class Bullet {
         return body.getPosition().y;
     }
 
+    public int getXOffset(){return bd.xOffset;}
+    public int getYOffset(){return bd.yOffset;}
+
+    public int getOriginX(){
+        if(bd.origin_x == -1)
+            return getTexture().getRegionWidth() / 2;
+        return bd.origin_x;
+    }
+
+    public int getOriginY(){
+        if(bd.origin_y == -1)
+            return getTexture().getRegionHeight() / 2;
+        return bd.origin_y;
+    }
+
     public void setSpeed(float angle, float speed){
         float forceAngle = (angle + 270f) / 180f * (float)Math.PI;
         body.applyLinearImpulse(MathUtils.cos(forceAngle) * speed, MathUtils.sin(forceAngle) * speed, body.getPosition().x, body.getPosition().y, true);

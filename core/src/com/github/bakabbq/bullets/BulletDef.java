@@ -24,6 +24,8 @@ public class BulletDef {
     public int angleFix = 0;
     public int origin_x = -1;
     public int origin_y = -1;
+    public int xOffset = 0;
+    public int yOffset = 0;
     public FixtureDef fixtureD; // the fixture for bullet creation
     protected Texture bulletSheet = new Texture(Gdx.files.internal("bullets/bullet1.png"));
     public TextureRegion texture;
@@ -36,6 +38,7 @@ public class BulletDef {
         fixtureD.density = 0.7f;
         fixtureD.friction = 0.0f;
         fixtureD.filter.groupIndex = -1;
+        fixtureD.restitution = 3f;
         fixtureD.shape = getShape();
         setTextureIndex();
         updateTexture();

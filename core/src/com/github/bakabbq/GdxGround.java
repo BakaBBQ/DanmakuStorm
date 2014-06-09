@@ -9,6 +9,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.*;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.decals.CameraGroupStrategy;
+import com.badlogic.gdx.graphics.g3d.decals.Decal;
+import com.badlogic.gdx.graphics.g3d.decals.DecalBatch;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector2;
@@ -27,7 +30,11 @@ public class GdxGround extends ApplicationAdapter {
     SpriteBatch ui;
     Texture bulletImage;
     TextureRegion majong;
+
+    private Decal decal;
+    private DecalBatch decalBatch;
     TextureRegion circularBullet;
+    FPSLogger logger = new FPSLogger();
     public World world;
     OrthographicCamera camera;
 
@@ -67,20 +74,32 @@ public class GdxGround extends ApplicationAdapter {
         camera.setToOrtho(false, 640, 480);
         camera.position.x -= 128;
         camera.position.y -= 15;
+        camera.zoom = 1.0f;
         camera.update();
+
+
 
         backgroundImage = new Texture(Gdx.files.internal("backgrounds/stg6bg.png"));
 
         modelBatch = new ModelBatch();
-        world = new World(new Vector2(0,0), true);
+        world = new World(new Vector2(0,-30), true);
         create_player_body();
 
         imc = new PerspectiveCamera(67,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         imc.position.set(10f, 10f, 10f);
-        imc.lookAt(0, 0, 0);
+        //imc.lookAt(0, 0, 0);
         imc.near = 1f;
         imc.far = 300f;
         imc.update();
+
+        CameraGroupStrategy cameraGroupStrategy = new CameraGroupStrategy(imc);
+
+
+        decalBatch = new DecalBatch(cameraGroupStrategy);
+        decal = Decal.newDecal(circularBullet, true);
+        decal.setPosition(0, 0, 0);
+        decal.setScale(1f);
+
 
         player = new DanmakuPlayer(this);
 
@@ -101,7 +120,7 @@ public class GdxGround extends ApplicationAdapter {
         for(int i = 0; i < 30 ; i ++){
             addBullet(Bullet.debugBullet, 200f, 200f, i * 12).setSpeed(10000 * 2);
         }
-        //addShooter(new DebugShooter(this), 200, 200);
+        addShooter(new DebugShooter(this), 200, 200);
 
 	}
 
@@ -129,7 +148,7 @@ public class GdxGround extends ApplicationAdapter {
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+        imc.update();
         /*
         modelBatch.begin(imc);
         modelBatch.render(modelInstance,environment);
@@ -143,10 +162,12 @@ public class GdxGround extends ApplicationAdapter {
         background.end();
          */
 
+        decal.lookAt(imc.position,imc.up);
+        decalBatch.add(decal);
+        decalBatch.flush();
+
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-
-
 
         batch.draw(player.getTexture(), player.getX() - 8, player.getY() - 16);
         //batch.draw(majong, player.getX(), player.getY());
@@ -156,10 +177,10 @@ public class GdxGround extends ApplicationAdapter {
             batch.setColor(c.r, c.g, c.b, ((float) singleBullet.getAlpha()) / 255f);
             batch.draw(
                     singleBullet.getTexture(),
-                    singleBullet.getX(),
-                    singleBullet.getY(),
-                    singleBullet.getTexture().getRegionWidth() / 2,
-                    singleBullet.getTexture().getRegionHeight() / 2,
+                    singleBullet.getX() + singleBullet.getXOffset(),
+                    singleBullet.getY() + singleBullet.getYOffset(),
+                    singleBullet.getOriginX(),
+                    singleBullet.getOriginY(),
                     singleBullet.getTexture().getRegionWidth(),
                     singleBullet.getTexture().getRegionHeight(),
                     1f,
@@ -167,7 +188,7 @@ public class GdxGround extends ApplicationAdapter {
                     singleBullet.body.getAngle() - 180 + singleBullet.getAngleFix()
             );
 
-            batch.draw(majong, singleBullet.getX(), singleBullet.getY());
+            //batch.draw(majong, singleBullet.getX(), singleBullet.getY());
 
             //singleBullet.getSprite().draw(batch);
 
@@ -186,7 +207,7 @@ public class GdxGround extends ApplicationAdapter {
                     1f,
                     1f,
                     singleOption.angle
-                    );
+            );
         }
 
         for(EnemyShooter singleEnemy : enemies){
