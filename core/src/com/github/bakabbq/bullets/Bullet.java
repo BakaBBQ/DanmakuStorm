@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.*;
+import com.github.bakabbq.BulletCollisionListener;
 
 /**
  * Created by LBQ on 5/27/14.
@@ -24,6 +25,8 @@ public class Bullet {
         bodydef.type = BodyDef.BodyType.DynamicBody;
         body = world.createBody(bodydef);
         FixtureDef fd = bd.fixtureD;
+        fd.filter.categoryBits = BulletCollisionListener.ENEMY_BULLET;
+        fd.filter.maskBits = (short)(BulletCollisionListener.PLAYER | 0x001);
         this.fixture = body.createFixture(fd);
         body.setTransform(x, y, angle);
         setSprite();

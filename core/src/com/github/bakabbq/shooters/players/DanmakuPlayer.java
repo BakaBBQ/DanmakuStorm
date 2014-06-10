@@ -7,8 +7,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
+import com.github.bakabbq.BulletCollisionListener;
 import com.github.bakabbq.GdxGround;
 import com.github.bakabbq.Pixel;
+import com.github.bakabbq.bullets.Bullet;
 import com.github.bakabbq.bullets.BulletDef;
 import com.github.bakabbq.bullets.PlayerBullet;
 
@@ -85,6 +87,8 @@ public class DanmakuPlayer {
         fixtureDef.shape = circle;
         fixtureDef.density = 1f;
         fixtureDef.friction = 0.4f;
+        fixtureDef.filter.categoryBits = BulletCollisionListener.PLAYER;
+        fixtureDef.filter.maskBits = (short) (BulletCollisionListener.ENEMY_BULLET | BulletCollisionListener.ENEMY);
         Fixture fixture = playerBody.createFixture(fixtureDef);
         circle.dispose();
     }

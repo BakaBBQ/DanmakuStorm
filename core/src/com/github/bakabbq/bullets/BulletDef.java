@@ -35,7 +35,6 @@ public class BulletDef {
         fixtureD = new FixtureDef();
         fixtureD.density = 0.7f;
         fixtureD.friction = 0.0f;
-        fixtureD.filter.groupIndex = -1;
         fixtureD.restitution = 3f;
         fixtureD.shape = getShape();
         setTextureIndex();

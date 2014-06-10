@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.*;
+import com.github.bakabbq.BulletCollisionListener;
 import com.github.bakabbq.GdxGround;
 
 /**
@@ -43,6 +44,8 @@ public class EnemyShooter extends BulletShooter {
         fixtureDef.shape = circle;
         fixtureDef.density = 1f;
         fixtureDef.friction = 0.4f;
+        fixtureDef.filter.categoryBits = BulletCollisionListener.ENEMY;
+        fixtureDef.filter.maskBits = (short) (BulletCollisionListener.PLAYER_BULLET | BulletCollisionListener.PLAYER);
         Fixture fixture = enemyBody.createFixture(fixtureDef);
         circle.dispose();
     }

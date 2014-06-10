@@ -122,28 +122,14 @@ public class GdxGround extends ApplicationAdapter {
         }
         addShooter(new DebugShooter(this), 200, 200);
 
-        EnemyShooter shooter = new EnemyShooter(this);
-        shooter.x = 10;
-        shooter.y = 10;
-        addEnemy(shooter);
+
+        for(int k = 0; k < 50; k++){
+            addEnemy(new EnemyShooter(this),20 + k * 100, 100);
+        }
 
     }
 
     private void create_player_body() {
-/*
-        playerDef.type = BodyDef.BodyType.DynamicBody;
-        playerDef.position.set(0,0);
-        playerBody = world.createBody(playerDef);
-        playerBody.setLinearDamping(40f);
-        CircleShape circle = new CircleShape();
-        circle.setRadius(0.1f);
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = circle;
-        fixtureDef.density = 1f;
-        fixtureDef.friction = 0.4f;
-        Fixture fixture = playerBody.createFixture(fixtureDef);
-        circle.dispose();
- */
     }
 
     @Override
@@ -152,18 +138,6 @@ public class GdxGround extends ApplicationAdapter {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         imc.update();
-        /*
-        modelBatch.begin(imc);
-        modelBatch.render(modelInstance,environment);
-        modelBatch.end();
-         */
-
-
-        /*
-        background.begin();
-        //background.draw(backgroundImage,0,0);
-        background.end();
-         */
 
         decal.lookAt(imc.position, imc.up);
         decalBatch.add(decal);
@@ -171,6 +145,23 @@ public class GdxGround extends ApplicationAdapter {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
+
+        for (EnemyShooter singleEnemy : enemies) {
+            //batch.draw(majong, singleEnemy.getX(), singleEnemy.getY());
+            batch.draw(
+                    singleEnemy.texture,
+                    singleEnemy.getX() + 5,
+                    singleEnemy.getY() + 6,
+                    0,
+                    0,
+                    singleEnemy.texture.getRegionWidth(),
+                    singleEnemy.texture.getRegionHeight(),
+                    0.2f,
+                    0.2f,
+                    0
+            );
+            singleEnemy.update();
+        }
 
         batch.draw(
                 player.getTexture(),
@@ -186,21 +177,7 @@ public class GdxGround extends ApplicationAdapter {
 
         );
 
-        for (EnemyShooter singleEnemy : enemies) {
-            batch.draw(
-                    singleEnemy.texture,
-                    singleEnemy.x,
-                    singleEnemy.y,
-                    singleEnemy.texture.getRegionWidth() / 2,
-                    singleEnemy.texture.getRegionHeight() / 2,
-                    singleEnemy.texture.getRegionWidth(),
-                    singleEnemy.texture.getRegionHeight(),
-                    0.2f,
-                    0.2f,
-                    0
-            );
-            singleEnemy.update();
-        }
+
 
         Color c = batch.getColor();
         for (Bullet singleBullet : bullets) {
@@ -306,6 +283,13 @@ public class GdxGround extends ApplicationAdapter {
     }
 
     public EnemyShooter addEnemy(EnemyShooter es) {
+        enemies.add(es);
+        return es;
+    }
+
+    public EnemyShooter addEnemy(EnemyShooter es, float x, float y) {
+        es.setX(x);
+        es.setY(y);
         enemies.add(es);
         return es;
     }

@@ -8,6 +8,10 @@ import com.badlogic.gdx.physics.box2d.*;
 public class BulletCollisionListener implements ContactListener {
     public boolean goBack = false;
 
+    public static short PLAYER = 0x002;
+    public static short PLAYER_BULLET = 0x004;
+    public static short ENEMY = 0x008;
+    public static short ENEMY_BULLET = 0x010;
     @Override
     public void beginContact(Contact contact) {
         goBack = false;
