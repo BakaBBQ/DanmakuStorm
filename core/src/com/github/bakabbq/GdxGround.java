@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g3d.decals.Decal;
 import com.badlogic.gdx.graphics.g3d.decals.DecalBatch;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -123,9 +124,12 @@ public class GdxGround extends ApplicationAdapter {
         addShooter(new DebugShooter(this), 200, 200);
 
 
+
         for(int k = 0; k < 50; k++){
-            addEnemy(new EnemyShooter(this),20 + k * 100, 100);
+            addEnemy(new EnemyShooter(this),1 + k * 2, MathUtils.random(3,5));
         }
+
+        //addEnemy(new EnemyShooter(this),10, 10);
 
     }
 

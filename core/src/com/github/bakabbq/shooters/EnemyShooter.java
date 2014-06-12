@@ -55,15 +55,16 @@ public class EnemyShooter extends BulletShooter {
     }
 
     public void setX(float x) {
-        enemyBody.getPosition().set(x, getY());
+        enemyBody.setTransform(x,getY(),enemyBody.getAngle());
     }
 
     public float getY() {
         return enemyBody.getPosition().y;
     }
 
+
     public void setY(float y) {
-        enemyBody.getPosition().set(getX(), y);
+        enemyBody.setTransform(getX(),y,enemyBody.getAngle());
     }
 
     public void setTextureIndexes() {

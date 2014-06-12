@@ -121,7 +121,7 @@ public class DanmakuPlayer {
         float generalV = 0.5f;
 
         if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
-            if (slowMode == false)
+            if (!slowMode)
                 onSlowMode();
             generalV = 0.3f;
 
