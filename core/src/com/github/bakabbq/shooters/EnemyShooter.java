@@ -82,7 +82,7 @@ public class EnemyShooter extends BulletShooter {
             case 1:
             case 2:
                 // no break
-                frameId = stateTimer % 5 + 7;
+                frameId = stateTimer % 4 + 8;
                 break;
         }
         TextureRegion result = new TextureRegion(enemySheet, 32 * frameId, 256 + 36 * this.colorId, 32, 32);

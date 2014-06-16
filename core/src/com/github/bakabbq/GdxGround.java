@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.Array;
 import com.github.bakabbq.bullets.Bullet;
 import com.github.bakabbq.bullets.BulletDef;
 import com.github.bakabbq.bullets.PlayerBullet;
+import com.github.bakabbq.items.ThItem;
 import com.github.bakabbq.shooters.BulletShooter;
 import com.github.bakabbq.shooters.DebugShooter;
 import com.github.bakabbq.shooters.EnemyShooter;
@@ -53,6 +54,7 @@ public class GdxGround extends ApplicationAdapter {
     };
     Array<BulletShooter> shooters = new Array<BulletShooter>() {
     };
+    Array<ThItem> items = new Array();
     Array<ParticleEffectPool.PooledEffect> effects = new Array();
     Array<EnemyShooter> enemies = new Array();
     BulletCollisionListener collisionListener;
@@ -125,8 +127,10 @@ public class GdxGround extends ApplicationAdapter {
 
 
 
-        for(int k = 0; k < 50; k++){
-            addEnemy(new EnemyShooter(this),1 + k * 2, MathUtils.random(3,5));
+        for(int k = 0; k < 25; k++){
+            EnemyShooter e = new EnemyShooter(this);
+            e.setState(MathUtils.random(0,2));
+            addEnemy(e,1 + k * 4, MathUtils.random(3,5));
         }
 
         //addEnemy(new EnemyShooter(this),10, 10);
@@ -181,6 +185,21 @@ public class GdxGround extends ApplicationAdapter {
 
         );
 
+
+        for (ThItem item : items){
+            batch.draw(
+                    item.texture,
+                    item.itemBody.getPosition().x,
+                    item.itemBody.getPosition().y,
+                    item.texture.getRegionWidth() / 2,
+                    item.texture.getRegionHeight() / 2,
+                    item.texture.getRegionWidth(),
+                    item.texture.getRegionHeight(),
+                    0.2f,
+                    0.2f,
+                    0
+            );
+        }
 
 
         Color c = batch.getColor();
