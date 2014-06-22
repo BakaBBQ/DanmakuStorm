@@ -24,6 +24,7 @@ public class Bullet {
         BodyDef bodydef = new BodyDef();
         bodydef.type = BodyDef.BodyType.DynamicBody;
         body = world.createBody(bodydef);
+        body.setUserData(this);
         FixtureDef fd = bd.fixtureD;
         fd.filter.categoryBits = BulletCollisionListener.ENEMY_BULLET;
         fd.filter.maskBits = (short)(BulletCollisionListener.PLAYER | 0x001);

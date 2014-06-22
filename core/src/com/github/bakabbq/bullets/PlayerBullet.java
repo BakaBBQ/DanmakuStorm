@@ -12,6 +12,9 @@ public class PlayerBullet extends Bullet {
     public static BulletReimuHoming reimuHoming = new BulletReimuHoming();
     public static ReimuAmulets reimuAmulet = new ReimuAmulets();
 
+
+    public int damage;
+
     public PlayerBullet(BulletDef bd, World world, float x, float y, float angle) {
         super(bd, world, x, y, angle);
         world.destroyBody(body);
@@ -25,6 +28,7 @@ public class PlayerBullet extends Bullet {
         fd.filter.maskBits = (short)(BulletCollisionListener.ENEMY | 0x001);
         this.fixture = body.createFixture(fd);
         body.setTransform(x, y, angle);
+        body.setUserData(this);
         setSprite();
 
         bd.fixtureD.density = 0.4f;
@@ -34,5 +38,11 @@ public class PlayerBullet extends Bullet {
         this.fixture = body.createFixture(bd.fixtureD);
         body.setLinearDamping(0f);
         body.setTransform(x, y, angle);
+
+        initDamage();
+    }
+
+    public void initDamage(){
+        this.damage  = 4;
     }
 }

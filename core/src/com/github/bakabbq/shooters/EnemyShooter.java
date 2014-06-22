@@ -15,6 +15,9 @@ public class EnemyShooter extends BulletShooter {
 
     public int colorId;
 
+
+    public int hp;
+
     public int stateId; //state id: 0 => staying at the same position,  1 => moving left, 2 => moving right
     public int stateTimer; //stateTimer for deciding the sprite
 
@@ -38,6 +41,7 @@ public class EnemyShooter extends BulletShooter {
         bodyDef.position.set(0, 0);
         enemyBody = ground.world.createBody(bodyDef);
         enemyBody.setLinearDamping(30f);
+        enemyBody.setUserData(this);
         CircleShape circle = new CircleShape();
         circle.setRadius(1f);
         FixtureDef fixtureDef = new FixtureDef();
@@ -108,5 +112,9 @@ public class EnemyShooter extends BulletShooter {
         this.stateId = x;
         this.stateTimer = 0;
         return ori;
+    }
+
+    public void onDeath(){
+
     }
 }

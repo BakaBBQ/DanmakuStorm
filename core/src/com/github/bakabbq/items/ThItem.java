@@ -28,6 +28,9 @@ public class ThItem {
         itemDef.type = BodyDef.BodyType.DynamicBody;
         itemDef.position.set(0,0);
         itemBody = ground.world.createBody(itemDef);
+
+        // User Data Update
+        itemBody.setUserData(this);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = getShape();
         fixtureDef.density = 1;

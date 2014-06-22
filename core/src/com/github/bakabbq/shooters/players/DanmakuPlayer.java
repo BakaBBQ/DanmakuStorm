@@ -81,6 +81,7 @@ public class DanmakuPlayer {
         playerDef.position.set(0, 0);
         playerBody = ground.world.createBody(playerDef);
         playerBody.setLinearDamping(40f);
+        playerBody.setUserData(this);
         CircleShape circle = new CircleShape();
         circle.setRadius(0.07f);
         FixtureDef fixtureDef = new FixtureDef();
