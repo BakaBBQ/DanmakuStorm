@@ -18,7 +18,6 @@ public class PlayerBullet extends Bullet {
     public PlayerBullet(BulletDef bd, World world, float x, float y, float angle) {
         super(bd, world, x, y, angle);
         world.destroyBody(body);
-
         this.bd = bd;
         BodyDef bodydef = new BodyDef();
         bodydef.type = BodyDef.BodyType.DynamicBody;

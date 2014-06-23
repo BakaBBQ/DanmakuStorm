@@ -26,10 +26,13 @@ public class EnemyShooter extends BulletShooter {
 
     public int textureId;
 
+    public boolean dead;
+
     public EnemyShooter(GdxGround ground) {
         super(ground);
         this.stateId = 0;
         this.stateTimer = 0;
+        this.hp = 8;
         setTextureIndexes();
         updateTexture();
         createBody();
@@ -115,6 +118,18 @@ public class EnemyShooter extends BulletShooter {
     }
 
     public void onDeath(){
+        this.dead = true;
+    }
 
+    public void recieveDamage(int dmg){
+        Gdx.app.log("Enemy", "Recieving " + dmg + " Dmg, rest " + (this.hp - dmg));
+        this.hp -= dmg;
+        if(this.hp <= 0){
+            onDeath();
+        }
+    }
+
+    public void dispose(){
+        ground.world.destroyBody(enemyBody);
     }
 }

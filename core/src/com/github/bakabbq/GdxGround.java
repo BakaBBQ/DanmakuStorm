@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.Array;
 import com.github.bakabbq.bullets.Bullet;
 import com.github.bakabbq.bullets.BulletDef;
 import com.github.bakabbq.bullets.PlayerBullet;
+import com.github.bakabbq.effects.ExplosionEffect;
 import com.github.bakabbq.items.ThItem;
 import com.github.bakabbq.shooters.BulletShooter;
 import com.github.bakabbq.shooters.DebugShooter;
@@ -48,6 +49,7 @@ public class GdxGround extends ApplicationAdapter {
     PerspectiveCamera imc;
     ParticleEffectPool particlePool;
     Texture menuBackground;
+
     Array<Bullet> bullets = new Array<Bullet>() {
     };
     Array<PlayerBullet> playerBullets = new Array() {
@@ -57,6 +59,9 @@ public class GdxGround extends ApplicationAdapter {
     Array<ThItem> items = new Array();
     Array<ParticleEffectPool.PooledEffect> effects = new Array();
     Array<EnemyShooter> enemies = new Array();
+    Array<ExplosionEffect> explosionEffects = new Array();
+
+
     BulletCollisionListener collisionListener;
     Texture backgroundImage;
     BodyDef playerDef = new BodyDef();
@@ -239,6 +244,22 @@ public class GdxGround extends ApplicationAdapter {
         }
 
 
+        for (ExplosionEffect singleEffect : explosionEffects){
+            batch.draw(
+                    singleEffect.texture,
+                    singleEffect.x,
+                    singleEffect.y,
+                    singleEffect.texture.getRegionWidth() / 2,
+                    singleEffect.texture.getRegionHeight() / 2,
+                    singleEffect.texture.getRegionWidth(),
+                    singleEffect.texture.getRegionHeight() ,
+                    0.2f,
+                    0.2f,
+                    singleEffect.direction
+            );
+        }
+
+
         batch.end();
 
         ui.begin();
@@ -250,6 +271,30 @@ public class GdxGround extends ApplicationAdapter {
             playerBody.setTransform(320, 240, 100);
             collisionListener.goBack = false;
         }
+
+        for (Bullet singleBullet : bullets) {
+            if (singleBullet.destroyFlag){
+                singleBullet.dispose();
+                bullets.removeValue(singleBullet, true);
+            }
+        }
+
+        for (EnemyShooter singleEnemy : enemies){
+            if (singleEnemy.dead){
+                addExplosion(singleEnemy.getX(), singleEnemy.getY());
+                singleEnemy.dispose();
+                enemies.removeValue(singleEnemy, true);
+
+            }
+        }
+
+        for (ExplosionEffect e : explosionEffects){
+            e.update();
+            if (e.timer >= 100){
+                explosionEffects.removeValue(e,true);
+            }
+        }
+
         //playerMovement();
         for (DanmakuOption singleOption : player.options) {
             singleOption.update();
@@ -320,5 +365,12 @@ public class GdxGround extends ApplicationAdapter {
     public void destroyBullet(Bullet b) {
         world.destroyBody(b.body);
         bullets.removeValue(b, false);
+    }
+
+    public void addExplosion(float x, float y){
+        ExplosionEffect e = new ExplosionEffect();
+        e.x = x;
+        e.y = y;
+        explosionEffects.add(e);
     }
 }

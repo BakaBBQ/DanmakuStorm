@@ -14,6 +14,11 @@ public class ThItem {
     /*
      * I need to simulate a LOT of things... damn...
      */
+
+    //Destroy Flag - once marked, it will be garbage dumped
+    public boolean destroyFlag;
+
+
     GdxGround ground;
     public TextureRegion texture;
     public Body itemBody;

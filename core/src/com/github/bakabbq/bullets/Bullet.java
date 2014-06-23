@@ -17,10 +17,15 @@ public class Bullet {
     public Body body;
     public BulletDef bd;
     public Sprite sprite;
+    public World world;
     Fixture fixture;
+
+    //Destroy Flag - once marked, it will be garbage dumped
+    public boolean destroyFlag;
 
     public Bullet(BulletDef bd, World world, float x, float y, float angle) {
         this.bd = bd;
+        this.world = world;
         BodyDef bodydef = new BodyDef();
         bodydef.type = BodyDef.BodyType.DynamicBody;
         body = world.createBody(bodydef);
@@ -97,5 +102,9 @@ public class Bullet {
         sprite.setOrigin(bd.texture.getRegionWidth() / 2, bd.texture.getRegionHeight() / 2);
         sprite.setRotation(180);
         bd.modifySprite(sprite);
+    }
+
+    public void dispose(){
+        this.world.destroyBody(this.body);
     }
 }

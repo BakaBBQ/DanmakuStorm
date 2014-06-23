@@ -1,6 +1,9 @@
 package com.github.bakabbq;
 
 import com.badlogic.gdx.physics.box2d.*;
+import com.github.bakabbq.bullets.Bullet;
+import com.github.bakabbq.bullets.PlayerBullet;
+import com.github.bakabbq.shooters.EnemyShooter;
 
 /**
  * Created by LBQ on 5/26/14.
@@ -13,6 +16,8 @@ public class BulletCollisionListener implements ContactListener {
     public static short ENEMY = 0x008;
     public static short ENEMY_BULLET = 0x010;
     public static short ITEMS = 0x012;
+
+
     @Override
     public void beginContact(Contact contact) {
         goBack = false;
@@ -24,6 +29,32 @@ public class BulletCollisionListener implements ContactListener {
         if (bodyB.getLinearDamping() >= 5) {
             //goBack = true;
         }
+
+        if(bodyA.getUserData() instanceof PlayerBullet){
+            ((PlayerBullet) bodyA.getUserData()).destroyFlag = true;
+        }
+
+        if(bodyB.getUserData() instanceof PlayerBullet){
+            ((PlayerBullet) bodyA.getUserData()).destroyFlag = true;
+        }
+
+
+
+
+        // Enemy - PlayerBullet Listener
+        if(bodyA.getUserData() instanceof EnemyShooter && bodyB.getUserData() instanceof PlayerBullet){
+            int dmg = ((PlayerBullet) bodyB.getUserData()).damage;
+            ((EnemyShooter) bodyA.getUserData()).recieveDamage(dmg);
+            contact.setEnabled(false);
+        }
+
+        if(bodyB.getUserData() instanceof EnemyShooter && bodyA.getUserData() instanceof PlayerBullet){
+            int dmg = ((PlayerBullet) bodyA.getUserData()).damage;
+            ((EnemyShooter) bodyB.getUserData()).recieveDamage(dmg);
+            contact.setEnabled(false);
+        }
+
+
     }
 
     @Override
