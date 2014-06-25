@@ -68,4 +68,10 @@ public class ThItem {
 
     }
 
+
+
+    public float getX(){
+        return 1f;
+    }
+
 }

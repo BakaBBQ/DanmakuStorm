@@ -373,4 +373,10 @@ public class GdxGround extends ApplicationAdapter {
         e.y = y;
         explosionEffects.add(e);
     }
+
+
+    public void addItem(float x, float y){
+        ThItem t = new ThItem(this);
+        items.add(t);
+    }
 }
