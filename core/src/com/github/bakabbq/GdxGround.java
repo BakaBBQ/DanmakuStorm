@@ -69,9 +69,11 @@ public class GdxGround extends ApplicationAdapter {
     float MAX_VELOCITY = 100f;
     private Decal decal;
     private DecalBatch decalBatch;
-
+	
+	
     @Override
     public void create() {
+		
         batch = new SpriteBatch();
         background = new SpriteBatch();
         ui = new SpriteBatch();
@@ -147,6 +149,7 @@ public class GdxGround extends ApplicationAdapter {
 
     @Override
     public void render() {
+		
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -155,6 +158,7 @@ public class GdxGround extends ApplicationAdapter {
         decal.lookAt(imc.position, imc.up);
         decalBatch.add(decal);
         decalBatch.flush();
+		
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
@@ -304,7 +308,7 @@ public class GdxGround extends ApplicationAdapter {
         removeGarbageBullets();
 
 
-    }
+    } 
 
     private void removeGarbageBullets() {
         for (Bullet singleBullet : bullets) {
