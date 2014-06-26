@@ -3,6 +3,7 @@ package com.github.bakabbq;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -35,6 +36,7 @@ public class GdxGround extends ApplicationAdapter {
     public Environment environment;
     SpriteBatch background;
     SpriteBatch batch;
+
     SpriteBatch ui;
     Texture bulletImage;
     TextureRegion majong;
@@ -49,6 +51,7 @@ public class GdxGround extends ApplicationAdapter {
     PerspectiveCamera imc;
     ParticleEffectPool particlePool;
     Texture menuBackground;
+    BitmapFont fontMincho;
 
     Array<Bullet> bullets = new Array<Bullet>() {
     };
@@ -88,6 +91,8 @@ public class GdxGround extends ApplicationAdapter {
         camera.position.y -= 240 - 240 / 5;
         camera.update();
 
+
+        fontMincho = new BitmapFont(Gdx.files.internal("fonts/YuMincho.fnt"));
 
         backgroundImage = new Texture(Gdx.files.internal("backgrounds/stg6bg.png"));
 
@@ -130,7 +135,7 @@ public class GdxGround extends ApplicationAdapter {
         for (int i = 0; i < 30; i++) {
             addBullet(Bullet.debugBullet, 200f, 200f, i * 12).setSpeed(10000 * 2);
         }
-        addShooter(new DebugShooter(this), 200, 200);
+        addShooter(new DebugShooter(this), 20, 20);
 
 
 
@@ -264,9 +269,13 @@ public class GdxGround extends ApplicationAdapter {
         }
 
 
+
+
+
         batch.end();
 
         ui.begin();
+        fontMincho.draw(ui, "靈符「博麗二重大結界」", 50, 50);
         //ui.draw(menuBackground, 0, 0);
         ui.end();
 
