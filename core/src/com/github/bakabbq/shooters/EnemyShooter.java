@@ -103,7 +103,12 @@ public class EnemyShooter extends BulletShooter {
         if (this.timer % 5 == 0)
             this.stateTimer += 1;
         updateTexture();
+		updateShoot();
     }
+	
+	public void updateShoot(){
+		//to be overwritten
+	}
 
     public TextureRegion getTexture() {
         return texture;

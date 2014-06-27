@@ -117,7 +117,7 @@ public class GdxGround extends ApplicationAdapter {
 
 
         player = new DanmakuPlayer(this);
-
+/*
         environment = new Environment();
         environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
         environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
@@ -126,7 +126,7 @@ public class GdxGround extends ApplicationAdapter {
         model = modelBuilder.createBox(5f, 5f, 5f,
                 new Material(ColorAttribute.createDiffuse(Color.GREEN)),
                 VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
-        modelInstance = new ModelInstance(model);
+        modelInstance = new ModelInstance(model);*/
 
 
         collisionListener = new BulletCollisionListener();
@@ -135,14 +135,22 @@ public class GdxGround extends ApplicationAdapter {
         for (int i = 0; i < 30; i++) {
             addBullet(Bullet.debugBullet, 200f, 200f, i * 12).setSpeed(10000 * 2);
         }
-        addShooter(new DebugShooter(this), 20, 20);
+        //addShooter(new DebugShooter(this), 20, 20);
 
 
 
-        for(int k = 0; k < 25; k++){
-            EnemyShooter e = new EnemyShooter(this);
+        for(int k = 0; k < 10; k++){
+            EnemyShooter e = new EnemyShooter(this){
+				@Override
+				public void updateShoot(){
+					if(this.timer >= 60 && this.timer % 30 == 0){
+						shoot(Bullet.kunaiBullet, 0, 150);
+					}
+				}
+				
+			};
             e.setState(MathUtils.random(0,2));
-            addEnemy(e,1 + k * 4, MathUtils.random(3,5));
+            addEnemy(e,1 + k * 6, MathUtils.random(10,12));
         }
 
         //addEnemy(new EnemyShooter(this),10, 10);
@@ -158,11 +166,12 @@ public class GdxGround extends ApplicationAdapter {
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		/*
         imc.update();
 
         decal.lookAt(imc.position, imc.up);
         decalBatch.add(decal);
-        decalBatch.flush();
+        decalBatch.flush();*/
 		
 
         batch.setProjectionMatrix(camera.combined);
@@ -322,7 +331,7 @@ public class GdxGround extends ApplicationAdapter {
     private void removeGarbageBullets() {
         for (Bullet singleBullet : bullets) {
             singleBullet.update();
-            if (singleBullet.getX() > 700 || singleBullet.getX() < -100 || singleBullet.getY() > 580 || singleBullet.getY() < -100)
+            if (singleBullet.getX() > 700/5 || singleBullet.getX() < -100/5 || singleBullet.getY() > 580/5 || singleBullet.getY() < -100/5)
                 destroyBullet(singleBullet);
         }
     }

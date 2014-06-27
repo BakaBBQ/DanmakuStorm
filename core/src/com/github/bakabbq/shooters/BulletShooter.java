@@ -11,7 +11,7 @@ public class BulletShooter {
     public BulletDef defaultBullet = Bullet.debugBullet;
     public float x, y;
     GdxGround ground;
-    int timer;
+    public int timer;
 
     public BulletShooter(GdxGround ground) {
         this.ground = ground;
