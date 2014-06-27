@@ -15,6 +15,11 @@ public class SpellCard {
     public SpellCard(ThBoss owner) {
         this.owner = owner;
         this.timer = 0;
+        updateAttributes();
+    }
+
+    public void updateAttributes(){
+        // to be overwritten
     }
 
     public void update() {

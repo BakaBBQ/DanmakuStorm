@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.*;
 import com.github.bakabbq.BulletCollisionListener;
 import com.github.bakabbq.GdxGround;
+import com.github.bakabbq.bullets.BulletDef;
 
 /**
  * Created by LBQ on 5/28/14.
@@ -78,6 +79,10 @@ public class EnemyShooter extends BulletShooter {
         this.colorId = 0;
     }
 
+    public void shoot(BulletDef bd, float angle, int speed) {
+        ground.addBullet(bd, getX(), getY(), angle).setSpeed(speed);
+    }
+
 
     public void updateTexture() {
         int frameId;
@@ -100,10 +105,11 @@ public class EnemyShooter extends BulletShooter {
 
     public void update() {
         super.update();
+        updateTexture();
         if (this.timer % 5 == 0)
             this.stateTimer += 1;
-        updateTexture();
-		updateShoot();
+
+        updateShoot();
     }
 	
 	public void updateShoot(){

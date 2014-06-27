@@ -28,9 +28,13 @@ import com.github.bakabbq.items.ThItem;
 import com.github.bakabbq.shooters.BulletShooter;
 import com.github.bakabbq.shooters.DebugShooter;
 import com.github.bakabbq.shooters.EnemyShooter;
+import com.github.bakabbq.shooters.bosses.ThBoss;
+import com.github.bakabbq.shooters.bosses.testsanae.TestSanae;
 import com.github.bakabbq.shooters.players.DanmakuOption;
 import com.github.bakabbq.shooters.players.DanmakuPlayer;
 
+
+// GdxGround, more like a playground, huh?
 public class GdxGround extends ApplicationAdapter {
     public World world;
     public Environment environment;
@@ -62,6 +66,7 @@ public class GdxGround extends ApplicationAdapter {
     Array<ThItem> items = new Array();
     Array<ParticleEffectPool.PooledEffect> effects = new Array();
     Array<EnemyShooter> enemies = new Array();
+    Array<ThBoss> bosses = new Array();
     Array<ExplosionEffect> explosionEffects = new Array();
 
 
@@ -117,7 +122,7 @@ public class GdxGround extends ApplicationAdapter {
 
 
         player = new DanmakuPlayer(this);
-/*
+        /*
         environment = new Environment();
         environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
         environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
@@ -127,6 +132,7 @@ public class GdxGround extends ApplicationAdapter {
                 new Material(ColorAttribute.createDiffuse(Color.GREEN)),
                 VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
         modelInstance = new ModelInstance(model);*/
+
 
 
         collisionListener = new BulletCollisionListener();
@@ -152,6 +158,8 @@ public class GdxGround extends ApplicationAdapter {
             e.setState(MathUtils.random(0,2));
             addEnemy(e,1 + k * 6, MathUtils.random(10,12));
         }
+
+        spawnBoss(new TestSanae(this), 30, 30);
 
         //addEnemy(new EnemyShooter(this),10, 10);
 
@@ -218,6 +226,23 @@ public class GdxGround extends ApplicationAdapter {
                     item.texture.getRegionHeight() / 2,
                     item.texture.getRegionWidth(),
                     item.texture.getRegionHeight(),
+                    0.2f,
+                    0.2f,
+                    0
+            );
+        }
+
+
+
+        for (ThBoss singleBoss : bosses){
+            batch.draw(
+                    singleBoss.texture,
+                    singleBoss.getX() + 5,
+                    singleBoss.getY() + 6,
+                    0,
+                    0,
+                    singleBoss.getTexture().getRegionWidth(),
+                    singleBoss.getTexture().getRegionHeight(),
                     0.2f,
                     0.2f,
                     0
@@ -310,6 +335,11 @@ public class GdxGround extends ApplicationAdapter {
             }
         }
 
+
+        for (ThBoss singleBoss : bosses){
+            singleBoss.update();
+        }
+
         for (ExplosionEffect e : explosionEffects){
             e.update();
             if (e.timer >= 100){
@@ -382,6 +412,13 @@ public class GdxGround extends ApplicationAdapter {
         es.setY(y);
         enemies.add(es);
         return es;
+    }
+
+    public ThBoss spawnBoss(ThBoss boss, float x, float y){
+        boss.setX(x);
+        boss.setY(y);
+        bosses.add(boss);
+        return boss;
     }
 
     public void destroyBullet(Bullet b) {
