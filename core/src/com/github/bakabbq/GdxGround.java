@@ -150,7 +150,7 @@ public class GdxGround extends ApplicationAdapter {
 				@Override
 				public void updateShoot(){
 					if(this.timer >= 60 && this.timer % 30 == 0){
-						shoot(Bullet.kunaiBullet, 0, 150);
+						shoot(Bullet.kunaiBullet, 0, 15);
 					}
 				}
 				
