@@ -1,12 +1,13 @@
 package com.github.bakabbq.shooters.bosses;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.utils.Array;
-import com.github.bakabbq.GdxGround;
-import com.github.bakabbq.shooters.EnemyShooter;
-import com.github.bakabbq.spellcards.SpellCard;
+import com.badlogic.gdx.*;
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.*;
+import com.github.bakabbq.*;
+import com.github.bakabbq.shooters.*;
+import com.github.bakabbq.spellcards.*;
 
 /**
  * Created by LBQ on 6/9/14.
@@ -92,4 +93,11 @@ public class ThBoss extends EnemyShooter {
     public void updateShoot(){
         spellCards.get(0).update();
     }
+	
+	@Override
+	public Shape getBodyShape(){
+		CircleShape circle = new CircleShape();
+        circle.setRadius(4f);
+		return circle;
+	}
 }

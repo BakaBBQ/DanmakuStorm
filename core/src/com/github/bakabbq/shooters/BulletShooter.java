@@ -10,7 +10,7 @@ import com.github.bakabbq.bullets.BulletDef;
 public class BulletShooter {
     public BulletDef defaultBullet = Bullet.debugBullet;
     public float x, y;
-    GdxGround ground;
+    public GdxGround ground;
     public int timer;
 
     public BulletShooter(GdxGround ground) {

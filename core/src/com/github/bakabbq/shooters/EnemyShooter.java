@@ -46,9 +46,9 @@ public class EnemyShooter extends BulletShooter {
         enemyBody = ground.world.createBody(bodyDef);
         enemyBody.setLinearDamping(30f);
         enemyBody.setUserData(this);
-        CircleShape circle = new CircleShape();
-        circle.setRadius(1f);
+        
         FixtureDef fixtureDef = new FixtureDef();
+		Shape circle = getBodyShape();
         fixtureDef.shape = circle;
         fixtureDef.density = 1f;
         fixtureDef.friction = 0.4f;
@@ -57,6 +57,12 @@ public class EnemyShooter extends BulletShooter {
         Fixture fixture = enemyBody.createFixture(fixtureDef);
         circle.dispose();
     }
+	
+	public Shape getBodyShape(){
+		CircleShape circle = new CircleShape();
+        circle.setRadius(1f);
+		return circle;
+	}
 
     public float getX() {
         return enemyBody.getPosition().x;
