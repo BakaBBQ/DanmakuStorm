@@ -24,6 +24,7 @@ import com.github.bakabbq.bullets.Bullet;
 import com.github.bakabbq.bullets.BulletDef;
 import com.github.bakabbq.bullets.PlayerBullet;
 import com.github.bakabbq.effects.ExplosionEffect;
+import com.github.bakabbq.effects.ThEffect;
 import com.github.bakabbq.items.ThItem;
 import com.github.bakabbq.shooters.BulletShooter;
 import com.github.bakabbq.shooters.DebugShooter;
@@ -47,7 +48,7 @@ public class GdxGround extends ApplicationAdapter {
     TextureRegion circularBullet;
     FPSLogger logger = new FPSLogger();
     OrthographicCamera camera;
-    DanmakuPlayer player;
+    public DanmakuPlayer player;
     TextureRegion[] enemyFrames;
     ModelBatch modelBatch;
     Model model;
@@ -64,9 +65,9 @@ public class GdxGround extends ApplicationAdapter {
     Array<BulletShooter> shooters = new Array<BulletShooter>() {
     };
     Array<ThItem> items = new Array();
-    Array<ParticleEffectPool.PooledEffect> effects = new Array();
     Array<EnemyShooter> enemies = new Array();
     Array<ThBoss> bosses = new Array();
+    Array<ThEffect> effects = new Array();
     Array<ExplosionEffect> explosionEffects = new Array();
 
 
@@ -92,8 +93,8 @@ public class GdxGround extends ApplicationAdapter {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 640, 480);
         camera.zoom = 0.2f;
-        camera.position.x -= 320 - 320 / 5;
-        camera.position.y -= 240 - 240 / 5;
+        camera.position.x -= 320 - 320 / 5   + 128 / 5;
+        camera.position.y -= 240 - 240 / 5   + (480 - 468) / 5;
         camera.update();
 
 
@@ -145,6 +146,7 @@ public class GdxGround extends ApplicationAdapter {
 
 
 
+        /*
         for(int k = 0; k < 10; k++){
             EnemyShooter e = new EnemyShooter(this){
 				@Override
@@ -153,11 +155,12 @@ public class GdxGround extends ApplicationAdapter {
 						shoot(Bullet.kunaiBullet, 0, 15);
 					}
 				}
-				
+
 			};
             e.setState(MathUtils.random(0,2));
             addEnemy(e,1 + k * 6, MathUtils.random(10,12));
         }
+         */
 
         spawnBoss(new TestSanae(this), 30, 30);
 
@@ -287,7 +290,10 @@ public class GdxGround extends ApplicationAdapter {
         }
 
 
+
+
         for (ExplosionEffect singleEffect : explosionEffects){
+
             batch.draw(
                     singleEffect.texture,
                     singleEffect.x,
@@ -302,6 +308,32 @@ public class GdxGround extends ApplicationAdapter {
             );
         }
 
+        c = batch.getColor();
+        for (ThEffect singleEffect : effects){
+            Gdx.app.log("Effect", "RegionWidth " + singleEffect.texture.getRegionWidth() + " RegionHeight " + singleEffect.texture.getRegionHeight());
+            batch.setColor(c.r,c.g,c.b,singleEffect.opacity);
+            batch.draw(
+                    singleEffect.texture,
+                    singleEffect.x - 119f / 5f,
+                    singleEffect.y - 119f / 5f,
+                    32,
+                    32,
+                    singleEffect.texture.getRegionWidth(),
+                    singleEffect.texture.getRegionHeight() ,
+                    0.2f,
+                    0.2f,
+                    singleEffect.angle
+            );
+
+
+
+
+
+        }
+        batch.setColor(c.r,c.g,c.b,1);
+
+
+
 
 
 
@@ -309,8 +341,8 @@ public class GdxGround extends ApplicationAdapter {
         batch.end();
 
         ui.begin();
-        fontMincho.draw(ui, "靈符「博麗二重大結界」", 50, 50);
-        //ui.draw(menuBackground, 0, 0);
+        //fontMincho.draw(ui, "靈符「博麗二重大結界」", 50, 50);
+        ui.draw(menuBackground, 0, 0);
         ui.end();
 
         world.step(1 / 60f, 6, 2);
@@ -354,6 +386,12 @@ public class GdxGround extends ApplicationAdapter {
         player.update();
         updateShooters();
         removeGarbageBullets();
+
+        for (ThEffect singleEffect : effects){
+            singleEffect.update();
+            if (singleEffect.disposeFlag)
+                effects.removeValue(singleEffect, true);
+        }
 
 
     } 
@@ -437,5 +475,11 @@ public class GdxGround extends ApplicationAdapter {
     public void addItem(float x, float y){
         ThItem t = new ThItem(this);
         items.add(t);
+    }
+
+    public void addEffect(ThEffect effect, float x, float y){
+        effect.x = x;
+        effect.y = y;
+        effects.add(effect);
     }
 }

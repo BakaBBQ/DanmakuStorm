@@ -13,6 +13,7 @@ import com.github.bakabbq.Pixel;
 import com.github.bakabbq.bullets.Bullet;
 import com.github.bakabbq.bullets.BulletDef;
 import com.github.bakabbq.bullets.PlayerBullet;
+import com.github.bakabbq.effects.SlowEffect;
 
 /**
  * Created by LBQ on 5/28/14.
@@ -194,6 +195,9 @@ public class DanmakuPlayer {
 
     void onSlowMode() {
         slowMode = true;
+        SlowEffect e = new SlowEffect();
+        e.ground = this.ground;
+        ground.addEffect(e, this.getX(), this.getY());
         for (DanmakuOption singleOption : options) {
             singleOption.refresh(options.size);
         }

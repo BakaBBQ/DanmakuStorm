@@ -30,4 +30,13 @@ public class SpellCard {
     public void mainLoop() {
         //Needs to be overwritten
     }
+
+
+    public float relX(float xPlus){
+        return owner.getX() + xPlus;
+    }
+
+    public float relY(float yPlus){
+        return owner.getY() + yPlus;
+    }
 }

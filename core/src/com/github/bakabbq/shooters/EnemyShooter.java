@@ -112,10 +112,15 @@ public class EnemyShooter extends BulletShooter {
     public void update() {
         super.update();
         updateTexture();
-        if (this.timer % 5 == 0)
+        if (this.timer % updateFrame() == 0)
             this.stateTimer += 1;
 
         updateShoot();
+    }
+
+
+    public int updateFrame(){
+        return 5;
     }
 	
 	public void updateShoot(){

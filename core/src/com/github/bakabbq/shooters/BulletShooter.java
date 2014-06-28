@@ -24,8 +24,26 @@ public class BulletShooter {
         ground.addBullet(bd, this.x, this.y, angle).setSpeed(speed);
     }
 
+
+    public void createBullet(BulletDef bd, float x, float y, float angle, float speed, boolean rel){
+        if(rel)
+            ground.addBullet(bd, this.x + x, this.y + y, angle).setSpeed(speed);
+        else
+            ground.addBullet(bd, x, y, angle).setSpeed(speed);
+    }
+
     public void shoot(float angle, int speed) {
         shoot(defaultBullet, angle, speed);
+    }
+
+
+
+    public void nwayShoot(BulletDef bd, int ways, int angleFix, int speed) {
+        if (ways <= 0)
+            ways = 1;
+        for (int i = 0; i < ways; i++) {
+            shoot(bd, i * 360 / ways + angleFix, speed);
+        }
     }
 
     public void nwayShoot(int ways, int angleFix, int speed) {
