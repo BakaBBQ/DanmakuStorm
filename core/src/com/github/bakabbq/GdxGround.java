@@ -482,4 +482,12 @@ public class GdxGround extends ApplicationAdapter {
         effect.y = y;
         effects.add(effect);
     }
+
+    public void clearEffect(ThEffect effect){
+        for (ThEffect singleEffect : effects){
+            if(singleEffect.getClass() == effect.getClass()){
+                singleEffect.enterDispose();
+            }
+        }
+    }
 }

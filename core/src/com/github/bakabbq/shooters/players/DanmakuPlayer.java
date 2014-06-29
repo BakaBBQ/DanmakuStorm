@@ -128,7 +128,8 @@ public class DanmakuPlayer {
             generalV = 0.3f;
 
         } else {
-            slowMode = false;
+            if(slowMode)
+                onSlowModeCancel();
         }
         //this.playerBody.setLinearVelocity(0f,0f);
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && vel.x > -MAX_VELOCITY) {
@@ -201,6 +202,11 @@ public class DanmakuPlayer {
         for (DanmakuOption singleOption : options) {
             singleOption.refresh(options.size);
         }
+    }
+
+    void onSlowModeCancel(){
+        slowMode = false;
+        ground.clearEffect(new SlowEffect());
     }
 
     public void shoot(BulletDef bd) {
