@@ -7,14 +7,14 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g3d.*;
-import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.Environment;
+import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.ModelBatch;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.decals.CameraGroupStrategy;
 import com.badlogic.gdx.graphics.g3d.decals.Decal;
 import com.badlogic.gdx.graphics.g3d.decals.DecalBatch;
-import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
-import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
-import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -27,19 +27,20 @@ import com.github.bakabbq.effects.ExplosionEffect;
 import com.github.bakabbq.effects.ThEffect;
 import com.github.bakabbq.items.ThItem;
 import com.github.bakabbq.shooters.BulletShooter;
-import com.github.bakabbq.shooters.DebugShooter;
 import com.github.bakabbq.shooters.EnemyShooter;
 import com.github.bakabbq.shooters.bosses.ThBoss;
 import com.github.bakabbq.shooters.bosses.testsanae.TestSanae;
 import com.github.bakabbq.shooters.players.DanmakuOption;
 import com.github.bakabbq.shooters.players.DanmakuPlayer;
+import com.github.bakabbq.shooters.players.IControlHelper;
+import com.sun.istack.internal.NotNull;
 
 
 // GdxGround, more like a playground, huh?
 public class GdxGround extends ApplicationAdapter {
     public World world;
     public Environment environment;
-    SpriteBatch background;
+    public SpriteBatch background;
     SpriteBatch batch;
 
     SpriteBatch ui;
@@ -57,6 +58,10 @@ public class GdxGround extends ApplicationAdapter {
     ParticleEffectPool particlePool;
     Texture menuBackground;
     BitmapFont fontMincho;
+
+    @NotNull
+    public IControlHelper controlHelper;
+
 
     Array<Bullet> bullets = new Array<Bullet>() {
     };
@@ -78,11 +83,11 @@ public class GdxGround extends ApplicationAdapter {
     float MAX_VELOCITY = 100f;
     private Decal decal;
     private DecalBatch decalBatch;
-	
-	
+
+
     @Override
     public void create() {
-		
+
         batch = new SpriteBatch();
         background = new SpriteBatch();
         ui = new SpriteBatch();
@@ -90,11 +95,13 @@ public class GdxGround extends ApplicationAdapter {
         majong = new TextureRegion(bulletImage, 0, 112, 16, 16);
         circularBullet = new TextureRegion(bulletImage, 0, 32, 16, 16);
         menuBackground = new Texture(Gdx.files.internal("menus/menuBackground.png"));
+
+
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 640, 480);
         camera.zoom = 0.2f;
-        camera.position.x -= 320 - 320 / 5   + 128 / 5;
-        camera.position.y -= 240 - 240 / 5   + (480 - 468) / 5;
+        camera.position.x -= 320 - 320 / 5 + 128 / 5;
+        camera.position.y -= 240 - 240 / 5 + (480 - 468) / 5;
         camera.update();
 
 
@@ -135,36 +142,15 @@ public class GdxGround extends ApplicationAdapter {
         modelInstance = new ModelInstance(model);*/
 
 
-
         collisionListener = new BulletCollisionListener();
         world.setContactListener(collisionListener);
 
         for (int i = 0; i < 30; i++) {
             addBullet(Bullet.debugBullet, 200f, 200f, i * 12).setSpeed(10000 * 2);
         }
-        //addShooter(new DebugShooter(this), 20, 20);
-
-
-
-        /*
-        for(int k = 0; k < 10; k++){
-            EnemyShooter e = new EnemyShooter(this){
-				@Override
-				public void updateShoot(){
-					if(this.timer >= 60 && this.timer % 30 == 0){
-						shoot(Bullet.kunaiBullet, 0, 15);
-					}
-				}
-
-			};
-            e.setState(MathUtils.random(0,2));
-            addEnemy(e,1 + k * 6, MathUtils.random(10,12));
-        }
-         */
 
         spawnBoss(new TestSanae(this), 30, 30);
 
-        //addEnemy(new EnemyShooter(this),10, 10);
 
     }
 
@@ -173,17 +159,18 @@ public class GdxGround extends ApplicationAdapter {
 
     @Override
     public void render() {
-		
-        Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera.update();
+        Gdx.gl.glViewport((int) viewport.x, (int) viewport.y,
+                (int) viewport.width, (int) viewport.height);
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		/*
+        /*
         imc.update();
 
         decal.lookAt(imc.position, imc.up);
         decalBatch.add(decal);
         decalBatch.flush();*/
-		
+
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
@@ -220,7 +207,7 @@ public class GdxGround extends ApplicationAdapter {
         );
 
 
-        for (ThItem item : items){
+        for (ThItem item : items) {
             batch.draw(
                     item.texture,
                     item.itemBody.getPosition().x,
@@ -236,8 +223,7 @@ public class GdxGround extends ApplicationAdapter {
         }
 
 
-
-        for (ThBoss singleBoss : bosses){
+        for (ThBoss singleBoss : bosses) {
             batch.draw(
                     singleBoss.texture,
                     singleBoss.getX() + 5,
@@ -290,9 +276,7 @@ public class GdxGround extends ApplicationAdapter {
         }
 
 
-
-
-        for (ExplosionEffect singleEffect : explosionEffects){
+        for (ExplosionEffect singleEffect : explosionEffects) {
 
             batch.draw(
                     singleEffect.texture,
@@ -301,7 +285,7 @@ public class GdxGround extends ApplicationAdapter {
                     singleEffect.texture.getRegionWidth() / 2,
                     singleEffect.texture.getRegionHeight() / 2,
                     singleEffect.texture.getRegionWidth(),
-                    singleEffect.texture.getRegionHeight() ,
+                    singleEffect.texture.getRegionHeight(),
                     0.2f,
                     0.2f,
                     singleEffect.direction
@@ -309,9 +293,9 @@ public class GdxGround extends ApplicationAdapter {
         }
 
         c = batch.getColor();
-        for (ThEffect singleEffect : effects){
+        for (ThEffect singleEffect : effects) {
             Gdx.app.log("Effect", "RegionWidth " + singleEffect.texture.getRegionWidth() + " RegionHeight " + singleEffect.texture.getRegionHeight());
-            batch.setColor(c.r,c.g,c.b,singleEffect.opacity);
+            batch.setColor(c.r, c.g, c.b, singleEffect.opacity);
             batch.draw(
                     singleEffect.texture,
                     singleEffect.x - 119f / 5f,
@@ -319,30 +303,22 @@ public class GdxGround extends ApplicationAdapter {
                     32,
                     32,
                     singleEffect.texture.getRegionWidth(),
-                    singleEffect.texture.getRegionHeight() ,
+                    singleEffect.texture.getRegionHeight(),
                     0.2f,
                     0.2f,
                     singleEffect.angle
             );
 
 
-
-
-
         }
-        batch.setColor(c.r,c.g,c.b,1);
-
-
-
-
-
+        batch.setColor(c.r, c.g, c.b, 1);
 
 
         batch.end();
 
         ui.begin();
         //fontMincho.draw(ui, "靈符「博麗二重大結界」", 50, 50);
-        ui.draw(menuBackground, 0, 0);
+        //ui.draw(menuBackground, 0, 0);
         ui.end();
 
         world.step(1 / 60f, 6, 2);
@@ -352,14 +328,14 @@ public class GdxGround extends ApplicationAdapter {
         }
 
         for (Bullet singleBullet : bullets) {
-            if (singleBullet.destroyFlag){
+            if (singleBullet.destroyFlag) {
                 singleBullet.dispose();
                 bullets.removeValue(singleBullet, true);
             }
         }
 
-        for (EnemyShooter singleEnemy : enemies){
-            if (singleEnemy.dead){
+        for (EnemyShooter singleEnemy : enemies) {
+            if (singleEnemy.dead) {
                 addExplosion(singleEnemy.getX(), singleEnemy.getY());
                 singleEnemy.dispose();
                 enemies.removeValue(singleEnemy, true);
@@ -368,14 +344,14 @@ public class GdxGround extends ApplicationAdapter {
         }
 
 
-        for (ThBoss singleBoss : bosses){
+        for (ThBoss singleBoss : bosses) {
             singleBoss.update();
         }
 
-        for (ExplosionEffect e : explosionEffects){
+        for (ExplosionEffect e : explosionEffects) {
             e.update();
-            if (e.timer >= 100){
-                explosionEffects.removeValue(e,true);
+            if (e.timer >= 100) {
+                explosionEffects.removeValue(e, true);
             }
         }
 
@@ -387,19 +363,19 @@ public class GdxGround extends ApplicationAdapter {
         updateShooters();
         removeGarbageBullets();
 
-        for (ThEffect singleEffect : effects){
+        for (ThEffect singleEffect : effects) {
             singleEffect.update();
             if (singleEffect.disposeFlag)
                 effects.removeValue(singleEffect, true);
         }
 
 
-    } 
+    }
 
     private void removeGarbageBullets() {
         for (Bullet singleBullet : bullets) {
             singleBullet.update();
-            if (singleBullet.getX() > 700/5 || singleBullet.getX() < -100/5 || singleBullet.getY() > 580/5 || singleBullet.getY() < -100/5)
+            if (singleBullet.getX() > 700 / 5 || singleBullet.getX() < -100 / 5 || singleBullet.getY() > 580 / 5 || singleBullet.getY() < -100 / 5)
                 destroyBullet(singleBullet);
         }
     }
@@ -433,6 +409,35 @@ public class GdxGround extends ApplicationAdapter {
         return bs;
     }
 
+
+    private static final int VIRTUAL_WIDTH = 640;
+    private static final int VIRTUAL_HEIGHT = 480;
+    private static final float ASPECT_RATIO =
+            (float) VIRTUAL_WIDTH / (float) VIRTUAL_HEIGHT;
+
+    Rectangle viewport;
+
+    @Override
+    public void resize(int width, int height) {
+        float aspectRatio = (float) width / (float) height;
+        float scale = 1f;
+        Vector2 crop = new Vector2(0f, 0f);
+        if (aspectRatio > ASPECT_RATIO) {
+            scale = (float) height / (float) VIRTUAL_HEIGHT;
+            crop.x = (width - VIRTUAL_WIDTH * scale) / 2f;
+        } else if (aspectRatio < ASPECT_RATIO) {
+            scale = (float) width / (float) VIRTUAL_WIDTH;
+            crop.y = (height - VIRTUAL_HEIGHT * scale) / 2f;
+        } else {
+            scale = (float) width / (float) VIRTUAL_WIDTH;
+        }
+
+        float w = (float) VIRTUAL_WIDTH * scale;
+        float h = (float) VIRTUAL_HEIGHT * scale;
+        viewport = new Rectangle(crop.x, crop.y, w, h);
+    }
+
+
     public BulletShooter addShooter(BulletShooter bs, float x, float y) {
         bs.x = x;
         bs.y = y;
@@ -452,7 +457,7 @@ public class GdxGround extends ApplicationAdapter {
         return es;
     }
 
-    public ThBoss spawnBoss(ThBoss boss, float x, float y){
+    public ThBoss spawnBoss(ThBoss boss, float x, float y) {
         boss.setX(x);
         boss.setY(y);
         bosses.add(boss);
@@ -464,7 +469,7 @@ public class GdxGround extends ApplicationAdapter {
         bullets.removeValue(b, false);
     }
 
-    public void addExplosion(float x, float y){
+    public void addExplosion(float x, float y) {
         ExplosionEffect e = new ExplosionEffect();
         e.x = x;
         e.y = y;
@@ -472,20 +477,20 @@ public class GdxGround extends ApplicationAdapter {
     }
 
 
-    public void addItem(float x, float y){
+    public void addItem(float x, float y) {
         ThItem t = new ThItem(this);
         items.add(t);
     }
 
-    public void addEffect(ThEffect effect, float x, float y){
+    public void addEffect(ThEffect effect, float x, float y) {
         effect.x = x;
         effect.y = y;
         effects.add(effect);
     }
 
-    public void clearEffect(ThEffect effect){
-        for (ThEffect singleEffect : effects){
-            if(singleEffect.getClass() == effect.getClass()){
+    public void clearEffect(ThEffect effect) {
+        for (ThEffect singleEffect : effects) {
+            if (singleEffect.getClass() == effect.getClass()) {
                 singleEffect.enterDispose();
             }
         }

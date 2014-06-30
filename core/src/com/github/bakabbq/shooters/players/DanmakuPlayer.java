@@ -32,7 +32,7 @@ public class DanmakuPlayer {
             {new Vector2(-15, -10f), new Vector2(15, -10f), new Vector2(0, -15f)},
             {new Vector2(-15, -10f), new Vector2(15, -10f), new Vector2(-10f, -15f), new Vector2(10f, -15f)},
     };
-    private final float MAX_VELOCITY = 100f;
+    public final float MAX_VELOCITY = 100f;
     public Texture textureSheet;
     public TextureRegion[][] slicedSheet;
     public GdxGround ground;
@@ -100,7 +100,9 @@ public class DanmakuPlayer {
         if (this.timer % 3 == 0)
             moveTimer++;
         updateControls();
+        //ground.controlHelper.updatePlayerControl(this);
         updateShoot();
+
     }
 
     public void updateShoot() {
