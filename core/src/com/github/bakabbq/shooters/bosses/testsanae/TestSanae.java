@@ -10,7 +10,7 @@ import com.github.bakabbq.shooters.bosses.ThBoss;
 public class TestSanae extends ThBoss{
     public TestSanae(GdxGround ground) {
         super(ground);
-        stateId = StateHelper.IDLE;
+        stateId = StateHelper.MOVING_LEFT;
     }
 
 

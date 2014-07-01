@@ -39,6 +39,8 @@ public class DanmakuPlayer {
     public Body playerBody;
     public Array<DanmakuOption> options = new Array() {
     };
+
+    public int grazeCnt;
     public int power;
     public boolean slowMode = false; // this is quite useless since this updates every frame.__.
     int timer;
@@ -52,6 +54,7 @@ public class DanmakuPlayer {
         power = 400;
         textureSheet = new Texture(Gdx.files.internal("players/reimu.png"));
         slicedSheet = TextureRegion.split(textureSheet, 32, 48);
+        grazeCnt = 0;
 
         createBody();
         addOption();

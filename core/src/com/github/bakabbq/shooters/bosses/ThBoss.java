@@ -58,13 +58,13 @@ public class ThBoss extends EnemyShooter {
         switch(stateId) {
             case 0:
                 rId = 0;
-                cId = stateTimer % 4;
+                cId = (stateTimer > 3 ? (2 + stateTimer % 2) : (stateTimer % 4));
                 break;
             case 1:
                 flip = true;
             case 2:
                 rId = 1;
-                cId = (stateTimer > 3 ? (3) : (stateTimer % 4));
+                cId = (stateTimer > 3 ? (2 + stateTimer % 2) : (stateTimer % 4));
                 break;
             case 3:
                 rId = 2;

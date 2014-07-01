@@ -33,6 +33,7 @@ import com.github.bakabbq.shooters.bosses.testsanae.TestSanae;
 import com.github.bakabbq.shooters.players.DanmakuOption;
 import com.github.bakabbq.shooters.players.DanmakuPlayer;
 import com.github.bakabbq.shooters.players.IControlHelper;
+import com.github.bakabbq.shooters.players.PlayerGrazeCounter;
 import com.sun.istack.internal.NotNull;
 
 
@@ -58,6 +59,9 @@ public class GdxGround extends ApplicationAdapter {
     ParticleEffectPool particlePool;
     Texture menuBackground;
     BitmapFont fontMincho;
+    BitmapFont fontSavoye;
+
+    PlayerGrazeCounter grazeCounter;
 
     @NotNull
     public IControlHelper controlHelper;
@@ -106,6 +110,8 @@ public class GdxGround extends ApplicationAdapter {
 
 
         fontMincho = new BitmapFont(Gdx.files.internal("fonts/YuMincho.fnt"));
+        fontSavoye = new BitmapFont(Gdx.files.internal("fonts/savoye_let.fnt"));
+
 
         backgroundImage = new Texture(Gdx.files.internal("backgrounds/stg6bg.png"));
 
@@ -130,6 +136,7 @@ public class GdxGround extends ApplicationAdapter {
 
 
         player = new DanmakuPlayer(this);
+        grazeCounter = new PlayerGrazeCounter(player);
         /*
         environment = new Environment();
         environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
@@ -150,6 +157,7 @@ public class GdxGround extends ApplicationAdapter {
         }
 
         spawnBoss(new TestSanae(this), 30, 30);
+
 
 
     }
@@ -294,7 +302,7 @@ public class GdxGround extends ApplicationAdapter {
 
         c = batch.getColor();
         for (ThEffect singleEffect : effects) {
-            Gdx.app.log("Effect", "RegionWidth " + singleEffect.texture.getRegionWidth() + " RegionHeight " + singleEffect.texture.getRegionHeight());
+            //Gdx.app.log("Effect", "RegionWidth " + singleEffect.texture.getRegionWidth() + " RegionHeight " + singleEffect.texture.getRegionHeight());
             batch.setColor(c.r, c.g, c.b, singleEffect.opacity);
             batch.draw(
                     singleEffect.texture,
@@ -317,6 +325,7 @@ public class GdxGround extends ApplicationAdapter {
         batch.end();
 
         ui.begin();
+        fontSavoye.draw(ui,"" + player.grazeCnt, 40, 40);
         //fontMincho.draw(ui, "靈符「博麗二重大結界」", 50, 50);
         //ui.draw(menuBackground, 0, 0);
         ui.end();
@@ -368,6 +377,7 @@ public class GdxGround extends ApplicationAdapter {
             if (singleEffect.disposeFlag)
                 effects.removeValue(singleEffect, true);
         }
+        grazeCounter.update();
 
 
     }

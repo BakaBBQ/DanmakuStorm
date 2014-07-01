@@ -1,10 +1,12 @@
 package com.github.bakabbq.bullets;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.*;
 import com.github.bakabbq.BulletCollisionListener;
+import com.github.bakabbq.GdxGround;
 
 /**
  * Created by LBQ on 5/27/14.
@@ -18,6 +20,7 @@ public class Bullet {
     public BulletDef bd;
     public Sprite sprite;
     public World world;
+    public boolean grazed;
     Fixture fixture;
 
     //Destroy Flag - once marked, it will be garbage dumped
@@ -36,6 +39,7 @@ public class Bullet {
         this.fixture = body.createFixture(fd);
         body.setTransform(x, y, angle);
         setSprite();
+        grazed = false;
     }
 
     public int getAngleFix() {
@@ -102,6 +106,16 @@ public class Bullet {
         sprite.setOrigin(bd.texture.getRegionWidth() / 2, bd.texture.getRegionHeight() / 2);
         sprite.setRotation(180);
         bd.modifySprite(sprite);
+    }
+
+    public void onGraze(){
+        ((GdxGround) Gdx.app.getApplicationListener()).player.grazeCnt += 1;
+        Gdx.app.log("Graze", "Player Graze: " + ((GdxGround) Gdx.app.getApplicationListener()).player.grazeCnt);
+        grazed = true;
+    }
+
+    public boolean canGraze(){
+        return !grazed;
     }
 
     public void dispose(){
