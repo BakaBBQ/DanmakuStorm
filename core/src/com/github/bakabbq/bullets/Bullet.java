@@ -23,11 +23,13 @@ public class Bullet {
     public boolean grazed;
     Fixture fixture;
 
+
     //Destroy Flag - once marked, it will be garbage dumped
     public boolean destroyFlag;
 
     public Bullet(BulletDef bd, World world, float x, float y, float angle) {
         this.bd = bd;
+        this.timer = 0;
         this.world = world;
         BodyDef bodydef = new BodyDef();
         bodydef.type = BodyDef.BodyType.DynamicBody;
@@ -35,7 +37,7 @@ public class Bullet {
         body.setUserData(this);
         FixtureDef fd = bd.fixtureD;
         fd.filter.categoryBits = BulletCollisionListener.ENEMY_BULLET;
-        fd.filter.maskBits = (short)(BulletCollisionListener.PLAYER | 0x001);
+        fd.filter.maskBits = (short)(BulletCollisionListener.PLAYER | 0x001 | BulletCollisionListener.PLAYER_BULLET);
         this.fixture = body.createFixture(fd);
         body.setTransform(x, y, angle);
         setSprite();
@@ -87,8 +89,9 @@ public class Bullet {
         float forceAngle = (body.getAngle() + 270f) / 180f * (float) Math.PI;
         body.applyLinearImpulse(MathUtils.cos(forceAngle) * speed, MathUtils.sin(forceAngle) * speed, body.getPosition().x, body.getPosition().y, true);
     }
-
+    public int timer;
     public void update() {
+        timer++;
         sprite.setPosition(body.getPosition().x, body.getPosition().y);
         this.bd.modifyBullet(this);
     }
@@ -112,6 +115,11 @@ public class Bullet {
         ((GdxGround) Gdx.app.getApplicationListener()).player.grazeCnt += 1;
         Gdx.app.log("Graze", "Player Graze: " + ((GdxGround) Gdx.app.getApplicationListener()).player.grazeCnt);
         grazed = true;
+    }
+
+    public void stop(){
+        body.setLinearVelocity(0,0);
+        body.setAngularVelocity(0);
     }
 
     public boolean canGraze(){

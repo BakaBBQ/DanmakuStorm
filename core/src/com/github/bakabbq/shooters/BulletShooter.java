@@ -18,6 +18,14 @@ public class BulletShooter {
         timer = 0;
     }
 
+    public float getX(){
+        return x;
+    }
+
+    public float getY(){
+        return y;
+    }
+
 
     //Delegate method
     public void shoot(BulletDef bd, float angle, int speed) {

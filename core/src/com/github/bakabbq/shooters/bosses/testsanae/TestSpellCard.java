@@ -3,8 +3,7 @@ package com.github.bakabbq.shooters.bosses.testsanae;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.github.bakabbq.StateHelper;
-import com.github.bakabbq.bullets.Bullet;
-import com.github.bakabbq.bullets.BulletDef;
+import com.github.bakabbq.bullets.*;
 import com.github.bakabbq.shooters.bosses.ThBoss;
 import com.github.bakabbq.spellcards.SpellCard;
 
@@ -24,10 +23,51 @@ public class TestSpellCard extends SpellCard{
 
     @Override
     public void mainLoop(){
-        if(timer % 60 == 0)
-            for(int i = 0; i < 40 ; i ++){
-                owner.shoot(Bullet.amuletBullet, MathUtils.random(0,360), MathUtils.random(20,180));
-            }
+        if(timer % 60 == 0 && timer % 120 != 0)
+            owner.nwayShoot(new BulletAmulets(){
+                @Override
+                public void modifyBullet(Bullet bullet){
+                    if(bullet.timer == 60){
+                        bullet.setSpeed(bullet.body.getAngle() + MathUtils.random(-60,60), 2f);
+                        bullet.stop();
+                    }
+
+                    if(bullet.timer == 120){
+                        bullet.setSpeed(-80f);
+                    }
+
+                    if(bullet.timer == 240){
+                        bullet.setSpeed(100f);
+                    }
+                }
+            }, 100, 0, 40);
+
+
+
+        else if(timer%60==0 && timer % 120 == 0){
+            owner.nwayShoot(new BulletKunai(){
+                @Override
+                public void modifyBullet(Bullet bullet){
+                    if(bullet.timer == 60){
+                        bullet.stop();
+                        //bullet.body.setLinearVelocity(0,0);
+                        //bullet.setSpeed(bullet.body.getAngle() + MathUtils.random(-60,60), 2f);
+                    }
+
+                    if(bullet.timer == 120){
+                        bullet.setSpeed(-80f);
+                    }
+
+                    if(bullet.timer == 240){
+                        //bullet.setSpeed(100f);
+                    }
+                }
+            }, 20, 0, 10);
+        }
+
+
+
+
 
     } // void mainLoop
 }

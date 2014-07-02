@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.decals.CameraGroupStrategy;
 import com.badlogic.gdx.graphics.g3d.decals.Decal;
 import com.badlogic.gdx.graphics.g3d.decals.DecalBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -22,6 +23,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.github.bakabbq.bullets.Bullet;
 import com.github.bakabbq.bullets.BulletDef;
+import com.github.bakabbq.bullets.Laser;
 import com.github.bakabbq.bullets.PlayerBullet;
 import com.github.bakabbq.effects.ExplosionEffect;
 import com.github.bakabbq.effects.ThEffect;
@@ -34,6 +36,9 @@ import com.github.bakabbq.shooters.players.DanmakuOption;
 import com.github.bakabbq.shooters.players.DanmakuPlayer;
 import com.github.bakabbq.shooters.players.IControlHelper;
 import com.github.bakabbq.shooters.players.PlayerGrazeCounter;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+
+
 import com.sun.istack.internal.NotNull;
 
 
@@ -62,6 +67,7 @@ public class GdxGround extends ApplicationAdapter {
     BitmapFont fontSavoye;
 
     PlayerGrazeCounter grazeCounter;
+    ShapeRenderer shapeRenderer;
 
     @NotNull
     public IControlHelper controlHelper;
@@ -78,6 +84,7 @@ public class GdxGround extends ApplicationAdapter {
     Array<ThBoss> bosses = new Array();
     Array<ThEffect> effects = new Array();
     Array<ExplosionEffect> explosionEffects = new Array();
+    Array<Laser> lasers = new Array<Laser>();
 
 
     BulletCollisionListener collisionListener;
@@ -151,15 +158,14 @@ public class GdxGround extends ApplicationAdapter {
 
         collisionListener = new BulletCollisionListener();
         world.setContactListener(collisionListener);
-
+        shapeRenderer = new ShapeRenderer();
         for (int i = 0; i < 30; i++) {
             addBullet(Bullet.debugBullet, 200f, 200f, i * 12).setSpeed(10000 * 2);
         }
 
-        spawnBoss(new TestSanae(this), 30, 30);
-
-
-
+        TestSanae sanae = new TestSanae(this);
+        spawnBoss(sanae, 30, 30);
+        //addLaser(new Laser(180, 0, sanae));
     }
 
     private void create_player_body() {
@@ -234,8 +240,8 @@ public class GdxGround extends ApplicationAdapter {
         for (ThBoss singleBoss : bosses) {
             batch.draw(
                     singleBoss.texture,
-                    singleBoss.getX() + 5,
-                    singleBoss.getY() + 6,
+                    singleBoss.getX() + 2,
+                    singleBoss.getY() + 3,
                     0,
                     0,
                     singleBoss.getTexture().getRegionWidth(),
@@ -318,11 +324,19 @@ public class GdxGround extends ApplicationAdapter {
             );
 
 
+
+
+
         }
         batch.setColor(c.r, c.g, c.b, 1);
 
+        for (Laser singleLaser : lasers){
+            //batch.draw(majong, singleLaser.owner.getX(),singleLaser.owner.getY());
+        }
 
         batch.end();
+
+
 
         ui.begin();
         fontSavoye.draw(ui,"" + player.grazeCnt, 40, 40);
@@ -380,12 +394,25 @@ public class GdxGround extends ApplicationAdapter {
         grazeCounter.update();
 
 
+        shapeRenderer.setProjectionMatrix(camera.combined);
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(1,1,0,1);
+        for (Laser singleLaser : lasers){
+            shapeRenderer.line(singleLaser.owner.getX(),singleLaser.owner.getY(), singleLaser.tx, singleLaser.ty);
+        }
+        shapeRenderer.end();
+
+
+        for(Laser singleLaser : lasers){
+            singleLaser.update();
+        }
     }
 
     private void removeGarbageBullets() {
         for (Bullet singleBullet : bullets) {
             singleBullet.update();
-            if (singleBullet.getX() > 700 / 5 || singleBullet.getX() < -100 / 5 || singleBullet.getY() > 580 / 5 || singleBullet.getY() < -100 / 5)
+            if (singleBullet.getX() > 350 / 5 || singleBullet.getX() < -50 / 5 || singleBullet.getY() > 500 / 5 || singleBullet.getY() < -60 / 5)
                 destroyBullet(singleBullet);
         }
     }
@@ -504,5 +531,9 @@ public class GdxGround extends ApplicationAdapter {
                 singleEffect.enterDispose();
             }
         }
+    }
+
+    public void addLaser(Laser laser){
+        lasers.add(laser);
     }
 }

@@ -18,10 +18,10 @@ public class BulletOval extends BulletDef {
     public Shape getShape() {
         Vector2[] vertices = new Vector2[4];
 
-        vertices[0] = new Vector2(3f, 0f);
-        vertices[1] = new Vector2(0f, 4f);
-        vertices[2] = new Vector2(-3f, 0f);
-        vertices[3] = new Vector2(0f, -4f);
+        vertices[0] = new Vector2(3/5f, 0f);
+        vertices[1] = new Vector2(0f, 4/5f);
+        vertices[2] = new Vector2(-3/5f, 0f);
+        vertices[3] = new Vector2(0f, -4/5f);
         PolygonShape shape = new PolygonShape();
         shape.set(vertices);
         return shape;
