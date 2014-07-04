@@ -3,10 +3,7 @@ package com.github.bakabbq;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
@@ -14,7 +11,10 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.decals.CameraGroupStrategy;
 import com.badlogic.gdx.graphics.g3d.decals.Decal;
 import com.badlogic.gdx.graphics.g3d.decals.DecalBatch;
+import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer;
+import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -70,7 +70,8 @@ public class GdxGround extends ApplicationAdapter {
     PlayerGrazeCounter grazeCounter;
     ShapeRenderer shapeRenderer;
 
-    @NotNull
+    ImmediateModeRenderer renderer;
+
     public IControlHelper controlHelper;
 
     Texture test;
@@ -131,7 +132,6 @@ public class GdxGround extends ApplicationAdapter {
 
         imc = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         imc.position.set(10f, 10f, 10f);
-        //imc.lookAt(0, 0, 0);
         imc.near = 1f;
         imc.far = 300f;
         imc.update();
@@ -170,6 +170,10 @@ public class GdxGround extends ApplicationAdapter {
 
         TestSanae sanae = new TestSanae(this);
         spawnBoss(sanae, 30, 30);
+
+        renderer = new ImmediateModeRenderer20(false, true, 1);
+
+
         //addLaser(new Laser(180, 0, sanae));
     }
 
@@ -194,7 +198,6 @@ public class GdxGround extends ApplicationAdapter {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         for (EnemyShooter singleEnemy : enemies) {
-            //batch.draw(majong, singleEnemy.getX(), singleEnemy.getY());
             batch.draw(
                     singleEnemy.texture,
                     singleEnemy.getX() + 5,
@@ -423,6 +426,43 @@ public class GdxGround extends ApplicationAdapter {
     }
 
     private void playerMovement() {
+    }
+
+    public void progress(float cx, float cy, float r, float thickness, float amt, Color c, Texture lookup) {
+        //start and end angles
+        float start = 0f;
+        float end = amt * 360f;
+
+        lookup.bind();
+        renderer.begin(camera.combined, Gdx.gl.GL_TRIANGLE_STRIP);
+        Gdx.gl.glEnable(Gdx.gl.GL_BLEND);
+
+        Gdx.gl.glBlendFunc(Gdx.gl.GL_SRC_ALPHA, Gdx.gl.GL_ONE_MINUS_SRC_ALPHA);
+        int segs = (int)(12 * Math.cbrt(r));
+        end += 90f;
+        start += 90f;
+        float halfThick = thickness/2f;
+        float step = 360f / segs;
+        for (float angle=start; angle<(end+step); angle+=step) {
+            float tc = 0.5f;
+            if (angle==start)
+                tc = 0f;
+            else if (angle>=end)
+                tc = 1f;
+
+            float fx = MathUtils.cosDeg(angle);
+            float fy = MathUtils.sinDeg(angle);
+
+            float z = 0f;
+            renderer.color(c.r, c.g, c.b, c.a);
+            renderer.texCoord(tc, 1f);
+            renderer.vertex(cx + fx * (r + halfThick), cy + fy * (r + halfThick), z);
+
+            renderer.color(c.r, c.g, c.b, c.a);
+            renderer.texCoord(tc, 0f);
+            renderer.vertex(cx + fx * (r + -halfThick), cy + fy * (r + -halfThick), z);
+        }
+        renderer.end();
     }
 
 
