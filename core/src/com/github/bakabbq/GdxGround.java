@@ -25,6 +25,7 @@ import com.github.bakabbq.bullets.Bullet;
 import com.github.bakabbq.bullets.BulletDef;
 import com.github.bakabbq.bullets.Laser;
 import com.github.bakabbq.bullets.PlayerBullet;
+import com.github.bakabbq.effects.BulletCreationEffect;
 import com.github.bakabbq.effects.ExplosionEffect;
 import com.github.bakabbq.effects.ThEffect;
 import com.github.bakabbq.items.ThItem;
@@ -71,6 +72,8 @@ public class GdxGround extends ApplicationAdapter {
 
     @NotNull
     public IControlHelper controlHelper;
+
+    Texture test;
 
 
     Array<Bullet> bullets = new Array<Bullet>() {
@@ -144,6 +147,8 @@ public class GdxGround extends ApplicationAdapter {
 
         player = new DanmakuPlayer(this);
         grazeCounter = new PlayerGrazeCounter(player);
+
+        test =new Texture(Gdx.files.internal("backgrounds/stage01a.png"));
         /*
         environment = new Environment();
         environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
@@ -188,7 +193,6 @@ public class GdxGround extends ApplicationAdapter {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-
         for (EnemyShooter singleEnemy : enemies) {
             //batch.draw(majong, singleEnemy.getX(), singleEnemy.getY());
             batch.draw(
@@ -312,21 +316,16 @@ public class GdxGround extends ApplicationAdapter {
             batch.setColor(c.r, c.g, c.b, singleEffect.opacity);
             batch.draw(
                     singleEffect.texture,
-                    singleEffect.x - 119f / 5f,
-                    singleEffect.y - 119f / 5f,
-                    32,
-                    32,
-                    singleEffect.texture.getRegionWidth(),
-                    singleEffect.texture.getRegionHeight(),
+                    singleEffect.x - singleEffect.texture.getRegionWidth() / 2 * singleEffect.zoomX,
+                    singleEffect.y - singleEffect.texture.getRegionHeight() / 2 * singleEffect.zoomY,
+                    singleEffect.texture.getRegionWidth() / 2 * singleEffect.zoomX,
+                    singleEffect.texture.getRegionHeight() / 2 * singleEffect.zoomY,
+                    singleEffect.texture.getRegionWidth() * singleEffect.zoomX,
+                    singleEffect.texture.getRegionHeight() * singleEffect.zoomY,
                     0.2f,
                     0.2f,
                     singleEffect.angle
             );
-
-
-
-
-
         }
         batch.setColor(c.r, c.g, c.b, 1);
 
@@ -430,6 +429,7 @@ public class GdxGround extends ApplicationAdapter {
     public Bullet addBullet(BulletDef bd, float x, float y, float angle) {
         Bullet bullet;
         bullet = new Bullet(bd, world, x, y, angle);
+        addEffect(new BulletCreationEffect(), x, y);
         bullets.add(bullet);
         return bullet;
     }

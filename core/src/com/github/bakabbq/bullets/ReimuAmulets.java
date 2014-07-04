@@ -10,6 +10,10 @@ import com.badlogic.gdx.physics.box2d.Shape;
  * Created by LBQ on 5/30/14.
  */
 public class ReimuAmulets extends BulletDef {
+    public ReimuAmulets(int colorId) {
+        super(colorId);
+    }
+
     public void setTextureIndex() {
         bulletSheet = new Texture(Gdx.files.internal("players/reimu.png"));
         textureX = 0;

@@ -8,6 +8,10 @@ import com.github.bakabbq.Pixel;
  * Created by LBQ on 5/27/14.
  */
 public class BulletAmulets extends BulletDef {
+    public BulletAmulets(int colorId) {
+        super(colorId);
+    }
+
     public void setTextureIndex() {
         textureX = 1;
         textureY = 7;

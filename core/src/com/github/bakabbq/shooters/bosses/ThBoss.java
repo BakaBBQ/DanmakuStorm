@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.*;
 import com.github.bakabbq.*;
+import com.github.bakabbq.effects.BossCastingEffect;
 import com.github.bakabbq.shooters.*;
 import com.github.bakabbq.spellcards.*;
 
@@ -20,6 +21,7 @@ public class ThBoss extends EnemyShooter {
         super(ground);
         initSpellCards();
         initMainTexture();
+        ground.addEffect(new BossCastingEffect(), getX(), getY());
     }
 
 

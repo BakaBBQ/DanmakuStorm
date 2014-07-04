@@ -5,18 +5,16 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
- * Created by LBQ on 6/28/14.
+ * Created by LBQ on 7/4/14.
  */
-public class BossCastingEffect extends ThEffect{
-
-    public BossCastingEffect(){
+public class BulletCreationEffect extends ThEffect{
+    public BulletCreationEffect(){
         super();
-        zoomTo(1.2f);
     }
 
     @Override
     public void initTexture(){
-        this.texture = new TextureRegion(mainTexture, 128, 64 + 16, 128, 128);
+        this.texture = new TextureRegion(new Texture(Gdx.files.internal("bullets/bullet1.png")), 0, 208, 32, 32);
     }
 
     @Override
@@ -39,7 +37,10 @@ public class BossCastingEffect extends ThEffect{
 
     @Override
     public void onMainUpdate(){
-        this.angle+=2;
+        this.zoomX -= 0.03f;
+        this.zoomY -= 0.03f;
+        if (this.zoomX <= 0.0f){
+            enterDispose();
+        }
     }
-
 }

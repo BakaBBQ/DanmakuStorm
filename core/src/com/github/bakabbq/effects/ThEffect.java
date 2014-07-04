@@ -13,7 +13,8 @@ import com.github.bakabbq.GdxGround;
 public class ThEffect {
     public float x,y;
     public int timer = 0;
-    public float zoomX, zoomY = 1f;
+    public float zoomX = 1f;
+    public float zoomY = 1f;
     public float angle = 0f;
     public float opacity = 0f;
 
@@ -89,5 +90,10 @@ public class ThEffect {
 
     public void dispose(){
         disposeFlag = true;
+    }
+
+    public void zoomTo(float zoom){
+        this.zoomX = zoom;
+        this.zoomY = zoom;
     }
 }

@@ -24,7 +24,7 @@ public class TestSpellCard extends SpellCard{
     @Override
     public void mainLoop(){
         if(timer % 60 == 0 && timer % 120 != 0)
-            owner.nwayShoot(new BulletAmulets(){
+            owner.nwayShoot(new BulletAmulets(0){
                 @Override
                 public void modifyBullet(Bullet bullet){
                     if(bullet.timer == 60){
@@ -45,13 +45,11 @@ public class TestSpellCard extends SpellCard{
 
 
         else if(timer%60==0 && timer % 120 == 0){
-            owner.nwayShoot(new BulletKunai(){
+            owner.nwayShoot(new BulletKunai(0){
                 @Override
                 public void modifyBullet(Bullet bullet){
                     if(bullet.timer == 60){
                         bullet.stop();
-                        //bullet.body.setLinearVelocity(0,0);
-                        //bullet.setSpeed(bullet.body.getAngle() + MathUtils.random(-60,60), 2f);
                     }
 
                     if(bullet.timer == 120){

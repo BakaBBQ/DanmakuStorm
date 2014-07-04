@@ -8,6 +8,10 @@ import com.badlogic.gdx.physics.box2d.Shape;
  * Created by LBQ on 5/27/14.
  */
 public class BulletKunai extends BulletDef {
+    public BulletKunai(int colorId) {
+        super(colorId);
+    }
+
     @Override
     public void setTextureIndex() {
         textureX = 1;

@@ -8,6 +8,10 @@ import com.badlogic.gdx.physics.box2d.Shape;
  * Created by LBQ on 5/28/14.
  */
 public class BulletOval extends BulletDef {
+    public BulletOval(int colorId) {
+        super(colorId);
+    }
+
     @Override
     public void setTextureIndex() {
         this.textureX = 1;

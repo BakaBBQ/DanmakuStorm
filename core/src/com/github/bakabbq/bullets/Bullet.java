@@ -12,10 +12,10 @@ import com.github.bakabbq.GdxGround;
  * Created by LBQ on 5/27/14.
  */
 public class Bullet {
-    public static BulletDef debugBullet = new BulletDef();
-    public static BulletAmulets amuletBullet = new BulletAmulets();
-    public static BulletKunai kunaiBullet = new BulletKunai();
-    public static BulletOval ovalBullet = new BulletOval();
+    public static BulletDef debugBullet = new BulletDef(0);
+    public static BulletAmulets amuletBullet = new BulletAmulets(0);
+    public static BulletKunai kunaiBullet = new BulletKunai(0);
+    public static BulletOval ovalBullet = new BulletOval(0);
     public Body body;
     public BulletDef bd;
     public Sprite sprite;

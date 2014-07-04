@@ -29,9 +29,12 @@ public class BulletDef {
     public FixtureDef fixtureD; // the fixture for bullet creation
     public TextureRegion texture;
     public Sprite sprite;
+
+    public int colorId;
     protected Texture bulletSheet = new Texture(Gdx.files.internal("bullets/bullet1.png"));
 
-    public BulletDef() {
+    public BulletDef(int colorId) {
+        this.colorId = colorId;
         fixtureD = new FixtureDef();
         fixtureD.density = 0.7f;
         fixtureD.friction = 0.0f;
@@ -42,7 +45,8 @@ public class BulletDef {
     }
 
     public void setTextureIndex() {
-        Gdx.app.log("Debug", "Debug Bullet Used");
+        textureX = colorId;
+        textureY = 2;
     }
 
     public Shape getShape() {

@@ -9,8 +9,8 @@ import com.github.bakabbq.BulletCollisionListener;
  * Created by LBQ on 5/30/14.
  */
 public class PlayerBullet extends Bullet {
-    public static BulletReimuHoming reimuHoming = new BulletReimuHoming();
-    public static ReimuAmulets reimuAmulet = new ReimuAmulets();
+    public static BulletReimuHoming reimuHoming = new BulletReimuHoming(0);
+    public static ReimuAmulets reimuAmulet = new ReimuAmulets(0);
 
 
     public int damage;
