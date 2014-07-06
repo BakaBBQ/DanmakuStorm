@@ -11,9 +11,7 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.decals.CameraGroupStrategy;
 import com.badlogic.gdx.graphics.g3d.decals.Decal;
 import com.badlogic.gdx.graphics.g3d.decals.DecalBatch;
-import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer;
-import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.*;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -111,7 +109,7 @@ public class GdxGround extends ApplicationAdapter {
         circularBullet = new TextureRegion(bulletImage, 0, 32, 16, 16);
         menuBackground = new Texture(Gdx.files.internal("menus/menuBackground.png"));
 
-
+        setupShader();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 640, 480);
         camera.zoom = 0.2f;
@@ -180,6 +178,19 @@ public class GdxGround extends ApplicationAdapter {
     private void create_player_body() {
     }
 
+    ShaderProgram shader;
+    void setupShader(){
+        ShaderProgram.pedantic = false;
+        shader = new ShaderProgram(
+                Gdx.files.internal("testshaders/test.vert").readString(),
+                Gdx.files.internal("testshaders/test.frag").readString()
+        );
+        if(!shader.isCompiled()) {
+            Gdx.app.log("Problem loading shader:", shader.getLog());
+        }
+        background.setShader(shader);
+    }
+
     @Override
     public void render() {
         camera.update();
@@ -187,12 +198,10 @@ public class GdxGround extends ApplicationAdapter {
                 (int) viewport.width, (int) viewport.height);
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        /*
-        imc.update();
 
-        decal.lookAt(imc.position, imc.up);
-        decalBatch.add(decal);
-        decalBatch.flush();*/
+        background.begin();
+        background.draw(backgroundImage,0,0);
+        background.end();
 
 
         batch.setProjectionMatrix(camera.combined);
@@ -469,7 +478,7 @@ public class GdxGround extends ApplicationAdapter {
     public Bullet addBullet(BulletDef bd, float x, float y, float angle) {
         Bullet bullet;
         bullet = new Bullet(bd, world, x, y, angle);
-        addEffect(new BulletCreationEffect(), x, y);
+        //addEffect(new BulletCreationEffect(), x, y);
         bullets.add(bullet);
         return bullet;
     }
