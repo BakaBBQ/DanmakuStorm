@@ -107,14 +107,16 @@ public class GdxGround extends ApplicationAdapter {
         bulletImage = new Texture(Gdx.files.internal("bullets/bullet1.png"));
         majong = new TextureRegion(bulletImage, 0, 112, 16, 16);
         circularBullet = new TextureRegion(bulletImage, 0, 32, 16, 16);
-        menuBackground = new Texture(Gdx.files.internal("menus/menuBackground.png"));
+        menuBackground = new Texture(Gdx.files.internal("menus/front.png"));
 
         setupShader();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 640, 480);
+
         camera.zoom = 0.2f;
-        camera.position.x -= 320 - 320 / 5 + 128 / 5;
-        camera.position.y -= 240 - 240 / 5 + (480 - 468) / 5;
+        //magic
+        camera.position.x -= 320 - 320 / 5 + 128 / 5 - 10;
+        camera.position.y -= 240 - 240 / 5 + (480 - 462) / 5;
         camera.update();
 
 
@@ -146,17 +148,7 @@ public class GdxGround extends ApplicationAdapter {
         player = new DanmakuPlayer(this);
         grazeCounter = new PlayerGrazeCounter(player);
 
-        test =new Texture(Gdx.files.internal("backgrounds/stage01a.png"));
-        /*
-        environment = new Environment();
-        environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
-        environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
-
-        ModelBuilder modelBuilder = new ModelBuilder();
-        model = modelBuilder.createBox(5f, 5f, 5f,
-                new Material(ColorAttribute.createDiffuse(Color.GREEN)),
-                VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
-        modelInstance = new ModelInstance(model);*/
+        test = new Texture(Gdx.files.internal("backgrounds/stage01a.png"));
 
 
         collisionListener = new BulletCollisionListener();
@@ -352,7 +344,7 @@ public class GdxGround extends ApplicationAdapter {
         ui.begin();
         fontSavoye.draw(ui,"" + player.grazeCnt, 40, 40);
         //fontMincho.draw(ui, "靈符「博麗二重大結界」", 50, 50);
-        //ui.draw(menuBackground, 0, 0);
+        ui.draw(menuBackground, 0, 0);
         ui.end();
 
         world.step(1 / 60f, 6, 2);
