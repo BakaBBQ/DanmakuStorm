@@ -3,6 +3,7 @@ package com.github.bakabbq.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.github.bakabbq.DanmakuGame;
@@ -17,9 +18,13 @@ public class TitleScreen implements Screen{
     Texture praying;
     Texture particle;
 
+    int timer;
+
 
     public TitleScreen(DanmakuGame game){
         this.game = game;
+
+        timer = 0;
         loadBasicAssets();
         loadAllAssets();
     }
@@ -36,8 +41,16 @@ public class TitleScreen implements Screen{
 
     @Override
     public void render(float delta) {
+        timer ++;
         getBatch().begin();
         getBatch().draw(background,0,0);
+
+        Color c = getBatch().getColor();
+        getBatch().setColor(c.r, c.g, c.b, (float) (180 + Math.abs((Math.sin((float) timer/30f) * 75)) / 255f));
+        //Deal with girls are praying
+        getBatch().draw(praying,0,0);
+        getBatch().setColor(c);
+
         getBatch().end();
     }
 
