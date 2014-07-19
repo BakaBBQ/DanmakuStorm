@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.github.bakabbq.GdxGround;
+import com.github.bakabbq.IDanmakuWorld;
 
 /**
  * Created by LBQ on 6/28/14.
@@ -23,7 +24,7 @@ public class ThEffect {
     public Texture mainTexture = new Texture(Gdx.files.internal("bullets/system.png"));
     public TextureRegion texture;
 
-    public GdxGround ground;
+    public IDanmakuWorld ground;
 
     public int state;
 
@@ -95,5 +96,14 @@ public class ThEffect {
     public void zoomTo(float zoom){
         this.zoomX = zoom;
         this.zoomY = zoom;
+    }
+
+
+    public float getXOffset(){
+        return 0;
+    }
+
+    public float getYOffset(){
+        return 0;
     }
 }

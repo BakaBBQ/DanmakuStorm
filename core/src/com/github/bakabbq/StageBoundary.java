@@ -7,7 +7,7 @@ import com.badlogic.gdx.physics.box2d.Body;
  */
 public class StageBoundary {
     public Body upperBody, lowerBody, leftBody, rightBody;
-    public StageBoundary(GdxGround ground){
+    public StageBoundary(IDanmakuWorld ground){
         createBoundaries(0,0,384,449);
     }
 

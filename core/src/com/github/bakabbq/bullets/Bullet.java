@@ -6,7 +6,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.*;
 import com.github.bakabbq.BulletCollisionListener;
+import com.github.bakabbq.DanmakuGame;
 import com.github.bakabbq.GdxGround;
+import com.github.bakabbq.IDanmakuWorld;
+import com.sun.istack.internal.NotNull;
 
 /**
  * Created by LBQ on 5/27/14.
@@ -22,6 +25,8 @@ public class Bullet {
     public World world;
     public boolean grazed;
     Fixture fixture;
+
+    @NotNull public IDanmakuWorld danmakuWorld;
 
 
     //Destroy Flag - once marked, it will be garbage dumped
@@ -112,8 +117,8 @@ public class Bullet {
     }
 
     public void onGraze(){
-        ((GdxGround) Gdx.app.getApplicationListener()).player.grazeCnt += 1;
-        Gdx.app.log("Graze", "Player Graze: " + ((GdxGround) Gdx.app.getApplicationListener()).player.grazeCnt);
+        danmakuWorld.getPlayer().grazeCnt += 1;
+        //Gdx.app.log("Graze", "Player Graze: " + ((GdxGround) Gdx.app.getApplicationListener()).player.grazeCnt);
         grazed = true;
     }
 

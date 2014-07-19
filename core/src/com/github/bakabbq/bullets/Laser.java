@@ -40,7 +40,7 @@ public class Laser{
     }
 
     public void createBody(float x, float y, float angle){
-        World world = owner.ground.world;
+        World world = owner.ground.getWorld();
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x,y);

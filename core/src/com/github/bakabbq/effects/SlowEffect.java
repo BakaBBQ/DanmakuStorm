@@ -37,7 +37,17 @@ public class SlowEffect extends ThEffect{
     @Override
     public void generalUpdate(){
         this.angle++;
-        this.x = ground.player.getX();
-        this.y = ground.player.getY();
+        this.x = ground.getPlayer().getX();
+        this.y = ground.getPlayer().getY();
+    }
+
+    @Override
+    public float getXOffset(){
+        return -23.8f;
+    }
+
+    @Override
+    public float getYOffset(){
+        return -23.8f;
     }
 }

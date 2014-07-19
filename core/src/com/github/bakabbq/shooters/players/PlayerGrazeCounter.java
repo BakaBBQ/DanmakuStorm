@@ -4,12 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.*;
 import com.github.bakabbq.BulletCollisionListener;
 import com.github.bakabbq.GdxGround;
+import com.github.bakabbq.IDanmakuWorld;
 
 /**
  * Created by LBQ on 7/1/14.
  */
 public class PlayerGrazeCounter {
-    GdxGround ground;
+    IDanmakuWorld ground;
     DanmakuPlayer player;
     Body body;
 
@@ -21,7 +22,7 @@ public class PlayerGrazeCounter {
     }
 
     public void createBody(){
-        World world = ground.world;
+        World world = ground.getWorld();
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(this.player.playerBody.getPosition());
@@ -35,14 +36,12 @@ public class PlayerGrazeCounter {
         fixtureDef.friction = 0.4f;
         fixtureDef.restitution = 0.6f;
         fixtureDef.isSensor = true;
-        //fixtureDef.filter.categoryBits = BulletCollisionListener.GRAZE;
-        //fixtureDef.filter.maskBits = BulletCollisionListener.ENEMY_BULLET;
         Fixture fixture = body.createFixture(fixtureDef);
         shape.dispose();
     }
 
     public void dispose(){
-        ground.world.destroyBody(body);
+        ground.getWorld().destroyBody(body);
     }
 
     public void update(){

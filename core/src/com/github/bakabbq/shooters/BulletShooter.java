@@ -1,6 +1,7 @@
 package com.github.bakabbq.shooters;
 
 import com.github.bakabbq.GdxGround;
+import com.github.bakabbq.IDanmakuWorld;
 import com.github.bakabbq.bullets.Bullet;
 import com.github.bakabbq.bullets.BulletDef;
 
@@ -10,10 +11,10 @@ import com.github.bakabbq.bullets.BulletDef;
 public class BulletShooter {
     public BulletDef defaultBullet = Bullet.debugBullet;
     public float x, y;
-    public GdxGround ground;
+    public IDanmakuWorld ground;
     public int timer;
 
-    public BulletShooter(GdxGround ground) {
+    public BulletShooter(IDanmakuWorld ground) {
         this.ground = ground;
         timer = 0;
     }

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.*;
 import com.github.bakabbq.BulletCollisionListener;
 import com.github.bakabbq.GdxGround;
+import com.github.bakabbq.IDanmakuWorld;
 
 /**
  * Created by LBQ on 6/16/14.
@@ -19,10 +20,10 @@ public class ThItem {
     public boolean destroyFlag;
 
 
-    GdxGround ground;
+    IDanmakuWorld ground;
     public TextureRegion texture;
     public Body itemBody;
-    public ThItem(GdxGround ground){
+    public ThItem(IDanmakuWorld ground){
         this.ground = ground;
         createBody();
         initTexture();
@@ -32,7 +33,7 @@ public class ThItem {
         BodyDef itemDef = new BodyDef();
         itemDef.type = BodyDef.BodyType.DynamicBody;
         itemDef.position.set(0,0);
-        itemBody = ground.world.createBody(itemDef);
+        itemBody = ground.getWorld().createBody(itemDef);
 
         // User Data Update
         itemBody.setUserData(this);

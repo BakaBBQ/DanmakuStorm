@@ -1,6 +1,7 @@
 package com.github.bakabbq.shooters.bosses.testsanae;
 
 import com.github.bakabbq.GdxGround;
+import com.github.bakabbq.IDanmakuWorld;
 import com.github.bakabbq.StateHelper;
 import com.github.bakabbq.shooters.bosses.ThBoss;
 
@@ -8,7 +9,7 @@ import com.github.bakabbq.shooters.bosses.ThBoss;
  * Created by LBQ on 6/27/14.
  */
 public class TestSanae extends ThBoss{
-    public TestSanae(GdxGround ground) {
+    public TestSanae(IDanmakuWorld ground) {
         super(ground);
         stateId = StateHelper.MOVING_LEFT;
     }

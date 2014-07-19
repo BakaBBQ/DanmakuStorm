@@ -17,7 +17,7 @@ public class ThBoss extends EnemyShooter {
     public String name = "";
     public Array<SpellCard> spellCards = new Array();
     Texture mainTexture = new Texture(Gdx.files.internal("bosses/stg5enm.png"));
-    public ThBoss(GdxGround ground) {
+    public ThBoss(IDanmakuWorld ground) {
         super(ground);
         initSpellCards();
         initMainTexture();

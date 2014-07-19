@@ -40,6 +40,9 @@ public class PlayerBullet extends Bullet {
 
         initDamage();
     }
+    public boolean canGraze(){
+        return false;
+    }
 
     public void initDamage(){
         this.damage  = 4;

@@ -10,10 +10,7 @@ import com.badlogic.gdx.physics.box2d.Shape;
 
 /**
  * Created by BBQ on 5/27/14.
- * <p/>
- * <p/>
- * <p/>
- * <p/>
+ *
  * The Intention of BulletDef is designed for a bullet database
  * after initialization, use fixture for creating bodies and use getTexture() to get the graphics for rendering
  */
@@ -68,8 +65,13 @@ public class BulletDef {
 
     //called once per frame
     public void modifyBullet(Bullet bullet) {
-
+        // to be overriden
     }
 
+    //change the type of the bullet
+    public void changeType(BulletDef type, Bullet bullet){
+        this.texture = type.texture;
+        bullet.body.createFixture(type.fixtureD);
+    }
 
 }

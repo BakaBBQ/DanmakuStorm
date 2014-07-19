@@ -9,6 +9,8 @@ import com.github.bakabbq.shooters.players.PlayerGrazeCounter;
 
 /**
  * Created by LBQ on 5/26/14.
+ *
+ * Veeeeeeeeeeery Ugly, needs to be rewritten
  */
 public class BulletCollisionListener implements ContactListener {
     public boolean goBack = false;

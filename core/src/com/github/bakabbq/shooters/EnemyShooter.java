@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.*;
 import com.github.bakabbq.BulletCollisionListener;
 import com.github.bakabbq.GdxGround;
+import com.github.bakabbq.IDanmakuWorld;
 import com.github.bakabbq.bullets.BulletDef;
 
 /**
@@ -29,7 +30,7 @@ public class EnemyShooter extends BulletShooter {
 
     public boolean dead;
 
-    public EnemyShooter(GdxGround ground) {
+    public EnemyShooter(IDanmakuWorld ground) {
         super(ground);
         this.stateId = 0;
         this.stateTimer = 0;
@@ -43,7 +44,7 @@ public class EnemyShooter extends BulletShooter {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(0, 0);
-        enemyBody = ground.world.createBody(bodyDef);
+        enemyBody = ground.getWorld().createBody(bodyDef);
         enemyBody.setLinearDamping(30f);
         enemyBody.setUserData(this);
         
@@ -152,6 +153,6 @@ public class EnemyShooter extends BulletShooter {
     }
 
     public void dispose(){
-        ground.world.destroyBody(enemyBody);
+        ground.getWorld().destroyBody(enemyBody);
     }
 }

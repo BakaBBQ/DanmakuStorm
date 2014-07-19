@@ -2,6 +2,7 @@ package com.github.bakabbq.shooters;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.github.bakabbq.GdxGround;
+import com.github.bakabbq.IDanmakuWorld;
 import com.github.bakabbq.bullets.Bullet;
 
 /**
@@ -9,7 +10,7 @@ import com.github.bakabbq.bullets.Bullet;
  */
 public class DebugShooter extends BulletShooter {
 
-    public DebugShooter(GdxGround ground) {
+    public DebugShooter(IDanmakuWorld ground) {
         super(ground);
         defaultBullet = Bullet.debugBullet;
     }

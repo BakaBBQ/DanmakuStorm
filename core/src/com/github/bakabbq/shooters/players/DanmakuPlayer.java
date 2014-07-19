@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.github.bakabbq.BulletCollisionListener;
 import com.github.bakabbq.GdxGround;
+import com.github.bakabbq.IDanmakuWorld;
 import com.github.bakabbq.Pixel;
 import com.github.bakabbq.bullets.Bullet;
 import com.github.bakabbq.bullets.BulletDef;
@@ -35,7 +36,7 @@ public class DanmakuPlayer {
     public final float MAX_VELOCITY = 100f;
     public Texture textureSheet;
     public TextureRegion[][] slicedSheet;
-    public GdxGround ground;
+    public IDanmakuWorld ground;
     public Body playerBody;
     public Array<DanmakuOption> options = new Array() {
     };
@@ -47,20 +48,23 @@ public class DanmakuPlayer {
     int moveState; // 0 => still, 2 => down, 4 => left, 6 => right, 8 => up
     int moveTimer;
 
-    public DanmakuPlayer(GdxGround ground) {
+    PlayerGrazeCounter grazeCounter;
+
+    public DanmakuPlayer(IDanmakuWorld ground) {
         this.ground = ground;
         timer = 0;
         moveTimer = 0;
-        power = 400;
-        textureSheet = new Texture(Gdx.files.internal("players/reimu.png"));
+        power = 200;
+        textureSheet = new Texture(Gdx.files.internal("players/sanae.png"));
         slicedSheet = TextureRegion.split(textureSheet, 32, 48);
         grazeCnt = 0;
 
         createBody();
         addOption();
         addOption();
-        addOption();
-        addOption();
+
+
+        grazeCounter = new PlayerGrazeCounter(this);
     }
 
     public void addOption() {
@@ -83,7 +87,7 @@ public class DanmakuPlayer {
         BodyDef playerDef = new BodyDef();
         playerDef.type = BodyDef.BodyType.DynamicBody;
         playerDef.position.set(0, 0);
-        playerBody = ground.world.createBody(playerDef);
+        playerBody = ground.getWorld().createBody(playerDef);
         playerBody.setLinearDamping(40f);
         playerBody.setUserData(this);
         CircleShape circle = new CircleShape();
@@ -105,6 +109,8 @@ public class DanmakuPlayer {
         updateControls();
         //ground.controlHelper.updatePlayerControl(this);
         updateShoot();
+
+        grazeCounter.update();
 
     }
 
@@ -224,6 +230,10 @@ public class DanmakuPlayer {
 
     public void shoot(BulletDef bd, int xOff, int yOff, int speed) {
         ground.addPlayerBullet(bd, getX() + xOff, getY() + yOff, 180).setSpeed(speed);
+    }
+
+    public void setPos(float x, float y){
+        this.playerBody.setTransform(x,y,0);
     }
 
 

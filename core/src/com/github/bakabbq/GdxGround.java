@@ -42,7 +42,7 @@ import com.sun.istack.internal.NotNull;
 
 
 // GdxGround, more like a playground, huh?
-public class GdxGround extends ApplicationAdapter {
+public class GdxGround extends ApplicationAdapter implements IDanmakuWorld{
     public World world;
     public Environment environment;
     public SpriteBatch background;
@@ -487,6 +487,11 @@ public class GdxGround extends ApplicationAdapter {
         return bs;
     }
 
+    @Override
+    public World getWorld() {
+        return this.world;
+    }
+
 
     private static final int VIRTUAL_WIDTH = 640;
     private static final int VIRTUAL_HEIGHT = 480;
@@ -576,5 +581,9 @@ public class GdxGround extends ApplicationAdapter {
 
     public void addLaser(Laser laser){
         lasers.add(laser);
+    }
+
+    public DanmakuPlayer getPlayer(){
+        return player;
     }
 }
