@@ -13,7 +13,7 @@ public class BulletAmulets extends BulletDef {
     }
 
     public void setTextureIndex() {
-        textureX = 1;
+        textureX = this.colorId;
         textureY = 7;
     }
 

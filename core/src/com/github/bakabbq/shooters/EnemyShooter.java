@@ -140,12 +140,16 @@ public class EnemyShooter extends BulletShooter {
         return ori;
     }
 
+    public boolean isSlave(){
+        return false;
+    }
+
     public void onDeath(){
         this.dead = true;
     }
 
     public void recieveDamage(int dmg){
-        Gdx.app.log("Enemy", "Recieving " + dmg + " Dmg, rest " + (this.hp - dmg));
+        //Gdx.app.log("Enemy", "Recieving " + dmg + " Dmg, rest " + (this.hp - dmg));
         this.hp -= dmg;
         if(this.hp <= 0){
             onDeath();

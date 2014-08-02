@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Shape;
+import com.github.bakabbq.BulletCollisionListener;
+import com.github.bakabbq.IDanmakuWorld;
 
 /**
  * Created by BBQ on 5/27/14.
@@ -39,6 +41,11 @@ public class BulletDef {
         fixtureD.shape = getShape();
         setTextureIndex();
         updateTexture();
+        postInit();
+    }
+
+    public void postInit(){
+
     }
 
     public void setTextureIndex() {
@@ -71,7 +78,13 @@ public class BulletDef {
     //change the type of the bullet
     public void changeType(BulletDef type, Bullet bullet){
         this.texture = type.texture;
+        type.fixtureD.filter.categoryBits = BulletCollisionListener.ENEMY_BULLET;
+        type.fixtureD.filter.maskBits = (short)(BulletCollisionListener.PLAYER | 0x001 | BulletCollisionListener.PLAYER_BULLET);
         bullet.body.createFixture(type.fixtureD);
+    }
+
+    public void splitInto(BulletDef type, Bullet bullet, int ways){
+        IDanmakuWorld world = bullet.danmakuWorld;
     }
 
 }

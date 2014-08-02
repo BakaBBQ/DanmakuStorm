@@ -68,6 +68,10 @@ public class BulletShooter {
         if (timer >= Integer.MAX_VALUE) {
             timer = 0;
         }
+        updateShoot();
+    }
 
+    public void updateShoot(){
+        //to be overwritten
     }
 }

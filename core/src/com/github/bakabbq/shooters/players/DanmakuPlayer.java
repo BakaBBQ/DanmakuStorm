@@ -13,6 +13,7 @@ import com.github.bakabbq.IDanmakuWorld;
 import com.github.bakabbq.Pixel;
 import com.github.bakabbq.bullets.Bullet;
 import com.github.bakabbq.bullets.BulletDef;
+import com.github.bakabbq.bullets.BulletSanaeSnake;
 import com.github.bakabbq.bullets.PlayerBullet;
 import com.github.bakabbq.effects.SlowEffect;
 
@@ -117,7 +118,7 @@ public class DanmakuPlayer {
     public void updateShoot() {
         if (timer % 4 == 0 && Gdx.input.isKeyPressed(Input.Keys.Z))
             for (DanmakuOption singleOption : options)
-                singleOption.shoot(PlayerBullet.reimuHoming);
+                singleOption.shoot(new BulletSanaeSnake(0));
 
         if (timer % 12 == 0 && Gdx.input.isKeyPressed(Input.Keys.Z))
             shoot(PlayerBullet.reimuAmulet, 0, (int) Pixel.m2p(30));

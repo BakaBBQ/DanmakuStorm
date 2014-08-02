@@ -18,13 +18,21 @@ public class TitleScreen implements Screen{
     Texture praying;
     Texture particle;
 
+    //No time to waste, use violent ways to achieve this...
+    Texture logo;
+    Texture startGame;
+
     int timer;
+
+    int stateId;
 
 
     public TitleScreen(DanmakuGame game){
         this.game = game;
 
         timer = 0;
+        stateId = 0;
+
         loadBasicAssets();
         loadAllAssets();
     }
@@ -45,13 +53,17 @@ public class TitleScreen implements Screen{
         getBatch().begin();
         getBatch().draw(background,0,0);
 
+        renderLoading();
+
+        getBatch().end();
+    }
+
+    public void renderLoading(){
         Color c = getBatch().getColor();
-        getBatch().setColor(c.r, c.g, c.b, (float) (180 + Math.abs((Math.sin((float) timer/30f) * 75)) / 255f));
+        getBatch().setColor(c.r, c.g, c.b, (255f - Math.abs((timer % 80 - 40)) * 2) / 255f);
         //Deal with girls are praying
         getBatch().draw(praying,0,0);
         getBatch().setColor(c);
-
-        getBatch().end();
     }
 
     public SpriteBatch getBatch(){

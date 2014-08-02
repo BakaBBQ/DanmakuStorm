@@ -12,11 +12,13 @@ import com.github.bakabbq.spellcards.*;
 
 /**
  * Created by LBQ on 6/9/14.
+ *
+ * Seems like there is something called Animation in gdx.... .___.
  */
 public class ThBoss extends EnemyShooter {
     public String name = "";
     public Array<SpellCard> spellCards = new Array();
-    Texture mainTexture = new Texture(Gdx.files.internal("bosses/stg5enm.png"));
+    public Texture mainTexture = new Texture(Gdx.files.internal("bosses/stg5enm.png"));
     public ThBoss(IDanmakuWorld ground) {
         super(ground);
         initSpellCards();
@@ -24,6 +26,9 @@ public class ThBoss extends EnemyShooter {
         ground.addEffect(new BossCastingEffect(), getX(), getY());
     }
 
+    public int updateFrame(){
+        return 10;
+    }
 
 
 
@@ -57,10 +62,12 @@ public class ThBoss extends EnemyShooter {
         int rId, cId;
         rId = cId = 0;
         boolean flip = false;
+
+        //Yes, Magic Indeed
         switch(stateId) {
             case 0:
                 rId = 0;
-                cId = (stateTimer > 3 ? (2 + stateTimer % 2) : (stateTimer % 4));
+                cId = (stateTimer > 3 ? (0 + stateTimer % 4) : (stateTimer % 4));
                 break;
             case 1:
                 flip = true;

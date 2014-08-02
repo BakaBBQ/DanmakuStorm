@@ -6,5 +6,5 @@ package com.github.bakabbq.audio;
  * Wonder if this really have uses...
  */
 public class AudioBank {
-    public static ThSe bulletAppear = new ThSe("playerShoot.wav");
+    public static ThSe bulletAppear = new ThSe("playerShoot.mp3");
 }

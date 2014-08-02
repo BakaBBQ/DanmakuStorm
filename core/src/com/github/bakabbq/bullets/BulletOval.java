@@ -14,7 +14,7 @@ public class BulletOval extends BulletDef {
 
     @Override
     public void setTextureIndex() {
-        this.textureX = 1;
+        this.textureX = colorId;
         this.textureY = 4;
     }
 

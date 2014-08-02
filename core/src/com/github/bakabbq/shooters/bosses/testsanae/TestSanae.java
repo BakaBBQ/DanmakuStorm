@@ -11,13 +11,13 @@ import com.github.bakabbq.shooters.bosses.ThBoss;
 public class TestSanae extends ThBoss{
     public TestSanae(IDanmakuWorld ground) {
         super(ground);
-        stateId = StateHelper.MOVING_LEFT;
+        stateId = StateHelper.IDLE;
     }
 
 
     @Override
     public int updateFrame(){
-        return 3;
+        return 4;
     }
 
     @Override

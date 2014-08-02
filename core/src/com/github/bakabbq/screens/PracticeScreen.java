@@ -1,17 +1,17 @@
 package com.github.bakabbq.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import com.github.bakabbq.BulletCollisionListener;
-import com.github.bakabbq.DanmakuGame;
-import com.github.bakabbq.DanmakuScene;
-import com.github.bakabbq.IDanmakuWorld;
+import com.github.bakabbq.*;
 import com.github.bakabbq.audio.AudioBank;
 import com.github.bakabbq.audio.MusicBox;
 import com.github.bakabbq.audio.ThSe;
@@ -28,6 +28,8 @@ import com.github.bakabbq.shooters.bosses.ThBoss;
 import com.github.bakabbq.shooters.bosses.testsanae.TestSanae;
 import com.github.bakabbq.shooters.players.DanmakuOption;
 import com.github.bakabbq.shooters.players.DanmakuPlayer;
+
+import java.util.Date;
 
 /**
  * Created by LBQ on 7/14/14.
@@ -60,11 +62,19 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
     //Audio Components
     MusicBox musicBox;
 
-
-
     //Box2d stuffs
     public World world;
     public BulletCollisionListener collisionListener;
+
+
+    //Particle Effect Stuffs
+    ParticleEffectPool particleEffectPool;
+    Array<ParticleEffectPool.PooledEffect> pooledEffects = new Array();
+
+    Date gameTimer;
+
+
+
 
     public PracticeScreen(DanmakuGame game, DanmakuScene scene){
         this.game = game;
@@ -74,7 +84,14 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
         loadUiComponents();
         initAudioComponents();
         initScene();
+        initParticle();
         setupZoom();
+    }
+
+    void initParticle(){
+        ParticleEffect slaveEffect = new ParticleEffect();
+        slaveEffect.load(Gdx.files.internal("particles/bullet_slave"), Gdx.files.internal("particles"));
+        particleEffectPool = new ParticleEffectPool(slaveEffect, 1, 2);
     }
 
     void initObjectContainers(){
@@ -138,9 +155,12 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
         renderShooters();
         renderEffects();
         renderBullets();
+        renderParticles(delta);
+
         game.batch.end();
         game.uiBatch.begin();
         renderUI();
+
         game.uiBatch.end();
         update();
         world.step(1 / 60f, 6, 2);
@@ -151,18 +171,23 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
 
         //there should really be some kind of method called getBatch, shouldn't there=-=
         for (EnemyShooter singleEnemy : enemies) {
-            game.batch.draw(
-                    singleEnemy.texture,
-                    singleEnemy.getX() + 5,
-                    singleEnemy.getY() + 6,
-                    0,
-                    0,
-                    singleEnemy.texture.getRegionWidth(),
-                    singleEnemy.texture.getRegionHeight(),
-                    0.2f,
-                    0.2f,
-                    0
-            );
+            if(singleEnemy.isSlave()){
+                createEffect(singleEnemy.getX() + 5, singleEnemy.getY() + 6);
+            } else {
+                game.batch.draw(
+                        singleEnemy.texture,
+                        singleEnemy.getX() + 5,
+                        singleEnemy.getY() + 6,
+                        0,
+                        0,
+                        singleEnemy.texture.getRegionWidth(),
+                        singleEnemy.texture.getRegionHeight(),
+                        0.2f,
+                        0.2f,
+                        0
+                );
+
+            }
             singleEnemy.update();
         }
 
@@ -260,8 +285,28 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
         game.batch.setColor(c.r, c.g, c.b, 1);
     }
 
+    void renderParticles(float delta){
+        for (ParticleEffectPool.PooledEffect singleEffect : pooledEffects){
+            singleEffect.draw(game.batch,delta);
+            if(singleEffect.isComplete()){
+                singleEffect.free();
+                pooledEffects.removeValue(singleEffect,true);
+            }
+        }
+    }
+
     void renderUI(){
         game.uiBatch.draw(menuBackground,0,0);
+        renderFps();
+    }
+
+    void renderFps(){
+        int fps = Gdx.graphics.getFramesPerSecond();
+        getFontBank().arial.draw(game.uiBatch,"" + fps, 30 , 450);
+    }
+
+    public FontBank getFontBank(){
+        return game.fontBank;
     }
 
 
@@ -301,6 +346,10 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
             if (singleEffect.disposeFlag)
                 effects.removeValue(singleEffect, true);
         }
+
+
+
+        updateScreenshot();
 
     }
 
@@ -424,6 +473,17 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
         return bs;
     }
 
+    public void updateScreenshot(){
+        if(Gdx.input.isKeyPressed(Input.Keys.P))
+            ScreenshotTaker.saveScreenshot();
+    }
+
+    void createEffect(float x, float y){
+        ParticleEffectPool.PooledEffect effect = particleEffectPool.obtain();
+        effect.setPosition(100, 100);
+        pooledEffects.add(effect);
+    }
+
 
 
     @Override
@@ -434,6 +494,12 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
     public DanmakuPlayer getPlayer(){
         //TODO
         return players.first();
+    }
+
+
+    //returns the timerFlow per frame, depends on grazing... : in seconds
+    public int getTimeFlowFrames(){
+        return 1 + getPlayer().grazeCnt / 70;
     }
 
 

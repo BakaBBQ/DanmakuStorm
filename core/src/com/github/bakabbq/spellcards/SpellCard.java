@@ -18,6 +18,14 @@ public class SpellCard {
         updateAttributes();
     }
 
+    public float getTimeOut(){
+        return timeOut - (float)timer / 60f;
+    }
+
+    public float getRoundedTimeOut(){
+        return Math.round(getTimeOut() * 100) / 100;
+    }
+
     public void updateAttributes(){
         // to be overwritten
     }

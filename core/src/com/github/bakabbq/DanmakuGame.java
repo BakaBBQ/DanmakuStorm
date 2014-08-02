@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.bakabbq.background.ThBackground;
@@ -24,8 +26,16 @@ public class DanmakuGame extends Game {
     public SpriteBatch batch;
     public SpriteBatch uiBatch;
     public AssetManager assetManager;
-    public FitViewport viewport;
     public OrthographicCamera camera;
+
+    public FontBank fontBank;
+
+    private static final int VIRTUAL_WIDTH = 640;
+    private static final int VIRTUAL_HEIGHT = 480;
+    private static final float ASPECT_RATIO =
+            (float) VIRTUAL_WIDTH / (float) VIRTUAL_HEIGHT;
+
+    Rectangle viewport;
 
     public Screen currentScreen;
     public void create(){
@@ -34,25 +44,47 @@ public class DanmakuGame extends Game {
         assetManager = new AssetManager();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 640, 480);
-        viewport = new FitViewport(640, 480, camera);
+
+        fontBank = new FontBank();
 
 
         PracticeScreen screen;
         DanmakuScene scene = new DanmakuScene(TestSanae.class, TestSpellCard.class, ThBackground.class);
 
-        currentScreen = new PracticeScreen(this, scene);
+        //currentScreen = new PracticeScreen(this, scene);
+        currentScreen = new TitleScreen(this);
         //Main
         this.setScreen( (currentScreen) );
     }
 
     public void render() {
         camera.update();
-        Gdx.gl.glViewport((int) 0, (int) 0,
-                (int) 640, (int) 480);
+        Gdx.gl.glViewport((int) viewport.x, (int) viewport.y,
+                (int) viewport.width, (int) viewport.height);
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.setProjectionMatrix(camera.combined);
         super.render();
+    }
+
+    @Override
+    public void resize(int width, int height){
+        float aspectRatio = (float) width / (float) height;
+        float scale = 1f;
+        Vector2 crop = new Vector2(0f, 0f);
+        if (aspectRatio > ASPECT_RATIO) {
+            scale = (float) height / (float) VIRTUAL_HEIGHT;
+            crop.x = (width - VIRTUAL_WIDTH * scale) / 2f;
+        } else if (aspectRatio < ASPECT_RATIO) {
+            scale = (float) width / (float) VIRTUAL_WIDTH;
+            crop.y = (height - VIRTUAL_HEIGHT * scale) / 2f;
+        } else {
+            scale = (float) width / (float) VIRTUAL_WIDTH;
+        }
+
+        float w = (float) VIRTUAL_WIDTH * scale;
+        float h = (float) VIRTUAL_HEIGHT * scale;
+        viewport = new Rectangle(crop.x, crop.y, w, h);
     }
 
     public void dispose(){
