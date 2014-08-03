@@ -26,13 +26,7 @@ public class TestSpellCard extends SpellCard{
     @Override
     public void mainLoop(){
        if(timer % 60 == 0){
-           owner.ground.addEnemy(new EnemyShooter(owner.ground){
-               @Override
-               public boolean isSlave(){
-                   return true;
-               }
-
-           }, owner.x, owner.y).enemyBody.applyLinearImpulse(0,10,0,0,true);
+           owner.nwayShoot(30,MathUtils.random(0,360),60);
        }
     } // void mainLoop
 }

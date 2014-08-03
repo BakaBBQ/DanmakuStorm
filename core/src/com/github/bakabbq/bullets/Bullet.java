@@ -26,6 +26,25 @@ public class Bullet {
     public boolean grazed;
     Fixture fixture;
 
+
+    public static int COLOR_GRAY = 0;
+    public static int COLOR_DARKRED = 1;
+    public static int COLOR_RED = 2;
+    public static int COLOR_PURPLE = 3;
+    public static int COLOR_VIOLET = 4;
+    public static int COLOR_DARKBLUE = 5;
+    public static int COLOR_BLUE = 6;
+    public static int COLOR_SKYBLUE = 7;
+    public static int COLOR_LIGHTBLUE = 8;
+    public static int COLOR_GRASSGREEN = 9;
+    public static int COLOR_GREEN = 10;
+    public static int COLOR_YELLOWGREEN = 11;
+    public static int COLOR_LEMONYELLOW = 12;
+    public static int COLOR_YELLOW = 13;
+    public static int COLOR_ORANGE = 14;
+    public static int COLOR_WHITE = 15;
+
+
     @NotNull public IDanmakuWorld danmakuWorld;
 
 
@@ -86,6 +105,7 @@ public class Bullet {
     }
 
     public void setSpeed(float angle, float speed) {
+        aimAt(angle);
         float forceAngle = (angle + 270f) / 180f * (float) Math.PI;
         body.applyLinearImpulse(MathUtils.cos(forceAngle) * speed, MathUtils.sin(forceAngle) * speed, body.getPosition().x, body.getPosition().y, true);
     }
@@ -133,5 +153,25 @@ public class Bullet {
 
     public void dispose(){
         this.world.destroyBody(this.body);
+    }
+
+    public float getTowardPlayerAngle(){
+        float xDiff = getTowardPlayerX();
+        float yDiff = getTowardPlayerY();
+        return ((float) Math.atan(yDiff / xDiff));
+    }
+
+    public float getTowardPlayerX(){
+        float xDiff = getX() - danmakuWorld.getPlayer().getX();
+        return  xDiff;
+    }
+
+    public float getTowardPlayerY(){
+        float yDiff = getY() - danmakuWorld.getPlayer().getY();
+        return yDiff;
+    }
+
+    public void aimAt(float angle){
+        this.body.setTransform(getX(), getY(), angle);
     }
 }

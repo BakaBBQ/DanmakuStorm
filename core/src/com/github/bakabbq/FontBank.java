@@ -11,11 +11,13 @@ public class FontBank {
     public BitmapFont savoye;
     public BitmapFont log;
     public BitmapFont arial;
+    public BitmapFont digital;
     public FontBank(){
         yuMincho = new BitmapFont(Gdx.files.internal("fonts/YuMincho.fnt"));
         savoye = new BitmapFont(Gdx.files.internal("fonts/savoye_let.fnt"));
         log = loadFont("log.fnt");
         arial = loadFont("arial.fnt");
+        digital = loadFont("digital.fnt");
     }
 
     BitmapFont loadFont(String str){

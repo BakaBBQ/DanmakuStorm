@@ -51,8 +51,13 @@ public class DanmakuGame extends Game {
         PracticeScreen screen;
         DanmakuScene scene = new DanmakuScene(TestSanae.class, TestSpellCard.class, ThBackground.class);
 
-        //currentScreen = new PracticeScreen(this, scene);
-        currentScreen = new TitleScreen(this);
+        boolean titleDebug = false;
+        if(titleDebug)
+            currentScreen = new TitleScreen(this);
+        else
+            currentScreen = new PracticeScreen(this, scene);
+
+        //currentScreen = new TitleScreen(this);
         //Main
         this.setScreen( (currentScreen) );
     }

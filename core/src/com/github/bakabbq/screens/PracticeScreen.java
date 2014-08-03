@@ -25,6 +25,7 @@ import com.github.bakabbq.items.ThItem;
 import com.github.bakabbq.shooters.BulletShooter;
 import com.github.bakabbq.shooters.EnemyShooter;
 import com.github.bakabbq.shooters.bosses.ThBoss;
+import com.github.bakabbq.shooters.bosses.kanako.BossKanako;
 import com.github.bakabbq.shooters.bosses.testsanae.TestSanae;
 import com.github.bakabbq.shooters.players.DanmakuOption;
 import com.github.bakabbq.shooters.players.DanmakuPlayer;
@@ -117,7 +118,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
         collisionListener = new BulletCollisionListener();
         world.setContactListener(collisionListener);
 
-        ThBoss boss = new TestSanae(this);
+        ThBoss boss = new BossKanako(this);
         boss.setX(237/10);
         boss.setY(62);
         bosses.add(boss);
@@ -297,6 +298,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
 
     void renderUI(){
         game.uiBatch.draw(menuBackground,0,0);
+        getFontBank().arial.draw(game.uiBatch,"1 / 15", 100, 100);
         renderFps();
     }
 

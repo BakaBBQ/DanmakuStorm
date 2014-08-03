@@ -24,7 +24,7 @@ public class BossKanako extends ThBoss{
 
     @Override
     public void initSpellCards() {
-        spellCards.add(new TestSpellCard(this));
+        spellCards.add(new NonSpell1(this));
     }
 
     @Override
