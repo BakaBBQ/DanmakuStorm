@@ -38,7 +38,7 @@ import com.github.bakabbq.shooters.players.PlayerGrazeCounter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 
-import com.sun.istack.internal.NotNull;
+
 
 
 // GdxGround, more like a playground, huh?
@@ -435,10 +435,7 @@ public class GdxGround extends ApplicationAdapter implements IDanmakuWorld{
         float end = amt * 360f;
 
         lookup.bind();
-        renderer.begin(camera.combined, Gdx.gl.GL_TRIANGLE_STRIP);
-        Gdx.gl.glEnable(Gdx.gl.GL_BLEND);
-
-        Gdx.gl.glBlendFunc(Gdx.gl.GL_SRC_ALPHA, Gdx.gl.GL_ONE_MINUS_SRC_ALPHA);
+        
         int segs = (int)(12 * Math.cbrt(r));
         end += 90f;
         start += 90f;

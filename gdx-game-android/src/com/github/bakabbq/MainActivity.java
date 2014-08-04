@@ -12,7 +12,10 @@ public class MainActivity extends AndroidApplication {
         
         AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
         cfg.useGL20 = true;
+		
+		
+		DanmakuGame game = new DanmakuGame();
         
-        initialize(new GdxGround(), cfg);
+        initialize(game, cfg);
     }
 }

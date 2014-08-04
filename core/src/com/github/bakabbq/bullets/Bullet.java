@@ -9,7 +9,7 @@ import com.github.bakabbq.BulletCollisionListener;
 import com.github.bakabbq.DanmakuGame;
 import com.github.bakabbq.GdxGround;
 import com.github.bakabbq.IDanmakuWorld;
-import com.sun.istack.internal.NotNull;
+
 
 /**
  * Created by LBQ on 5/27/14.
@@ -45,7 +45,7 @@ public class Bullet {
     public static int COLOR_WHITE = 15;
 
 
-    @NotNull public IDanmakuWorld danmakuWorld;
+     public IDanmakuWorld danmakuWorld;
 
 
     //Destroy Flag - once marked, it will be garbage dumped

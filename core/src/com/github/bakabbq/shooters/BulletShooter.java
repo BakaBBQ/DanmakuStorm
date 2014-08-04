@@ -65,6 +65,14 @@ public class BulletShooter {
             shoot(bd, singleAngleDiff * i + startAngle,speed);
         }
     }
+	
+	public void nWayAngeledSpreadShot(BulletDef bd, int nways, int ways, int angleFix, float totalAngleDiff, int speed){
+		for (int i = 0; i < nways; i++){
+			float angle = 360f/nways;
+			angledSpreadShot(bd, ways, (int)angle * i+angleFix, totalAngleDiff, speed);
+		}
+		
+	}
 
     public void nwayShoot(int ways, int angleFix, int speed) {
         if (ways <= 0)

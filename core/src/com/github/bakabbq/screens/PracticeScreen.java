@@ -152,6 +152,8 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
      */
     @Override
     public void render(float delta) {
+		Gdx.gl.glViewport((int) game.viewport.x, (int) game.viewport.y,
+						  (int) game.viewport.width, (int) game.viewport.height);
         game.batch.begin();
         renderShooters();
         renderEffects();
@@ -159,6 +161,8 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
         renderParticles(delta);
 
         game.batch.end();
+		Gdx.gl.glViewport((int) game.viewport.x, (int) game.viewport.y,
+						  (int) game.viewport.width, (int) game.viewport.height);
         game.uiBatch.begin();
         renderUI();
 
@@ -298,7 +302,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
 
     void renderUI(){
         game.uiBatch.draw(menuBackground,0,0);
-        getFontBank().arial.draw(game.uiBatch,"1 / 15", 100, 100);
+      //  getFontBank().arial.draw(game.uiBatch,"1 / 15", 100, 100);
         renderFps();
     }
 
@@ -348,6 +352,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
             if (singleEffect.disposeFlag)
                 effects.removeValue(singleEffect, true);
         }
+		removeGarbageBullets();
 
 
 
@@ -502,6 +507,14 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
     //returns the timerFlow per frame, depends on grazing... : in seconds
     public int getTimeFlowFrames(){
         return 1 + getPlayer().grazeCnt / 70;
+    }
+	
+	private void removeGarbageBullets() {
+        for (Bullet singleBullet : bullets) {
+            singleBullet.update();
+            if (singleBullet.getX() > 350 / 5 || singleBullet.getX() < -50 / 5 || singleBullet.getY() > 500 / 5 || singleBullet.getY() < -60 / 5)
+                destroyBullet(singleBullet);
+        }
     }
 
 

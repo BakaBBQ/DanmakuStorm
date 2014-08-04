@@ -6,6 +6,7 @@ import com.github.bakabbq.IDanmakuWorld;
 import com.github.bakabbq.StateHelper;
 import com.github.bakabbq.shooters.bosses.ThBoss;
 import com.github.bakabbq.shooters.bosses.testsanae.TestSpellCard;
+import src.com.github.bakabbq.shooters.bosses.kanako.*;
 
 /**
  * Created by LBQ on 8/2/14.
@@ -24,7 +25,7 @@ public class BossKanako extends ThBoss{
 
     @Override
     public void initSpellCards() {
-        spellCards.add(new NonSpell1(this));
+        spellCards.add(new spellCard1(this));
     }
 
     @Override

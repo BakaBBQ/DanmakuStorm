@@ -11,8 +11,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
+
 import com.github.bakabbq.background.ThBackground;
 import com.github.bakabbq.screens.PracticeScreen;
 import com.github.bakabbq.screens.TitleScreen;
@@ -35,7 +34,7 @@ public class DanmakuGame extends Game {
     private static final float ASPECT_RATIO =
             (float) VIRTUAL_WIDTH / (float) VIRTUAL_HEIGHT;
 
-    Rectangle viewport;
+    public Rectangle viewport;
 
     public Screen currentScreen;
     public void create(){
