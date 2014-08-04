@@ -17,15 +17,10 @@ public class spellCard1 extends SpellCard
     }
 	@Override
     public void mainLoop(){
-
-        
-		
 		if(timer % 10 == 0){
-			owner.nWayAngeledSpreadShot(new BulletAmulets(Bullet.COLOR_DARKRED), 3, 5,timer%360,25,45);
+			//owner.nWayAngeledSpreadShot(new BulletKunai(0), 3, 5,timer % 360, 25, 20);
+            owner.shoot(new BulletKnife(0), 0, 1);
 		}
-		
-		
-
     } // void mainLoop
 	
 	

@@ -63,6 +63,7 @@ public class Bullet {
         fd.filter.categoryBits = BulletCollisionListener.ENEMY_BULLET;
         fd.filter.maskBits = (short)(BulletCollisionListener.PLAYER | 0x001 | BulletCollisionListener.PLAYER_BULLET);
         this.fixture = body.createFixture(fd);
+        //this.fixture.setSensor(true);
         body.setTransform(x, y, angle);
         setSprite();
         grazed = false;
