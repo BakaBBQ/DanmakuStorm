@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
@@ -15,6 +16,7 @@ import com.github.bakabbq.*;
 import com.github.bakabbq.audio.AudioBank;
 import com.github.bakabbq.audio.MusicBox;
 import com.github.bakabbq.audio.ThSe;
+import com.github.bakabbq.background.ThBackground;
 import com.github.bakabbq.bullets.Bullet;
 import com.github.bakabbq.bullets.BulletDef;
 import com.github.bakabbq.bullets.Laser;
@@ -63,6 +65,15 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
     //Audio Components
     MusicBox musicBox;
 
+    //Background SpriteBatch
+    SpriteBatch backgroundBatch;
+
+    //Background stuff
+    ThBackground background;
+
+    //Shape Renderer - for drawing health bar
+
+
     //Box2d stuffs
     public World world;
     public BulletCollisionListener collisionListener;
@@ -81,6 +92,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
         this.game = game;
         this.scene = scene;
 
+        backgroundBatch = new SpriteBatch();
         initObjectContainers();
         loadUiComponents();
         initAudioComponents();
@@ -123,6 +135,8 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
         boss.setY(62);
         bosses.add(boss);
 
+        background = new ThBackground(this);
+
         DanmakuPlayer player = new DanmakuPlayer(this);
         player.setPos(237/10,30/5);
         players.add(player);
@@ -154,7 +168,11 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
     public void render(float delta) {
 		Gdx.gl.glViewport((int) game.viewport.x, (int) game.viewport.y,
 						  (int) game.viewport.width, (int) game.viewport.height);
+        backgroundBatch.begin();
+        background.update(backgroundBatch);
+        backgroundBatch.end();
         game.batch.begin();
+
         renderShooters();
         renderEffects();
         renderBullets();
@@ -164,6 +182,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
 		Gdx.gl.glViewport((int) game.viewport.x, (int) game.viewport.y,
 						  (int) game.viewport.width, (int) game.viewport.height);
         game.uiBatch.begin();
+
         renderUI();
 
         game.uiBatch.end();
@@ -308,7 +327,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
 
     void renderFps(){
         int fps = Gdx.graphics.getFramesPerSecond();
-        getFontBank().arial.draw(game.uiBatch,"" + fps, 30 , 450);
+        getFontBank().arial.draw(game.uiBatch,"" + fps, 610 , 20);
     }
 
     public FontBank getFontBank(){

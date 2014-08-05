@@ -3,7 +3,11 @@ Danmaku Storm
 ### 2d Touhou Shooter Engine / Game
 Currently Still in Development
 
-The author is currently learning glsl to make touhou-like backgrounds...
-development will be slowed down
+##About using Box2d
+yeah it might be a bad idea and I am currently regreting it...
+but who knows._., bullets can become fun with some physics shenanigans...
 
-I must say that the code looks like a complete mess right now ._____.
+##About using ripped images from Touhou
+Yeah I know it isn't right..
+but i really HAVE NO TIME to recreate bullet sheets only for testing this engine
+so just give me a break...

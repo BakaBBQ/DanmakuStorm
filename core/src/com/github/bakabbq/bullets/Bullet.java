@@ -139,7 +139,6 @@ public class Bullet {
 
     public void onGraze(){
         danmakuWorld.getPlayer().grazeCnt += 1;
-        //Gdx.app.log("Graze", "Player Graze: " + ((GdxGround) Gdx.app.getApplicationListener()).player.grazeCnt);
         grazed = true;
     }
 

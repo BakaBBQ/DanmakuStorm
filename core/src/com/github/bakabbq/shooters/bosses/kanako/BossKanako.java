@@ -6,7 +6,7 @@ import com.github.bakabbq.IDanmakuWorld;
 import com.github.bakabbq.StateHelper;
 import com.github.bakabbq.shooters.bosses.ThBoss;
 import com.github.bakabbq.shooters.bosses.testsanae.TestSpellCard;
-import src.com.github.bakabbq.shooters.bosses.kanako.*;
+import com.github.bakabbq.shooters.bosses.kanako.*;
 
 /**
  * Created by LBQ on 8/2/14.
