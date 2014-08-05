@@ -21,6 +21,7 @@ import com.github.bakabbq.bullets.Bullet;
 import com.github.bakabbq.bullets.BulletDef;
 import com.github.bakabbq.bullets.Laser;
 import com.github.bakabbq.bullets.PlayerBullet;
+import com.github.bakabbq.effects.BossEffects;
 import com.github.bakabbq.effects.ExplosionEffect;
 import com.github.bakabbq.effects.ThEffect;
 import com.github.bakabbq.items.ThItem;
@@ -83,6 +84,9 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
     ParticleEffectPool particleEffectPool;
     Array<ParticleEffectPool.PooledEffect> pooledEffects = new Array();
 
+    //BossEffect - yeah.. stupid ThEffect
+    BossEffects bossEffects;
+
     Date gameTimer;
 
 
@@ -123,19 +127,23 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
 
     void loadUiComponents(){
         menuBackground = new TextureRegion(new Texture(Gdx.files.internal("menus/front.png")));
+
     }
 
+    ThBoss boss;
     void initScene(){
         world = new World(new Vector2(0,0), true);
         collisionListener = new BulletCollisionListener();
         world.setContactListener(collisionListener);
 
-        ThBoss boss = new BossKanako(this);
+        boss = new BossKanako(this);
         boss.setX(237/10);
         boss.setY(62);
         bosses.add(boss);
 
         background = new ThBackground(this);
+        bossEffects = new BossEffects();
+
 
         DanmakuPlayer player = new DanmakuPlayer(this);
         player.setPos(237/10,30/5);
@@ -170,6 +178,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
 						  (int) game.viewport.width, (int) game.viewport.height);
         backgroundBatch.begin();
         background.update(backgroundBatch);
+        bossEffects.update(boss,backgroundBatch);
         backgroundBatch.end();
         game.batch.begin();
 
@@ -178,13 +187,14 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
         renderBullets();
         renderParticles(delta);
 
+
+
         game.batch.end();
 		Gdx.gl.glViewport((int) game.viewport.x, (int) game.viewport.y,
 						  (int) game.viewport.width, (int) game.viewport.height);
         game.uiBatch.begin();
 
         renderUI();
-
         game.uiBatch.end();
         update();
         world.step(1 / 60f, 6, 2);
