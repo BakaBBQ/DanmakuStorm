@@ -144,19 +144,19 @@ public class DanmakuPlayer {
                 onSlowModeCancel();
         }
         //this.playerBody.setLinearVelocity(0f,0f);
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && vel.x > -MAX_VELOCITY) {
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && getX() >= -10) {
             setState(4);
             this.playerBody.applyLinearImpulse(-generalV, 0, pos.x, pos.y, true);
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && vel.x < MAX_VELOCITY) {
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && getX() <= 60) {
             setState(6);
             this.playerBody.applyLinearImpulse(generalV, 0, pos.x, pos.y, true);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.UP) && vel.x < MAX_VELOCITY) {
+        if (Gdx.input.isKeyPressed(Input.Keys.UP) && getY() <= 78) {
             this.playerBody.applyLinearImpulse(0, generalV, pos.x, pos.y, true);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && vel.x < MAX_VELOCITY) {
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && getY() >= -3) {
             this.playerBody.applyLinearImpulse(0, -generalV, pos.x, pos.y, true);
         }
 
