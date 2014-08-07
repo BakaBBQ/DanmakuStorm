@@ -37,7 +37,7 @@ public class ThBackground {
         sprite2 = new Sprite(texture2,0,0,640 + 256,480 + 256);
         sprite2.setPosition(-256,-256);
         sprite1.setPosition(-256,-256);
-        sprite1.setAlpha(180f/255);
+        //sprite1.setAlpha(180f/255);
 
         sprite2.setAlpha(200f/255);
         //test.setScale(0.2f);

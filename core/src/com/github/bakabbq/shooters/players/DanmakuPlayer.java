@@ -39,8 +39,7 @@ public class DanmakuPlayer {
     public TextureRegion[][] slicedSheet;
     public IDanmakuWorld ground;
     public Body playerBody;
-    public Array<DanmakuOption> options = new Array() {
-    };
+    public Array<DanmakuOption> options = new Array() {};
 
     public int grazeCnt;
     public int power;

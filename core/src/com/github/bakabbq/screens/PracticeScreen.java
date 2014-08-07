@@ -97,12 +97,18 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
         this.scene = scene;
 
         backgroundBatch = new SpriteBatch();
+        initUiContainer();
         initObjectContainers();
         loadUiComponents();
         initAudioComponents();
         initScene();
         initParticle();
         setupZoom();
+    }
+
+    MainUiRenderer uiRenderer;
+    void initUiContainer(){
+        uiRenderer = new MainUiRenderer();
     }
 
     void initParticle(){
@@ -127,7 +133,6 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
 
     void loadUiComponents(){
         menuBackground = new TextureRegion(new Texture(Gdx.files.internal("menus/front.png")));
-
     }
 
     ThBoss boss;
@@ -330,7 +335,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
     }
 
     void renderUI(){
-        game.uiBatch.draw(menuBackground,0,0);
+        uiRenderer.render(game.uiBatch);
       //  getFontBank().arial.draw(game.uiBatch,"1 / 15", 100, 100);
         renderFps();
     }
