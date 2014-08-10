@@ -24,19 +24,16 @@ public class NonSpell1 extends SpellCard{
     @Override
     public void mainLoop(){
 
-        if(timer % 1 == 0){
-            owner.angledSpreadShot(new BulletAmulets(Bullet.COLOR_BLUE), 3, timer % 360, 25, 160);
-            owner.angledSpreadShot(new BulletAmulets(Bullet.COLOR_GREEN), 3, 360 - timer % 360, 25, 30);
+        if(timer % 10 == 0){
+            owner.angledSpreadShot(Bullet.amuletBullet, 3, timer % 360, 25, 160);
         }
 
-        if(timer % 1 == 0){
-            owner.angledSpreadShot(new BulletAmulets(Bullet.COLOR_DARKRED), 4, timer % 180 * 2, 25, 250);
-            owner.angledSpreadShot(new BulletAmulets(Bullet.COLOR_YELLOW), 4, 360 - timer % 180 * 2, 25, 1);
+        if(timer % 8 == 0){
+            owner.angledSpreadShot(Bullet.amuletBullet, 4, timer % 180 * 2, 25, 250);
         }
 
-        if(timer %1 == 0){
-            owner.angledSpreadShot(new BulletAmulets(Bullet.COLOR_DARKRED), 4, timer % 180 * 2, 25, 5);
-            owner.angledSpreadShot(new BulletAmulets(Bullet.COLOR_YELLOW), 4, 360 - timer % 180 * 2, 25, 280);
+        if(timer % 7  == 0){
+            owner.angledSpreadShot(Bullet.amuletBullet, 4, 360 - timer % 180 * 2, 25, 280);
         }
 
     } // void mainLoop

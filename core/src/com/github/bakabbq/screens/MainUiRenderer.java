@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class MainUiRenderer {
     Texture frame;
     Texture uiText;
+
+
     public MainUiRenderer(){
         frame = new Texture(Gdx.files.internal("menus/front.png"));
         uiText = new Texture(Gdx.files.internal("menus/menuUi.png"));

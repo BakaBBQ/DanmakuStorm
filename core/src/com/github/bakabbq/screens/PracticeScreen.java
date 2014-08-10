@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
@@ -33,6 +34,7 @@ import com.github.bakabbq.shooters.bosses.testsanae.TestSanae;
 import com.github.bakabbq.shooters.players.DanmakuOption;
 import com.github.bakabbq.shooters.players.DanmakuPlayer;
 
+import java.sql.Time;
 import java.util.Date;
 
 /**
@@ -72,7 +74,6 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
     //Background stuff
     ThBackground background;
 
-    //Shape Renderer - for drawing health bar
 
 
     //Box2d stuffs
@@ -95,6 +96,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
     public PracticeScreen(DanmakuGame game, DanmakuScene scene){
         this.game = game;
         this.scene = scene;
+
 
         backgroundBatch = new SpriteBatch();
         initUiContainer();
@@ -198,11 +200,17 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
 		Gdx.gl.glViewport((int) game.viewport.x, (int) game.viewport.y,
 						  (int) game.viewport.width, (int) game.viewport.height);
         game.uiBatch.begin();
-
+        //bossEffects.drawHpBar(bosses.first(),game.uiBatch);
         renderUI();
+
         game.uiBatch.end();
+        long start = System.currentTimeMillis();
+
         update();
+        System.out.println(System.currentTimeMillis() - start);
+
         world.step(1 / 60f, 6, 2);
+
     }
 
 

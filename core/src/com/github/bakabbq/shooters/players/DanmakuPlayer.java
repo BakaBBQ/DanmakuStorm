@@ -11,10 +11,7 @@ import com.github.bakabbq.BulletCollisionListener;
 import com.github.bakabbq.GdxGround;
 import com.github.bakabbq.IDanmakuWorld;
 import com.github.bakabbq.Pixel;
-import com.github.bakabbq.bullets.Bullet;
-import com.github.bakabbq.bullets.BulletDef;
-import com.github.bakabbq.bullets.BulletSanaeSnake;
-import com.github.bakabbq.bullets.PlayerBullet;
+import com.github.bakabbq.bullets.*;
 import com.github.bakabbq.effects.SlowEffect;
 
 /**
@@ -115,12 +112,20 @@ public class DanmakuPlayer {
     }
 
     public void updateShoot() {
-        if (timer % 4 == 0 && Gdx.input.isKeyPressed(Input.Keys.Z))
-            for (DanmakuOption singleOption : options)
-                singleOption.shoot(new BulletSanaeSnake(0));
+        if (timer % 4 == 0 && Gdx.input.isKeyPressed(Input.Keys.Z)){
+            if (slowMode){
+                options.get(0).nWayAngeledSpreadShot(PlayerBullet.reimuHoming, 1, 4, 178, 15, 580);
+                options.get(1).nWayAngeledSpreadShot(PlayerBullet.reimuHoming,1,4,188,15,580);
+            } else{
+                for (DanmakuOption singleOption : options){
+                    singleOption.nWayAngeledSpreadShot(PlayerBullet.reimuHoming,1,4,183,30,580);
+                }
+            }
+        }
 
-        if (timer % 12 == 0 && Gdx.input.isKeyPressed(Input.Keys.Z))
-            shoot(PlayerBullet.reimuAmulet, 0, (int) Pixel.m2p(30));
+
+        if (timer % 2 == 0 && Gdx.input.isKeyPressed(Input.Keys.Z))
+            shoot(PlayerBullet.reimuHoming, 0, 0);
 
 
     }
@@ -221,7 +226,7 @@ public class DanmakuPlayer {
     }
 
     public void shoot(BulletDef bd) {
-        ground.addPlayerBullet(bd, getX(), getY(), 180).setSpeed(10000);
+        ground.addPlayerBullet(bd, getX(), getY(), 180).setSpeed(800);
     }
 
     public void shoot(BulletDef bd, int xOff, int yOff) {

@@ -96,4 +96,36 @@ public class DanmakuOption {
     public void shoot(BulletDef bd) {
         player.ground.addPlayerBullet(bd, this.x, this.y, 180).setSpeed(800);
     }
+    public void shoot(BulletDef bd, float angle, int speed) {
+        player.ground.addPlayerBullet(bd, this.x, this.y, angle).setSpeed(speed);
+    }
+
+    public void nwayShoot(BulletDef bd, int ways, int angleFix, int speed) {
+        if (ways <= 0)
+            ways = 1;
+        for (int i = 0; i < ways; i++) {
+            shoot(bd, i * 360 / ways + angleFix, speed);
+        }
+    }
+
+    public void angledSpreadShot(BulletDef bd, int ways, int mainAngle, float totalAngleDiff, int speed){
+        if (ways <= 0)
+            ways = 1;
+
+        float singleAngleDiff = totalAngleDiff / (float) ways;
+        float startAngle = mainAngle - totalAngleDiff / 2.0f ;
+        for (int i  = 0; i < ways; i ++){
+            shoot(bd, singleAngleDiff * i + startAngle,speed);
+        }
+    }
+
+    public void nWayAngeledSpreadShot(BulletDef bd, int nways, int ways, int angleFix, float totalAngleDiff, int speed){
+        for (int i = 0; i < nways; i++){
+            float angle = 360f/nways;
+            angledSpreadShot(bd, ways, (int)angle * i+angleFix, totalAngleDiff, speed);
+        }
+
+    }
+
+
 }
