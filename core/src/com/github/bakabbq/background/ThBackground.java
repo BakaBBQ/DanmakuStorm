@@ -48,10 +48,6 @@ public class ThBackground {
         timer = 0;
     }
 
-    //public void update(){
-    //    render(ground.background);
-    //}
-
     public void update(SpriteBatch batch){
         timer++;
         mainLoop(batch);
@@ -61,7 +57,6 @@ public class ThBackground {
         sprite2.setPosition(-256 + timer % 256, -256 +timer % 256);
         sprite2.draw(batch);
         sprite1.setPosition(-256 + 256 - timer % 256, -256 +timer % 256);
-        //sprite1.setPosition(sprite2.getRegionWidth() - timer % sprite2.getRegionWidth(), sprite2.getRegionHeight() - timer % sprite2.getRegionHeight());
         sprite1.draw(batch);
     }
 

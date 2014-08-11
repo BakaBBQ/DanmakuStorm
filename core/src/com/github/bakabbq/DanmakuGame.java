@@ -4,10 +4,8 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -17,6 +15,7 @@ import com.github.bakabbq.screens.PracticeScreen;
 import com.github.bakabbq.screens.TitleScreen;
 import com.github.bakabbq.shooters.bosses.testsanae.TestSanae;
 import com.github.bakabbq.shooters.bosses.testsanae.TestSpellCard;
+import datas.FontBank;
 
 /**
  * Created by LBQ on 7/4/14.

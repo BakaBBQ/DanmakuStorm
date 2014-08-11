@@ -3,10 +3,8 @@ package com.github.bakabbq.shooters.bosses.kanako;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.github.bakabbq.IDanmakuWorld;
-import com.github.bakabbq.StateHelper;
+import datas.StateHelper;
 import com.github.bakabbq.shooters.bosses.ThBoss;
-import com.github.bakabbq.shooters.bosses.testsanae.TestSpellCard;
-import com.github.bakabbq.shooters.bosses.kanako.*;
 
 /**
  * Created by LBQ on 8/2/14.

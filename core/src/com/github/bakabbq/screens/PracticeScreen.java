@@ -9,32 +9,28 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.github.bakabbq.*;
 import com.github.bakabbq.audio.AudioBank;
 import com.github.bakabbq.audio.MusicBox;
-import com.github.bakabbq.audio.ThSe;
 import com.github.bakabbq.background.ThBackground;
 import com.github.bakabbq.bullets.Bullet;
 import com.github.bakabbq.bullets.BulletDef;
 import com.github.bakabbq.bullets.Laser;
 import com.github.bakabbq.bullets.PlayerBullet;
 import com.github.bakabbq.effects.BossEffects;
-import com.github.bakabbq.effects.ExplosionEffect;
 import com.github.bakabbq.effects.ThEffect;
-import com.github.bakabbq.items.ThItem;
 import com.github.bakabbq.shooters.BulletShooter;
 import com.github.bakabbq.shooters.EnemyShooter;
 import com.github.bakabbq.shooters.bosses.ThBoss;
 import com.github.bakabbq.shooters.bosses.kanako.BossKanako;
-import com.github.bakabbq.shooters.bosses.testsanae.TestSanae;
 import com.github.bakabbq.shooters.players.DanmakuOption;
 import com.github.bakabbq.shooters.players.DanmakuPlayer;
+import datas.FontBank;
+import datas.ScreenshotTaker;
 
-import java.sql.Time;
 import java.util.Date;
 
 /**
@@ -119,9 +115,14 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
         particleEffectPool = new ParticleEffectPool(slaveEffect, 1, 2);
     }
 
+
+
+    DebugValues debugValues;
     void initObjectContainers(){
         bullets = new Array<Bullet>();
         lasers = new Array<Laser>();
+
+        debugValues = new DebugValues();
 
         bosses = new Array<ThBoss>();
         enemies = new Array<EnemyShooter>();
@@ -181,8 +182,10 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
      */
     @Override
     public void render(float delta) {
+        long start;
 		Gdx.gl.glViewport((int) game.viewport.x, (int) game.viewport.y,
 						  (int) game.viewport.width, (int) game.viewport.height);
+        start = System.currentTimeMillis();
         backgroundBatch.begin();
         background.update(backgroundBatch);
         bossEffects.update(boss,backgroundBatch);
@@ -192,24 +195,23 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
         renderShooters();
         renderEffects();
         renderBullets();
-        renderParticles(delta);
-
 
 
         game.batch.end();
-		Gdx.gl.glViewport((int) game.viewport.x, (int) game.viewport.y,
-						  (int) game.viewport.width, (int) game.viewport.height);
+
+		//Gdx.gl.glViewport((int) game.viewport.x, (int) game.viewport.y,
+						  //(int) game.viewport.width, (int) game.viewport.height);
         game.uiBatch.begin();
         //bossEffects.drawHpBar(bosses.first(),game.uiBatch);
         renderUI();
 
         game.uiBatch.end();
-        long start = System.currentTimeMillis();
-
+        debugValues.renderInterval = System.currentTimeMillis() - start;
+        start = System.currentTimeMillis();
         update();
-        System.out.println(System.currentTimeMillis() - start);
 
         world.step(1 / 60f, 6, 2);
+        debugValues.updateInterval = System.currentTimeMillis() - start;
 
     }
 
@@ -350,7 +352,13 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
 
     void renderFps(){
         int fps = Gdx.graphics.getFramesPerSecond();
-        getFontBank().arial.draw(game.uiBatch,"" + fps, 610 , 20);
+        String debug = "Fps: " + fps + "\n"+
+                        "Bullets: " + bullets.size + "\n" +
+                       "RenderInterval: " + debugValues.renderInterval + "\n" +
+                       "UpdateInterval: " + debugValues.updateInterval + "\n" +
+                       "OverFlow?: " + (debugValues.renderInterval + debugValues.updateInterval > 16);
+        //getFontBank().arial.draw(game.uiBatch,debug, 450 , 80);
+        getFontBank().arial.drawMultiLine(game.uiBatch,debug, 450 , 160);
     }
 
     public FontBank getFontBank(){
@@ -541,7 +549,6 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
     }
 
     public DanmakuPlayer getPlayer(){
-        //TODO
         return players.first();
     }
 
@@ -554,7 +561,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
 	private void removeGarbageBullets() {
         for (Bullet singleBullet : bullets) {
             singleBullet.update();
-            if (singleBullet.getX() > 350 / 5 || singleBullet.getX() < -50 / 5 || singleBullet.getY() > 500 / 5 || singleBullet.getY() < -60 / 5)
+            if (singleBullet.getX() > 350 / 5 || singleBullet.getX() < -50 / 3 || singleBullet.getY() > 500 / 5 || singleBullet.getY() < -60 / 5)
                 destroyBullet(singleBullet);
         }
     }

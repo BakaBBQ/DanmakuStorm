@@ -34,7 +34,6 @@ public class BossEffects {
         rotatingHexagram.rotate(1f + Math.abs((60 - timer % 120)) / 60f);
         rotatingHexagram.setScale((1f + MathUtils.sin(timer / 20f)*0.2f) * 2);
         rotatingHexagram.setPosition(boss.getX() + 146,boss.getY() + 240);
-        //(MathUtils.sin(timer / 10f) * 120 + 255f)/255f)
         rotatingHexagram.draw(batch,1f - Math.abs(MathUtils.sin(timer / 20f)*0.2f));
 
 

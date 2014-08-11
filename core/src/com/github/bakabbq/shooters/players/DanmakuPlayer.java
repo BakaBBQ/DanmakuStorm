@@ -8,9 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.github.bakabbq.BulletCollisionListener;
-import com.github.bakabbq.GdxGround;
 import com.github.bakabbq.IDanmakuWorld;
-import com.github.bakabbq.Pixel;
 import com.github.bakabbq.bullets.*;
 import com.github.bakabbq.effects.SlowEffect;
 

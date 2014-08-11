@@ -1,11 +1,6 @@
 package com.github.bakabbq.shooters.bosses.testsanae;
 
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
-import com.github.bakabbq.StateHelper;
-import com.github.bakabbq.bullets.*;
-import com.github.bakabbq.shooters.BulletShooter;
-import com.github.bakabbq.shooters.EnemyShooter;
 import com.github.bakabbq.shooters.bosses.ThBoss;
 import com.github.bakabbq.spellcards.SpellCard;
 

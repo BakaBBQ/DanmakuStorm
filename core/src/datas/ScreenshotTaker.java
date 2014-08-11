@@ -1,4 +1,4 @@
-package com.github.bakabbq;
+package datas;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;

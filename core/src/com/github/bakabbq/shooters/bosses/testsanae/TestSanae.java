@@ -1,8 +1,7 @@
 package com.github.bakabbq.shooters.bosses.testsanae;
 
-import com.github.bakabbq.GdxGround;
 import com.github.bakabbq.IDanmakuWorld;
-import com.github.bakabbq.StateHelper;
+import datas.StateHelper;
 import com.github.bakabbq.shooters.bosses.ThBoss;
 
 /**
