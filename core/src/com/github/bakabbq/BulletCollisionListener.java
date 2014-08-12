@@ -44,8 +44,6 @@ public class BulletCollisionListener implements ContactListener {
         }
 
 
-
-
         // Enemy - PlayerBullet Listener
         if(bodyA.getUserData() instanceof EnemyShooter && bodyB.getUserData() instanceof PlayerBullet){
             int dmg = ((PlayerBullet) bodyB.getUserData()).damage;

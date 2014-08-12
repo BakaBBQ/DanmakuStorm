@@ -1,4 +1,4 @@
-package datas;
+package com.github.bakabbq.datas;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;

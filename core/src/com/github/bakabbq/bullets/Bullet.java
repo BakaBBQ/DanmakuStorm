@@ -174,4 +174,12 @@ public class Bullet {
     public void aimAt(float angle){
         this.body.setTransform(getX(), getY(), angle);
     }
+
+    public boolean canDestroy(){
+        return destroyFlag;
+    }
+
+    public void onHit(){
+        destroyFlag = true;
+    }
 }

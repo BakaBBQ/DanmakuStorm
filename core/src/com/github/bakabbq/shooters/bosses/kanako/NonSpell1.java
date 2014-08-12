@@ -15,10 +15,12 @@ public class NonSpell1 extends SpellCard{
         super(owner);
     }
 
+
+
+
     @Override
     public void updateAttributes(){
         this.name = "non spell";
-
     }
 
     @Override

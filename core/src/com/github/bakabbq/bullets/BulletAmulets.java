@@ -2,7 +2,7 @@ package com.github.bakabbq.bullets;
 
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
-import datas.Pixel;
+import com.github.bakabbq.datas.Pixel;
 
 /**
  * Created by LBQ on 5/27/14.

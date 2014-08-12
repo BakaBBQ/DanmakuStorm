@@ -1,4 +1,4 @@
-package datas;
+package com.github.bakabbq.datas;
 
 /**
  * Created by LBQ on 6/27/14.

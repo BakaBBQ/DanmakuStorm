@@ -1,7 +1,6 @@
-package datas;
+package com.github.bakabbq.datas;
 
 import com.badlogic.gdx.utils.Array;
-import com.github.bakabbq.DanmakuScene;
 
 /**
  * Created by LBQ on 8/11/14.

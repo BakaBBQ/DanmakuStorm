@@ -12,10 +12,11 @@ import com.badlogic.gdx.math.Vector2;
 
 import com.github.bakabbq.background.ThBackground;
 import com.github.bakabbq.screens.PracticeScreen;
+import com.github.bakabbq.screens.SigScreen;
 import com.github.bakabbq.screens.TitleScreen;
 import com.github.bakabbq.shooters.bosses.testsanae.TestSanae;
 import com.github.bakabbq.shooters.bosses.testsanae.TestSpellCard;
-import datas.FontBank;
+import com.github.bakabbq.datas.FontBank;
 
 /**
  * Created by LBQ on 7/4/14.
@@ -49,9 +50,9 @@ public class DanmakuGame extends Game {
         PracticeScreen screen;
         DanmakuScene scene = new DanmakuScene(TestSanae.class, TestSpellCard.class, ThBackground.class);
 
-        boolean titleDebug = false;
+        boolean titleDebug = true;
         if(titleDebug)
-            currentScreen = new TitleScreen(this);
+            currentScreen = new SigScreen(this);
         else
             currentScreen = new PracticeScreen(this, scene);
 

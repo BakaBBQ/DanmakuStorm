@@ -1,4 +1,4 @@
-package datas;
+package com.github.bakabbq.datas;
 
 import com.github.bakabbq.background.ThBackground;
 import com.github.bakabbq.shooters.bosses.ThBoss;

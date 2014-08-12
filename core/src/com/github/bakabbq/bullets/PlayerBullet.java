@@ -11,6 +11,7 @@ import com.github.bakabbq.BulletCollisionListener;
 public class PlayerBullet extends Bullet {
     public static BulletReimuHoming reimuHoming = new BulletReimuHoming(0);
     public static ReimuAmulets reimuAmulet = new ReimuAmulets(0);
+    public int contactTimer = 100;
 
 
     public int damage;

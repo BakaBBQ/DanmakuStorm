@@ -3,7 +3,7 @@ package com.github.bakabbq.shooters.bosses.kanako;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.github.bakabbq.IDanmakuWorld;
-import datas.StateHelper;
+import com.github.bakabbq.datas.StateHelper;
 import com.github.bakabbq.shooters.bosses.ThBoss;
 
 /**

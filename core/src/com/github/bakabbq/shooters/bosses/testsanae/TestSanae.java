@@ -1,7 +1,7 @@
 package com.github.bakabbq.shooters.bosses.testsanae;
 
 import com.github.bakabbq.IDanmakuWorld;
-import datas.StateHelper;
+import com.github.bakabbq.datas.StateHelper;
 import com.github.bakabbq.shooters.bosses.ThBoss;
 
 /**

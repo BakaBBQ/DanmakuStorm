@@ -28,8 +28,8 @@ import com.github.bakabbq.shooters.bosses.ThBoss;
 import com.github.bakabbq.shooters.bosses.kanako.BossKanako;
 import com.github.bakabbq.shooters.players.DanmakuOption;
 import com.github.bakabbq.shooters.players.DanmakuPlayer;
-import datas.FontBank;
-import datas.ScreenshotTaker;
+import com.github.bakabbq.datas.FontBank;
+import com.github.bakabbq.datas.ScreenshotTaker;
 
 import java.util.Date;
 
@@ -183,8 +183,6 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
     @Override
     public void render(float delta) {
         long start;
-		Gdx.gl.glViewport((int) game.viewport.x, (int) game.viewport.y,
-						  (int) game.viewport.width, (int) game.viewport.height);
         start = System.currentTimeMillis();
         backgroundBatch.begin();
         background.update(backgroundBatch);
