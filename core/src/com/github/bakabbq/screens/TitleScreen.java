@@ -1,73 +1,67 @@
 package com.github.bakabbq.screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.github.bakabbq.DanmakuGame;
+import com.github.bakabbq.screens.title.BackgroundSprite;
+import com.github.bakabbq.screens.title.LogoSprite;
+import com.github.bakabbq.screens.title.TitleChoices;
 
 /**
- * Created by LBQ on 7/12/14.
+ * Created by LBQ on 8/14/14.
  */
 public class TitleScreen implements Screen{
     DanmakuGame game;
 
-    Texture background;
-    Texture praying;
-    Texture particle;
-
-    //No time to waste, use violent ways to achieve this...
-    Texture logo;
-    Texture startGame;
-
+    BackgroundSprite bgSprite;
+    LogoSprite logoSprite;
+    Texture curtain;
+    TitleChoices titleChoices;
+    AllblackSprite allblackSprite;
     int timer;
-
-    int stateId;
-
-
     public TitleScreen(DanmakuGame game){
-        this.game = game;
-
         timer = 0;
-        stateId = 0;
-
-        loadBasicAssets();
-        loadAllAssets();
+        this.game = game;
+        bgSprite = new BackgroundSprite();
+        logoSprite = new LogoSprite();
+        curtain = new Texture("title/blackCurtain.png");
+        titleChoices = new TitleChoices();
+        allblackSprite = new AllblackSprite();
     }
 
-    //Only load the "girls are praying" stuffs
-    public void loadBasicAssets(){
-        background = new Texture(Gdx.files.internal("title/background.png"));
-        praying = new Texture(Gdx.files.internal("title/loading.png"));
-    }
-
-    public void loadAllAssets(){
-
-    }
-
+    /**
+     * Called when the screen should render itself.
+     *
+     * @param delta The time in seconds since the last render.
+     */
     @Override
     public void render(float delta) {
-        timer ++;
-        getBatch().begin();
-        getBatch().draw(background,0,0);
+        timer++;
+        game.batch.begin();
+        bgSprite.update(game.batch);
+        logoSprite.draw(game.batch);
+        game.batch.draw(curtain,0,0);
+        titleChoices.update(game.batch);
+        allblackSprite.draw(game.batch,Math.max(30 - timer,0)/30f);
+        game.batch.end();
 
-        renderLoading();
-
-        getBatch().end();
+        updateKeys();
     }
 
-    public void renderLoading(){
-        Color c = getBatch().getColor();
-        getBatch().setColor(c.r, c.g, c.b, (255f - Math.abs((timer % 80 - 40)) * 2) / 255f);
-        //Deal with girls are praying
-        getBatch().draw(praying,0,0);
-        getBatch().setColor(c);
-    }
-
-    public SpriteBatch getBatch(){
-        return game.batch;
+    public void updateKeys(){
+        if(Gdx.input.isKeyPressed(Input.Keys.Z)){
+            switch(titleChoices.choiceId){
+                case 0:
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    System.exit(0);
+                    break;
+            }
+        }
     }
 
     @Override
@@ -75,26 +69,33 @@ public class TitleScreen implements Screen{
 
     }
 
+
     @Override
     public void show() {
 
     }
+
 
     @Override
     public void hide() {
 
     }
 
+
     @Override
     public void pause() {
 
     }
+
 
     @Override
     public void resume() {
 
     }
 
+    /**
+     * Called when this screen should release all resources.
+     */
     @Override
     public void dispose() {
 

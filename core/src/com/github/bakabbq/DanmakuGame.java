@@ -91,6 +91,11 @@ public class DanmakuGame extends Game {
         viewport = new Rectangle(crop.x, crop.y, w, h);
     }
 
+    public void switchToTitle(){
+        currentScreen = new TitleScreen(this);
+        this.setScreen(currentScreen);
+    }
+
     public void dispose(){
         batch.dispose();
     }

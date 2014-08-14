@@ -49,6 +49,7 @@ public class SigScreen implements Screen {
             opacity = (80 - (timer - 180)) / 80f;
         }
         if (timer >= 260){
+            game.switchToTitle();
             opacity = 0f;
         }
         sigSprite.draw(getBatch(),opacity);
