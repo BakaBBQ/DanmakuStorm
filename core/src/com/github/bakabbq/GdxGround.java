@@ -583,4 +583,9 @@ public class GdxGround extends ApplicationAdapter implements IDanmakuWorld{
     public DanmakuPlayer getPlayer(){
         return player;
     }
+
+    @Override
+    public Array<Bullet> getBullets() {
+        return null;
+    }
 }

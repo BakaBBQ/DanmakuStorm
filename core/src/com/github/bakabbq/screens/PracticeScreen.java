@@ -46,7 +46,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
     DanmakuScene scene; // the scene, tool class
 
 
-    Array<Bullet> bullets; // array containing all bullets
+    public Array<Bullet> bullets; // array containing all bullets
     Array<Laser> lasers; // lasers
 
     Array<ThBoss> bosses; // boss array
@@ -562,6 +562,10 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
             if (singleBullet.getX() > 350 / 5 || singleBullet.getX() < -50 / 3 || singleBullet.getY() > 500 / 5 || singleBullet.getY() < -60 / 5)
                 destroyBullet(singleBullet);
         }
+    }
+
+    public Array<Bullet> getBullets(){
+        return bullets;
     }
 
 

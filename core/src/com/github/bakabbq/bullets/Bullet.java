@@ -26,6 +26,8 @@ public class Bullet {
     public boolean grazed;
     Fixture fixture;
 
+    public boolean pause;
+
 
     public static int COLOR_GRAY = 0;
     public static int COLOR_DARKRED = 1;
@@ -52,6 +54,8 @@ public class Bullet {
     public boolean destroyFlag;
 
     public Bullet(BulletDef bd, World world, float x, float y, float angle) {
+        long start;
+        start = System.currentTimeMillis();
         this.bd = bd;
         this.timer = 0;
         this.world = world;
@@ -63,10 +67,9 @@ public class Bullet {
         fd.filter.categoryBits = BulletCollisionListener.ENEMY_BULLET;
         fd.filter.maskBits = (short)(BulletCollisionListener.PLAYER | 0x001 | BulletCollisionListener.PLAYER_BULLET);
         this.fixture = body.createFixture(fd);
-        //this.fixture.setSensor(true);
         body.setTransform(x, y, angle);
-        setSprite();
         grazed = false;
+        Gdx.app.log("Profiler Bullet Creation", "" + (System.currentTimeMillis() - start));
     }
 
     public int getAngleFix() {
@@ -118,7 +121,10 @@ public class Bullet {
     public int timer;
     public void update() {
         timer++;
-        sprite.setPosition(body.getPosition().x, body.getPosition().y);
+        //sprite.setPosition(body.getPosition().x, body.getPosition().y);
+        //if(bd!= null)
+        if(pause)
+            return;
         this.bd.modifyBullet(this);
     }
 

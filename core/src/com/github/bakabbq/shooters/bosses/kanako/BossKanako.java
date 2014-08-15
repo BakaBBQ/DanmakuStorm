@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.github.bakabbq.IDanmakuWorld;
 import com.github.bakabbq.datas.StateHelper;
 import com.github.bakabbq.shooters.bosses.ThBoss;
+import com.github.bakabbq.spellcards.ScWindGodRad;
 
 /**
  * Created by LBQ on 8/2/14.
@@ -23,7 +24,7 @@ public class BossKanako extends ThBoss{
 
     @Override
     public void initSpellCards() {
-        spellCards.add(new NonSpell1(this));
+        spellCards.add(new ScWindGodRad(this));
     }
 
     @Override

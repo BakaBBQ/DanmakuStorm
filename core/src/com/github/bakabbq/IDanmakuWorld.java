@@ -1,6 +1,7 @@
 package com.github.bakabbq;
 
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.github.bakabbq.bullets.Bullet;
 import com.github.bakabbq.bullets.BulletDef;
 import com.github.bakabbq.bullets.Laser;
@@ -44,4 +45,6 @@ public interface IDanmakuWorld {
     public World getWorld();
 
     public DanmakuPlayer getPlayer();
+
+    public Array<Bullet> getBullets();
 }

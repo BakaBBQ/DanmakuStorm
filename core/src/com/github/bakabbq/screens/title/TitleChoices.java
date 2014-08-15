@@ -24,19 +24,30 @@ public class TitleChoices {
         choiceId = 0;
         currentKey = 0;
         justChangeTimer = 0;
+        o1 = 0.5f; o2=0.5f;o3=0.5f;
     }
 
+    float o1, o2, o3;
     public void update(SpriteBatch batch){
         updateKeyboard();
-        float o1 = 0.7f;
-        float o2 = 0.7f;
-        float o3 = 0.7f;
-        if(choiceId == 0)
-            o1 = 1f;
-        else if(choiceId == 1)
-            o2 = 1f;
-        else if(choiceId == 2)
-            o3 = 1f;
+        if(choiceId == 0) {
+            o1 = Math.min(o1 + 0.02f, 1f);
+            o2 = Math.max(o2 - 0.02f, 0.5f);
+            o3 = Math.max(o3 - 0.02f, 0.5f);
+        }
+        else if(choiceId == 1) {
+            o2 = Math.min(o2 + 0.02f, 1f);
+            o1 = Math.max(o1 - 0.02f, 0.5f);
+            o3 = Math.max(o3 - 0.02f, 0.5f);
+        }
+        else if(choiceId == 2){
+            o3 = Math.min(o3 + 0.02f, 1f);
+            o2 = Math.max(o2 - 0.02f, 0.5f);
+            o1 = Math.max(o1 - 0.02f, 0.5f);
+        }
+        start.setPosition(-10 + 10 * o1,0);
+        musicRoom.setPosition(-10 + 10 * o2,0);
+        quit.setPosition(-10 + 10 * o3,0);
         start.draw(batch,o1);
         musicRoom.draw(batch, o2);
         quit.draw(batch, o3);
