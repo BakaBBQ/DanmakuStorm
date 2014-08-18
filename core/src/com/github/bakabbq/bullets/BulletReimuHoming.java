@@ -3,6 +3,7 @@ package com.github.bakabbq.bullets;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 
@@ -10,8 +11,10 @@ import com.badlogic.gdx.physics.box2d.Shape;
  * Created by LBQ on 5/30/14.
  */
 public class BulletReimuHoming extends BulletDef {
+    public boolean stillEffective;
     public BulletReimuHoming(int colorId) {
         super(colorId);
+        stillEffective = false;
     }
 
     public void setTextureIndex() {
@@ -29,6 +32,8 @@ public class BulletReimuHoming extends BulletDef {
         return shape;
     }
 
+
+
     @Override
     public void modifySprite(Sprite spt) {
         spt.setAlpha(180f);
@@ -36,5 +41,11 @@ public class BulletReimuHoming extends BulletDef {
 
     @Override
     public void modifyBullet(Bullet bullet) {
+        if(bullet.collided){
+            bullet.alpha-=5;
+            bullet.setSpeed(-10);
+            if(bullet.alpha <= 0)
+                bullet.destroyFlag = true;
+        }
     }
 }

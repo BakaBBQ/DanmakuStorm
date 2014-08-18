@@ -25,46 +25,7 @@ public class BulletCollisionListener implements ContactListener {
 
     @Override
     public void beginContact(Contact contact) {
-        goBack = false;
-        Body bodyA = contact.getFixtureA().getBody();
-        Body bodyB = contact.getFixtureB().getBody();
-        if (bodyA.getLinearDamping() >= 5) {
-            //goBack = true;
-        }
-        if (bodyB.getLinearDamping() >= 5) {
-            //goBack = true;
-        }
 
-        if(bodyA.getUserData() instanceof PlayerBullet && bodyB.getUserData() instanceof EnemyShooter){
-            ((PlayerBullet) bodyA.getUserData()).destroyFlag = true;
-        }
-
-        if(bodyB.getUserData() instanceof PlayerBullet && bodyA.getUserData() instanceof EnemyShooter){
-            ((PlayerBullet) bodyA.getUserData()).destroyFlag = true;
-        }
-
-
-        // Enemy - PlayerBullet Listener
-        if(bodyA.getUserData() instanceof EnemyShooter && bodyB.getUserData() instanceof PlayerBullet){
-            int dmg = ((PlayerBullet) bodyB.getUserData()).damage;
-            ((EnemyShooter) bodyA.getUserData()).recieveDamage(dmg);
-            contact.setEnabled(false);
-        }
-
-        if(bodyB.getUserData() instanceof EnemyShooter && bodyA.getUserData() instanceof PlayerBullet){
-            int dmg = ((PlayerBullet) bodyA.getUserData()).damage;
-            ((EnemyShooter) bodyB.getUserData()).recieveDamage(dmg);
-            contact.setEnabled(false);
-        }
-
-
-        if(bodyA.getUserData() instanceof PlayerGrazeCounter && bodyB.getUserData() instanceof Bullet){
-            increasePlayerGraze((Bullet) bodyB.getUserData());
-        }
-
-        if(bodyB.getUserData() instanceof PlayerGrazeCounter && bodyA.getUserData() instanceof Bullet){
-            increasePlayerGraze((Bullet) bodyA.getUserData());
-        }
 
 
     }
@@ -82,7 +43,53 @@ public class BulletCollisionListener implements ContactListener {
 
     @Override
     public void preSolve(Contact contact, Manifold oldManifold) {
+        goBack = false;
+        Body bodyA = contact.getFixtureA().getBody();
+        Body bodyB = contact.getFixtureB().getBody();
+        if (bodyA.getLinearDamping() >= 5) {
+            //goBack = true;
+        }
+        if (bodyB.getLinearDamping() >= 5) {
+            //goBack = true;
+        }
 
+        if(bodyA.getUserData() instanceof PlayerBullet && bodyB.getUserData() instanceof EnemyShooter){
+            //((PlayerBullet) bodyA.getUserData()).destroyFlag = true;
+            bodyA.getFixtureList().first().setSensor(true);
+            contact.setEnabled(false);
+        }
+
+        if(bodyB.getUserData() instanceof PlayerBullet && bodyA.getUserData() instanceof EnemyShooter){
+            //((PlayerBullet) bodyA.getUserData()).destroyFlag = true;
+            bodyB.getFixtureList().first().setSensor(true);
+            contact.setEnabled(false);
+        }
+
+
+        // Enemy - PlayerBullet Listener
+        if(bodyA.getUserData() instanceof EnemyShooter && bodyB.getUserData() instanceof PlayerBullet && ((PlayerBullet) bodyB.getUserData()).stillCollide()){
+            ((PlayerBullet) bodyB.getUserData()).collided = true;
+            int dmg = ((PlayerBullet) bodyB.getUserData()).damage;
+            ((EnemyShooter) bodyA.getUserData()).recieveDamage(dmg);
+
+            contact.setEnabled(false);
+        }
+
+        if(bodyB.getUserData() instanceof EnemyShooter && bodyA.getUserData() instanceof PlayerBullet && ((PlayerBullet) bodyA.getUserData()).stillCollide()){
+            ((PlayerBullet) bodyA.getUserData()).collided = true;
+            int dmg = ((PlayerBullet) bodyA.getUserData()).damage;
+            ((EnemyShooter) bodyB.getUserData()).recieveDamage(dmg);
+            contact.setEnabled(false);
+        }
+
+
+        if(bodyA.getUserData() instanceof PlayerGrazeCounter && bodyB.getUserData() instanceof Bullet){
+            increasePlayerGraze((Bullet) bodyB.getUserData());
+        }
+
+        if(bodyB.getUserData() instanceof PlayerGrazeCounter && bodyA.getUserData() instanceof Bullet){
+            increasePlayerGraze((Bullet) bodyA.getUserData());
+        }
     }
 
     @Override

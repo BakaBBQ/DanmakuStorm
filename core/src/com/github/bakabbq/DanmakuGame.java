@@ -2,6 +2,7 @@ package com.github.bakabbq;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import com.github.bakabbq.background.ThBackground;
+import com.github.bakabbq.datas.ScreenshotTaker;
 import com.github.bakabbq.screens.PracticeScreen;
 import com.github.bakabbq.screens.SigScreen;
 import com.github.bakabbq.screens.TitleScreen;
@@ -50,7 +52,7 @@ public class DanmakuGame extends Game {
         PracticeScreen screen;
         DanmakuScene scene = new DanmakuScene(TestSanae.class, TestSpellCard.class, ThBackground.class);
 
-        boolean titleDebug = true;
+        boolean titleDebug = false;
         if(titleDebug)
             currentScreen = new SigScreen(this);
         else
@@ -69,6 +71,7 @@ public class DanmakuGame extends Game {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.setProjectionMatrix(camera.combined);
         super.render();
+        updateScreenshot();
     }
 
     @Override
@@ -89,11 +92,16 @@ public class DanmakuGame extends Game {
         float w = (float) VIRTUAL_WIDTH * scale;
         float h = (float) VIRTUAL_HEIGHT * scale;
         viewport = new Rectangle(crop.x, crop.y, w, h);
+
     }
 
     public void switchToTitle(){
         currentScreen = new TitleScreen(this);
         this.setScreen(currentScreen);
+    }
+    public void updateScreenshot(){
+        if(Gdx.input.isKeyPressed(Input.Keys.P))
+            ScreenshotTaker.saveScreenshot();
     }
 
     public void dispose(){

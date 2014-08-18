@@ -29,7 +29,6 @@ public class PlayerBullet extends Bullet {
         this.fixture = body.createFixture(fd);
         body.setTransform(x, y, angle);
         body.setUserData(this);
-        setSprite();
 
         bd.fixtureD.density = 0.4f;
         bd.fixtureD.friction = 0.5f;
@@ -38,8 +37,13 @@ public class PlayerBullet extends Bullet {
         this.fixture = body.createFixture(bd.fixtureD);
         body.setLinearDamping(0f);
         body.setTransform(x, y, angle);
-
         initDamage();
+    }
+
+
+    @Override
+    public boolean hasCreationEffect(){
+        return false;
     }
     public boolean canGraze(){
         return false;

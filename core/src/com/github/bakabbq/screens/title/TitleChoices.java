@@ -45,12 +45,15 @@ public class TitleChoices {
             o2 = Math.max(o2 - 0.02f, 0.5f);
             o1 = Math.max(o1 - 0.02f, 0.5f);
         }
+
+
         start.setPosition(-10 + 10 * o1,0);
         musicRoom.setPosition(-10 + 10 * o2,0);
         quit.setPosition(-10 + 10 * o3,0);
         start.draw(batch,o1);
         musicRoom.draw(batch, o2);
         quit.draw(batch, o3);
+
     }
 
     int currentKey;
@@ -60,14 +63,14 @@ public class TitleChoices {
                 choiceId = 2;
             else
                 choiceId--;
-            justChangeTimer = 10;
+            justChangeTimer = 15;
 
         } else if(Gdx.input.isKeyPressed(Input.Keys.DOWN) && justChangeTimer == 0){
             if(choiceId == 2)
                 choiceId = 0;
             else
                 choiceId ++;
-            justChangeTimer = 10;
+            justChangeTimer = 15;
         } else{
             currentKey = 0;
         }

@@ -24,6 +24,7 @@ public class Bullet {
     public Sprite sprite;
     public World world;
     public boolean grazed;
+    public boolean collided;
     Fixture fixture;
 
     public boolean pause;
@@ -45,6 +46,8 @@ public class Bullet {
     public static int COLOR_YELLOW = 13;
     public static int COLOR_ORANGE = 14;
     public static int COLOR_WHITE = 15;
+
+    int alpha;
 
 
      public IDanmakuWorld danmakuWorld;
@@ -68,6 +71,7 @@ public class Bullet {
         fd.filter.maskBits = (short)(BulletCollisionListener.PLAYER | 0x001 | BulletCollisionListener.PLAYER_BULLET);
         this.fixture = body.createFixture(fd);
         body.setTransform(x, y, angle);
+        this.alpha = bd.alpha;
         grazed = false;
         Gdx.app.log("Profiler Bullet Creation", "" + (System.currentTimeMillis() - start));
     }
@@ -133,7 +137,7 @@ public class Bullet {
     }
 
     public int getAlpha() {
-        return bd.alpha;
+        return this.alpha;
     }
 
     public void setSprite() {
@@ -157,6 +161,10 @@ public class Bullet {
         return !grazed;
     }
 
+    public TextureRegion getCreationTexture(){
+        return bd.onCreationTexture;
+    }
+
     public void dispose(){
         this.world.destroyBody(this.body);
     }
@@ -177,6 +185,10 @@ public class Bullet {
         return yDiff;
     }
 
+    public boolean hasCreationEffect(){
+        return this.timer <= 20;
+    }
+
     public void aimAt(float angle){
         this.body.setTransform(getX(), getY(), angle);
     }
@@ -188,4 +200,10 @@ public class Bullet {
     public void onHit(){
         destroyFlag = true;
     }
+
+    public boolean stillCollide(){
+        return this.alpha == bd.alpha;
+    }
+
+
 }

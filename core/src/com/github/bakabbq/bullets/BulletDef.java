@@ -41,11 +41,19 @@ public class BulletDef {
         fixtureD.shape = getShape();
         setTextureIndex();
         updateTexture();
+        initCreationTexture();
         postInit();
     }
 
     public void postInit(){
 
+    }
+
+    public TextureRegion onCreationTexture;
+    public void initCreationTexture(){
+        int startX;
+        startX = colorId * 16;
+        onCreationTexture = new TextureRegion(bulletSheet,startX,13 * 16,32,32);
     }
 
     public void setTextureIndex() {

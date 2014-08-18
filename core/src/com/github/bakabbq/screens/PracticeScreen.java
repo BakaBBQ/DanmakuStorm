@@ -72,6 +72,8 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
 
 
 
+
+
     //Box2d stuffs
     public World world;
     public BulletCollisionListener collisionListener;
@@ -314,6 +316,29 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
         for (Bullet singleBullet : bullets) {
 
             game.batch.setColor(c.r, c.g, c.b, ((float) singleBullet.getAlpha()) / 255f);
+            renderSingleBullet(singleBullet);
+
+
+        }
+        game.batch.setColor(c.r, c.g, c.b, 1);
+    }
+
+    public void renderSingleBullet(Bullet singleBullet){
+        if(singleBullet.hasCreationEffect()){
+            game.batch.draw(
+                    singleBullet.getCreationTexture(),
+                    singleBullet.getX() + singleBullet.getXOffset() - 8,
+                    singleBullet.getY() + singleBullet.getYOffset() - 8,
+                    singleBullet.getOriginX() * 2,
+                    singleBullet.getOriginY() * 2,
+                    32,
+                    32,
+                    0.2f * (20 - singleBullet.timer) / 20f,
+                    0.2f * (20 - singleBullet.timer) / 20f,
+                    0
+            );
+        } else{
+            //game.batch.setColor(c.r, c.g, c.b, ((float) singleBullet.getAlpha()) / 255f);
             game.batch.draw(
                     singleBullet.getTexture(),
                     singleBullet.getX() + singleBullet.getXOffset(),
@@ -326,10 +351,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
                     0.2f,
                     singleBullet.body.getAngle() - 180 + singleBullet.getAngleFix()
             );
-
-
         }
-        game.batch.setColor(c.r, c.g, c.b, 1);
     }
 
     void renderParticles(float delta){
@@ -404,7 +426,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
 
 
 
-        updateScreenshot();
+        //updateScreenshot();
 
     }
 
