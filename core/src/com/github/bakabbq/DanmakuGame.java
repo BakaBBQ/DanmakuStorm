@@ -31,6 +31,8 @@ public class DanmakuGame extends Game {
 
     public FontBank fontBank;
 
+    public JRubyClassLoader classLoader;
+
     private static final int VIRTUAL_WIDTH = 640;
     private static final int VIRTUAL_HEIGHT = 480;
     private static final float ASPECT_RATIO =
@@ -47,6 +49,9 @@ public class DanmakuGame extends Game {
         camera.setToOrtho(false, 640, 480);
 
         fontBank = new FontBank();
+
+        classLoader = new JRubyClassLoader();
+        Object meow = classLoader.loadClass("test.rb");
 
 
         PracticeScreen screen;
