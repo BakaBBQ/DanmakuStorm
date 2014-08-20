@@ -2,9 +2,11 @@ package com.github.bakabbq.shooters.bosses.kanako;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.github.bakabbq.BulletScript;
 import com.github.bakabbq.IDanmakuWorld;
 import com.github.bakabbq.datas.StateHelper;
 import com.github.bakabbq.shooters.bosses.ThBoss;
+import com.github.bakabbq.spellcards.JRubySpellCard;
 import com.github.bakabbq.spellcards.ScWindGodRad;
 
 /**
@@ -24,7 +26,9 @@ public class BossKanako extends ThBoss{
 
     @Override
     public void initSpellCards() {
-        spellCards.add(new spellCard1(this));
+        //
+        //spellCards.add(new spellCard1(this));
+        spellCards.add(new JRubySpellCard(this, BulletScript.load("TestScript")));
     }
 
     @Override

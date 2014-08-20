@@ -50,8 +50,8 @@ public class DanmakuGame extends Game {
 
         fontBank = new FontBank();
 
-        classLoader = new JRubyClassLoader();
-        Object meow = classLoader.loadClass("test.rb");
+        //Object meow = JRubyClassLoader.loadClass("test.rb");
+        JRubyClassLoader.loadLibrary("BaseScript");
 
 
         PracticeScreen screen;
