@@ -1,6 +1,9 @@
 package com.github.bakabbq.spellcards;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.github.bakabbq.BulletScript;
+import com.github.bakabbq.JRubyClassLoader;
 import com.github.bakabbq.shooters.bosses.ThBoss;
 
 /**
@@ -17,5 +20,24 @@ public class JRubySpellCard extends SpellCard{
     @Override
     public void mainLoop(){
         script.update();
+        updateReload();
+    }
+
+    public void reload(){
+        JRubyClassLoader.loadLibrary("BaseScript");
+        String filename = script.oriFilename;
+        this.script = BulletScript.load(filename);
+        this.script.setOwner(this.owner);
+    }
+
+    void updateReload(){
+        if(Gdx.input.isKeyPressed(Input.Keys.R)){
+            try{
+                reload();
+            }
+            catch(Exception e){
+                Gdx.app.log("JRuby", "Error when reloading script", e);
+            }
+        }
     }
 }

@@ -20,6 +20,8 @@ import com.github.bakabbq.bullets.Bullet;
 import com.github.bakabbq.bullets.BulletDef;
 import com.github.bakabbq.bullets.Laser;
 import com.github.bakabbq.bullets.PlayerBullet;
+import com.github.bakabbq.datas.FontBank;
+import com.github.bakabbq.datas.ScreenshotTaker;
 import com.github.bakabbq.effects.BossEffects;
 import com.github.bakabbq.effects.ThEffect;
 import com.github.bakabbq.shooters.BulletShooter;
@@ -28,8 +30,6 @@ import com.github.bakabbq.shooters.bosses.ThBoss;
 import com.github.bakabbq.shooters.bosses.kanako.BossKanako;
 import com.github.bakabbq.shooters.players.DanmakuOption;
 import com.github.bakabbq.shooters.players.DanmakuPlayer;
-import com.github.bakabbq.datas.FontBank;
-import com.github.bakabbq.datas.ScreenshotTaker;
 
 import java.util.Date;
 
@@ -37,48 +37,31 @@ import java.util.Date;
  * Created by LBQ on 7/14/14.
  *
  * PracticeScreen - The Main Screen of The Game
- *  initialized with a scene to practice
+ * initialized with a scene to practice
  */
-public class PracticeScreen implements Screen, IDanmakuWorld{
-
-    //the code definitely looks ugly down there
-    DanmakuGame game; // game object, essential for rendering
-    DanmakuScene scene; // the scene, tool class
-
+public class PracticeScreen implements Screen, IDanmakuWorld {
 
     public Array<Bullet> bullets; // array containing all bullets
-    Array<Laser> lasers; // lasers
-
-    Array<ThBoss> bosses; // boss array
-    Array<EnemyShooter> enemies; //enemies, for possible slave spawns
-    Array<BulletShooter> shooters;
-
-    Array<ThEffect> effects; //effects array
-
-    Array<DanmakuPlayer> players;
-
-
-    //Ui Components
-    TextureRegion menuBackground;
-
-    //Audio Components
-    MusicBox musicBox;
-
-    //Background SpriteBatch
-    SpriteBatch backgroundBatch;
-
-    //Background stuff
-    ThBackground background;
-
-
-
-
-
     //Box2d stuffs
     public World world;
     public BulletCollisionListener collisionListener;
-
-
+    //the code definitely looks ugly down there
+    DanmakuGame game; // game object, essential for rendering
+    DanmakuScene scene; // the scene, tool class
+    Array<Laser> lasers; // lasers
+    Array<ThBoss> bosses; // boss array
+    Array<EnemyShooter> enemies; //enemies, for possible slave spawns
+    Array<BulletShooter> shooters;
+    Array<ThEffect> effects; //effects array
+    Array<DanmakuPlayer> players;
+    //Ui Components
+    TextureRegion menuBackground;
+    //Audio Components
+    MusicBox musicBox;
+    //Background SpriteBatch
+    SpriteBatch backgroundBatch;
+    //Background stuff
+    ThBackground background;
     //Particle Effect Stuffs
     ParticleEffectPool particleEffectPool;
     Array<ParticleEffectPool.PooledEffect> pooledEffects = new Array();
@@ -87,11 +70,15 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
     BossEffects bossEffects;
 
     Date gameTimer;
+    MainUiRenderer uiRenderer;
+    DebugValues debugValues;
+    ThBoss boss;
+    /**
+     */
+    private boolean paused;
 
 
-
-
-    public PracticeScreen(DanmakuGame game, DanmakuScene scene){
+    public PracticeScreen(DanmakuGame game, DanmakuScene scene) {
         this.game = game;
         this.scene = scene;
 
@@ -106,21 +93,17 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
         setupZoom();
     }
 
-    MainUiRenderer uiRenderer;
-    void initUiContainer(){
+    void initUiContainer() {
         uiRenderer = new MainUiRenderer();
     }
 
-    void initParticle(){
+    void initParticle() {
         ParticleEffect slaveEffect = new ParticleEffect();
         slaveEffect.load(Gdx.files.internal("particles/bullet_slave"), Gdx.files.internal("particles"));
         particleEffectPool = new ParticleEffectPool(slaveEffect, 1, 2);
     }
 
-
-
-    DebugValues debugValues;
-    void initObjectContainers(){
+    void initObjectContainers() {
         bullets = new Array<Bullet>();
         lasers = new Array<Laser>();
 
@@ -136,18 +119,17 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
         shooters = new Array<BulletShooter>();
     }
 
-    void loadUiComponents(){
+    void loadUiComponents() {
         menuBackground = new TextureRegion(new Texture(Gdx.files.internal("menus/front.png")));
     }
 
-    ThBoss boss;
-    void initScene(){
-        world = new World(new Vector2(0,0), true);
+    void initScene() {
+        world = new World(new Vector2(0, 0), true);
         collisionListener = new BulletCollisionListener();
         world.setContactListener(collisionListener);
 
         boss = new BossKanako(this);
-        boss.setX(237/10);
+        boss.setX(237 / 10);
         boss.setY(62);
         bosses.add(boss);
 
@@ -156,18 +138,18 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
 
 
         DanmakuPlayer player = new DanmakuPlayer(this);
-        player.setPos(237/10,30/5);
+        player.setPos(237 / 10, 30 / 5);
         players.add(player);
     }
 
-    void initAudioComponents(){
+    void initAudioComponents() {
         musicBox = new MusicBox(this);
     }
 
     /*
         Box2d can never have quick objects, so i HAVE TO USE A STUPID WAY - use the camera to zoom, i really hate this...
      */
-    void setupZoom(){
+    void setupZoom() {
         game.camera.zoom = 0.2f;
 
         // Magic
@@ -188,7 +170,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
         start = System.currentTimeMillis();
         backgroundBatch.begin();
         background.update(backgroundBatch);
-        bossEffects.update(boss,backgroundBatch);
+        bossEffects.update(boss, backgroundBatch);
         backgroundBatch.end();
         game.batch.begin();
 
@@ -199,8 +181,8 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
 
         game.batch.end();
 
-		//Gdx.gl.glViewport((int) game.viewport.x, (int) game.viewport.y,
-						  //(int) game.viewport.width, (int) game.viewport.height);
+        //Gdx.gl.glViewport((int) game.viewport.x, (int) game.viewport.y,
+        //(int) game.viewport.width, (int) game.viewport.height);
         game.uiBatch.begin();
         //bossEffects.drawHpBar(bosses.first(),game.uiBatch);
         renderUI();
@@ -210,17 +192,16 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
         start = System.currentTimeMillis();
         update();
 
-        world.step(1 / 60f, 6, 2);
+
         debugValues.updateInterval = System.currentTimeMillis() - start;
 
     }
 
-
-    void renderShooters(){
+    void renderShooters() {
 
         //there should really be some kind of method called getBatch, shouldn't there=-=
         for (EnemyShooter singleEnemy : enemies) {
-            if(singleEnemy.isSlave()){
+            if (singleEnemy.isSlave()) {
                 createEffect(singleEnemy.getX() + 5, singleEnemy.getY() + 6);
             } else {
                 game.batch.draw(
@@ -240,7 +221,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
             singleEnemy.update();
         }
 
-        for (DanmakuPlayer singlePlayer : players){
+        for (DanmakuPlayer singlePlayer : players) {
             game.batch.draw(
                     singlePlayer.getTexture(),
                     singlePlayer.getX() - 8,
@@ -272,7 +253,6 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
         }
 
 
-
         for (ThBoss singleBoss : bosses) {
             game.batch.draw(
                     singleBoss.texture,
@@ -289,7 +269,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
         }
     }
 
-    void renderEffects(){
+    void renderEffects() {
         Color c;
         c = game.batch.getColor();
         for (ThEffect singleEffect : effects) {
@@ -297,7 +277,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
             game.batch.setColor(c.r, c.g, c.b, singleEffect.opacity);
             game.batch.draw(
                     singleEffect.texture,
-                    singleEffect.x + singleEffect.getXOffset() ,
+                    singleEffect.x + singleEffect.getXOffset(),
                     singleEffect.y + singleEffect.getYOffset(),
                     singleEffect.texture.getRegionWidth() / 2 * singleEffect.zoomX,
                     singleEffect.texture.getRegionHeight() / 2 * singleEffect.zoomY,
@@ -311,7 +291,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
         game.batch.setColor(c.r, c.g, c.b, 1);
     }
 
-    void renderBullets(){
+    void renderBullets() {
         Color c = game.batch.getColor();
         for (Bullet singleBullet : bullets) {
 
@@ -323,8 +303,8 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
         game.batch.setColor(c.r, c.g, c.b, 1);
     }
 
-    public void renderSingleBullet(Bullet singleBullet){
-        if(singleBullet.hasCreationEffect()){
+    public void renderSingleBullet(Bullet singleBullet) {
+        if (singleBullet.hasCreationEffect()) {
             game.batch.draw(
                     singleBullet.getCreationTexture(),
                     singleBullet.getX() + singleBullet.getXOffset() - 8,
@@ -337,7 +317,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
                     0.2f * (20 - singleBullet.timer) / 20f,
                     0
             );
-        } else{
+        } else {
             //game.batch.setColor(c.r, c.g, c.b, ((float) singleBullet.getAlpha()) / 255f);
             game.batch.draw(
                     singleBullet.getTexture(),
@@ -354,41 +334,39 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
         }
     }
 
-    void renderParticles(float delta){
-        for (ParticleEffectPool.PooledEffect singleEffect : pooledEffects){
-            singleEffect.draw(game.batch,delta);
-            if(singleEffect.isComplete()){
+    void renderParticles(float delta) {
+        for (ParticleEffectPool.PooledEffect singleEffect : pooledEffects) {
+            singleEffect.draw(game.batch, delta);
+            if (singleEffect.isComplete()) {
                 singleEffect.free();
-                pooledEffects.removeValue(singleEffect,true);
+                pooledEffects.removeValue(singleEffect, true);
             }
         }
     }
 
-    void renderUI(){
+    void renderUI() {
         uiRenderer.render(game.uiBatch);
-      //  getFontBank().arial.draw(game.uiBatch,"1 / 15", 100, 100);
+        //  getFontBank().arial.draw(game.uiBatch,"1 / 15", 100, 100);
         renderFps();
     }
 
-    void renderFps(){
+    void renderFps() {
         int fps = Gdx.graphics.getFramesPerSecond();
-        String debug = "Fps: " + fps + "\n"+
-                        "Bullets: " + bullets.size + "\n" +
-                       "RenderInterval: " + debugValues.renderInterval + "\n" +
-                       "UpdateInterval: " + debugValues.updateInterval + "\n" +
-                       "OverFlow?: " + (debugValues.renderInterval + debugValues.updateInterval > 16);
+        String debug = "Fps: " + fps + "\n" +
+                "Bullets: " + bullets.size + "\n" +
+                "RenderInterval: " + debugValues.renderInterval + "\n" +
+                "UpdateInterval: " + debugValues.updateInterval + "\n" +
+                "OverFlow?: " + (debugValues.renderInterval + debugValues.updateInterval > 16);
         //getFontBank().arial.draw(game.uiBatch,debug, 450 , 80);
-        getFontBank().arial.drawMultiLine(game.uiBatch,debug, 450 , 160);
+        getFontBank().arial.drawMultiLine(game.uiBatch, debug, 450, 160);
     }
 
-    public FontBank getFontBank(){
+    public FontBank getFontBank() {
         return game.fontBank;
     }
 
-
-
     // Called Once Per Frame
-    public void update(){
+    public void update() {
         for (Bullet singleBullet : bullets) {
             singleBullet.update();
             if (singleBullet.destroyFlag) {
@@ -410,7 +388,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
             singleBoss.update();
         }
 
-        for (DanmakuPlayer singlePlayer : players){
+        for (DanmakuPlayer singlePlayer : players) {
             singlePlayer.update();
             for (DanmakuOption singleOption : singlePlayer.options) {
                 singleOption.update();
@@ -422,8 +400,8 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
             if (singleEffect.disposeFlag)
                 effects.removeValue(singleEffect, true);
         }
-		removeGarbageBullets();
-
+        removeGarbageBullets();
+        world.step(1 / 60f, 6, 2);
 
 
         //updateScreenshot();
@@ -443,28 +421,32 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
      */
     @Override
     public void show() {
-
+        //Gdx.app.log("Test", "Show Called");
     }
 
     /**
      */
     @Override
     public void hide() {
-
+        //Gdx.app.log("Test", "Hide Called");
     }
 
-    /**
-     */
     @Override
     public void pause() {
+        //Gdx.app.log("Test", "Pause Called");
+        game.paused = true;
+    }
 
+    public boolean isPaused() {
+        return paused;
     }
 
     /**
      */
     @Override
     public void resume() {
-
+        //Gdx.app.log("Test", "Resume Called");
+        game.paused = false;
     }
 
     /**
@@ -524,7 +506,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
         }
     }
 
-    public void addLaser(Laser laser){
+    public void addLaser(Laser laser) {
         lasers.add(laser);
     }
 
@@ -550,17 +532,16 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
         return bs;
     }
 
-    public void updateScreenshot(){
-        if(Gdx.input.isKeyPressed(Input.Keys.P))
+    public void updateScreenshot() {
+        if (Gdx.input.isKeyPressed(Input.Keys.P))
             ScreenshotTaker.saveScreenshot();
     }
 
-    void createEffect(float x, float y){
+    void createEffect(float x, float y) {
         ParticleEffectPool.PooledEffect effect = particleEffectPool.obtain();
         effect.setPosition(100, 100);
         pooledEffects.add(effect);
     }
-
 
 
     @Override
@@ -568,17 +549,17 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
         return world;
     }
 
-    public DanmakuPlayer getPlayer(){
+    public DanmakuPlayer getPlayer() {
         return players.first();
     }
 
 
     //returns the timerFlow per frame, depends on grazing... : in seconds
-    public int getTimeFlowFrames(){
+    public int getTimeFlowFrames() {
         return 1 + getPlayer().grazeCnt / 70;
     }
-	
-	private void removeGarbageBullets() {
+
+    private void removeGarbageBullets() {
         for (Bullet singleBullet : bullets) {
             singleBullet.update();
             if (singleBullet.getX() > 350 / 5 || singleBullet.getX() < -50 / 3 || singleBullet.getY() > 500 / 5 || singleBullet.getY() < -60 / 5)
@@ -586,7 +567,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld{
         }
     }
 
-    public Array<Bullet> getBullets(){
+    public Array<Bullet> getBullets() {
         return bullets;
     }
 

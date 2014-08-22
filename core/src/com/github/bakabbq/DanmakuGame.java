@@ -24,23 +24,27 @@ import com.github.bakabbq.datas.FontBank;
  * Created by LBQ on 7/4/14.
  */
 public class DanmakuGame extends Game {
-    public SpriteBatch batch;
-    public SpriteBatch uiBatch;
-    public AssetManager assetManager;
-    public OrthographicCamera camera;
-
-    public FontBank fontBank;
-
-    public JRubyClassLoader classLoader;
-
     private static final int VIRTUAL_WIDTH = 640;
     private static final int VIRTUAL_HEIGHT = 480;
     private static final float ASPECT_RATIO =
             (float) VIRTUAL_WIDTH / (float) VIRTUAL_HEIGHT;
-
+    //I just realized that there is something called Singleton
+    private static DanmakuGame instance;
+    public SpriteBatch batch;
+    public SpriteBatch uiBatch;
+    public AssetManager assetManager;
+    public OrthographicCamera camera;
+    public FontBank fontBank;
     public Rectangle viewport;
-
     public Screen currentScreen;
+
+    public boolean paused;
+
+    public static DanmakuGame getInstance(){
+        if(instance == null)
+            instance = new DanmakuGame();
+        return instance;
+    }
     public void create(){
         batch = new SpriteBatch();
         uiBatch = new SpriteBatch();
@@ -69,6 +73,8 @@ public class DanmakuGame extends Game {
     }
 
     public void render() {
+        if(paused)
+            return;
         camera.update();
         Gdx.gl.glViewport((int) viewport.x, (int) viewport.y,
                 (int) viewport.width, (int) viewport.height);

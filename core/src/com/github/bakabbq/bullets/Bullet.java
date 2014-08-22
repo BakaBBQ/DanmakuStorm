@@ -19,17 +19,6 @@ public class Bullet {
     public static BulletAmulets amuletBullet = new BulletAmulets(0);
     public static BulletKunai kunaiBullet = new BulletKunai(0);
     public static BulletOval ovalBullet = new BulletOval(0);
-    public Body body;
-    public BulletDef bd;
-    public Sprite sprite;
-    public World world;
-    public boolean grazed;
-    public boolean collided;
-    Fixture fixture;
-
-    public boolean pause;
-
-
     public static int COLOR_GRAY = 0;
     public static int COLOR_DARKRED = 1;
     public static int COLOR_RED = 2;
@@ -46,15 +35,19 @@ public class Bullet {
     public static int COLOR_YELLOW = 13;
     public static int COLOR_ORANGE = 14;
     public static int COLOR_WHITE = 15;
-
-    int alpha;
-
-
+    public Body body;
+    public BulletDef bd;
+    public Sprite sprite;
+    public World world;
+    public boolean grazed;
+    public boolean collided;
+    public boolean pause;
      public IDanmakuWorld danmakuWorld;
-
-
     //Destroy Flag - once marked, it will be garbage dumped
     public boolean destroyFlag;
+    public int timer;
+    Fixture fixture;
+    int alpha;
 
     public Bullet(BulletDef bd, World world, float x, float y, float angle) {
         long start;
@@ -71,9 +64,11 @@ public class Bullet {
         fd.filter.maskBits = (short)(BulletCollisionListener.PLAYER | 0x001 | BulletCollisionListener.PLAYER_BULLET);
         this.fixture = body.createFixture(fd);
         body.setTransform(x, y, angle);
+        MassData md = new MassData();
+        md.mass = 4;
+        body.setMassData(md);
         this.alpha = bd.alpha;
         grazed = false;
-        Gdx.app.log("Profiler Bullet Creation", "" + (System.currentTimeMillis() - start));
     }
 
     public int getAngleFix() {
@@ -122,11 +117,9 @@ public class Bullet {
         float forceAngle = (body.getAngle() + 270f) / 180f * (float) Math.PI;
         body.applyLinearImpulse(MathUtils.cos(forceAngle) * speed, MathUtils.sin(forceAngle) * speed, body.getPosition().x, body.getPosition().y, true);
     }
-    public int timer;
+
     public void update() {
         timer++;
-        //sprite.setPosition(body.getPosition().x, body.getPosition().y);
-        //if(bd!= null)
         if(pause)
             return;
         this.bd.modifyBullet(this);
@@ -140,12 +133,6 @@ public class Bullet {
         return this.alpha;
     }
 
-    public void setSprite() {
-        sprite = new Sprite(bd.texture);
-        sprite.setOrigin(bd.texture.getRegionWidth() / 2, bd.texture.getRegionHeight() / 2);
-        sprite.setRotation(180);
-        bd.modifySprite(sprite);
-    }
 
     public void onGraze(){
         danmakuWorld.getPlayer().grazeCnt += 1;
@@ -204,6 +191,4 @@ public class Bullet {
     public boolean stillCollide(){
         return this.alpha == bd.alpha;
     }
-
-
 }

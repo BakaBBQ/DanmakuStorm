@@ -23,7 +23,6 @@ public class ThBoss extends EnemyShooter {
         super(ground);
         initSpellCards();
         initMainTexture();
-        //ground.addEffect(new BossCastingEffect(), getX(), getY());
     }
 
     public int updateFrame(){

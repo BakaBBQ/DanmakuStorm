@@ -1,6 +1,7 @@
 package com.github.bakabbq;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import org.jruby.embed.ScriptingContainer;
 
@@ -12,11 +13,19 @@ import org.jruby.embed.ScriptingContainer;
 public class JRubyClassLoader {
     private static ScriptingContainer container = new ScriptingContainer();
     public static Object loadClass(String filename){
-        String content = Gdx.files.internal("scripts/" + filename + ".rb").readString();
-        container.setClassLoader(JRubyClassLoader.class.getClassLoader());
-        container.runScriptlet(content); // load the class
-        Object actualObject = container.runScriptlet(filename + ".new");
-        return actualObject;
+        try {
+            FileHandle fh = Gdx.files.internal("scripts/" + filename + ".rb");
+
+            String content = Gdx.files.internal("scripts/" + filename + ".rb").readString();
+            container.setClassLoader(JRubyClassLoader.class.getClassLoader());
+            //container.runScriptlet(content); // load the class
+            container.runScriptlet(fh.reader(),fh.name());
+            Object actualObject = container.runScriptlet(filename + ".new");
+            return actualObject;
+        } catch(Exception e){
+            Gdx.app.log("JRuby", e.getMessage());
+        }
+        return 0;
     }
 
     public static void loadLibrary(String filename){

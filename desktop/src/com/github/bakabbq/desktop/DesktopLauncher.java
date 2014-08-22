@@ -13,11 +13,6 @@ public class DesktopLauncher {
         config.title = "东风谷早苗的弹幕训练 Demo v0.01";
         config.width = 640;
         config.height = 480;
-
-        GdxGround ground = new GdxGround();
-        DanmakuGame game = new DanmakuGame();
-        ground.controlHelper = new DesktopControlHelper();
-		//new LwjglApplication(ground, config);
-        new LwjglApplication(game,config);
+        new LwjglApplication(DanmakuGame.getInstance(),config);
 	}
 }

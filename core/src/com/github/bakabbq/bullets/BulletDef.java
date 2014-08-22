@@ -52,7 +52,7 @@ public class BulletDef {
     public TextureRegion onCreationTexture;
     public void initCreationTexture(){
         int startX;
-        startX = colorId * 16;
+        startX = colorId * 32;
         onCreationTexture = new TextureRegion(bulletSheet,startX,13 * 16,32,32);
     }
 
