@@ -81,7 +81,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
     public PracticeScreen(DanmakuGame game, DanmakuScene scene) {
         this.game = game;
         this.scene = scene;
-
+        JRubyClassLoader.init();
 
         backgroundBatch = new SpriteBatch();
         initUiContainer();
@@ -129,7 +129,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
         world.setContactListener(collisionListener);
 
         boss = new BossKanako(this);
-        boss.setX(237 / 10);
+        boss.setX(23);
         boss.setY(62);
         bosses.add(boss);
 
@@ -151,10 +151,9 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
      */
     void setupZoom() {
         game.camera.zoom = 0.2f;
-
         // Magic
-        game.camera.position.x -= 320 - 320 / 5 + 128 / 5 - 10;
-        game.camera.position.y -= 240 - 240 / 5 + (480 - 462) / 5;
+        game.camera.position.x -= 271;
+        game.camera.position.y -= 195;
 
         game.camera.update();
     }

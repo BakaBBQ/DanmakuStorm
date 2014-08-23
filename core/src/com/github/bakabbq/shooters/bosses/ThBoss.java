@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.*;
 import com.github.bakabbq.*;
-import com.github.bakabbq.effects.BossCastingEffect;
 import com.github.bakabbq.shooters.*;
 import com.github.bakabbq.spellcards.*;
 
@@ -97,6 +96,13 @@ public class ThBoss extends EnemyShooter {
         //use spellCards.add
     }
 
+    public void smoothMovement(int forceX, int forceY, int damping){
+        this.enemyBody.setLinearDamping(damping);
+        this.enemyBody.applyLinearImpulse(forceX, forceY, this.enemyBody.getLocalCenter().x,this.enemyBody.getLocalCenter().y, true);
+    }
+
+
+
     @Override
     public void updateShoot(){
         spellCards.get(0).update();
@@ -108,4 +114,6 @@ public class ThBoss extends EnemyShooter {
         circle.setRadius(4f);
 		return circle;
 	}
+
+
 }

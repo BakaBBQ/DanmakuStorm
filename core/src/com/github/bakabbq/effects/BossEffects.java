@@ -30,14 +30,11 @@ public class BossEffects {
         if(boss == null)
             return;
         timer++;
-
-        rotatingHexagram.rotate(1f + Math.abs((60 - timer % 120)) / 60f);
+        rotatingHexagram.rotate(1f + Math.abs((60 - timer % 120) * 3) / 60f);
         rotatingHexagram.setScale((1f + MathUtils.sin(timer / 20f)*0.2f) * 2);
-        rotatingHexagram.setPosition(boss.getX() + 146,boss.getY() + 240);
+        //Completely Magical
+        rotatingHexagram.setPosition(boss.getX() * 5 + 54,boss.getY() * 5 - 8);
         rotatingHexagram.draw(batch,1f - Math.abs(MathUtils.sin(timer / 20f)*0.2f));
-
-
-
     }
 
     public void drawHpBar(ThBoss boss, SpriteBatch batch){

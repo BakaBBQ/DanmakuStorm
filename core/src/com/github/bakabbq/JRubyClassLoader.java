@@ -11,7 +11,12 @@ import org.jruby.embed.ScriptingContainer;
  * Integration layer of JRuby
  */
 public class JRubyClassLoader {
-    private static ScriptingContainer container = new ScriptingContainer();
+    private static ScriptingContainer container;
+
+    public static void init(){
+        container = new ScriptingContainer();
+    }
+
     public static Object loadClass(String filename){
         try {
             FileHandle fh = Gdx.files.internal("scripts/" + filename + ".rb");

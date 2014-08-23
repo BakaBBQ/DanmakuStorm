@@ -11,8 +11,13 @@ class TestScript < BaseScript
 
     def update
     	super
-    	every 30.frames do
-    		nway_shoot(@test_bullet, 8, 0, 80)
+    	every 240.frames do
+            direct_position_set(20,20)
+            schedule_movement(10, 10, 120)
     	end
+
+        every 40.frames do
+            nway_shoot(@test_bullet, 8, 0, 80)
+        end
     end
 end

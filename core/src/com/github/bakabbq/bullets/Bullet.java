@@ -125,10 +125,6 @@ public class Bullet {
         this.bd.modifyBullet(this);
     }
 
-    public Sprite getSprite() {
-        return sprite;
-    }
-
     public int getAlpha() {
         return this.alpha;
     }
