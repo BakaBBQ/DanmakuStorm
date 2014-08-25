@@ -169,7 +169,7 @@ public class Bullet {
     }
 
     public boolean hasCreationEffect(){
-        return this.timer <= 20;
+        return this.timer <= 5;
     }
 
     public void aimAt(float angle){

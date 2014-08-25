@@ -4,7 +4,6 @@ class Object
 		return self
 	end
 end
-load 'ShotDef.rb'
 java_import com.github.bakabbq.bullets.BulletDef
 
 

@@ -20,7 +20,7 @@ public class NonSpell1 extends SpellCard{
 
     @Override
     public void updateAttributes(){
-        this.name = "non spell";
+        this.name = "喪病型非符";
     }
 
     @Override

@@ -82,6 +82,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
         this.game = game;
         this.scene = scene;
         JRubyClassLoader.init();
+        JRubyClassLoader.loadLibrary("BaseScript");
 
         backgroundBatch = new SpriteBatch();
         initUiContainer();
@@ -134,7 +135,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
         bosses.add(boss);
 
         background = new ThBackground(this);
-        bossEffects = new BossEffects();
+        bossEffects = BossEffects.getInstance();
 
 
         DanmakuPlayer player = new DanmakuPlayer(this);
@@ -312,8 +313,8 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
                     singleBullet.getOriginY() * 2,
                     32,
                     32,
-                    0.2f * (20 - singleBullet.timer) / 20f,
-                    0.2f * (20 - singleBullet.timer) / 20f,
+                    0.2f * ((5 - singleBullet.timer / 5) * 0.1f + 0.5f),
+                    0.2f * ((5 - singleBullet.timer / 5) * 0.1f + 0.5f),
                     0
             );
         } else {
@@ -345,6 +346,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
 
     void renderUI() {
         uiRenderer.render(game.uiBatch);
+        bossEffects.spellEffect.update();
         //  getFontBank().arial.draw(game.uiBatch,"1 / 15", 100, 100);
         renderFps();
     }

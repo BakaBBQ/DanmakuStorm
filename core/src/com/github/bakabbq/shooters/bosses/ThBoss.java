@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.*;
 import com.github.bakabbq.*;
+import com.github.bakabbq.effects.BossEffects;
+import com.github.bakabbq.effects.SpellEffect;
 import com.github.bakabbq.shooters.*;
 import com.github.bakabbq.spellcards.*;
 
@@ -22,13 +24,12 @@ public class ThBoss extends EnemyShooter {
         super(ground);
         initSpellCards();
         initMainTexture();
+        callUpdateSpellcardName();
     }
 
     public int updateFrame(){
         return 10;
     }
-
-
 
     public void initMainTexture(){
         mainTexture = new Texture(Gdx.files.internal("bosses/stg5enm.png"));
@@ -106,6 +107,20 @@ public class ThBoss extends EnemyShooter {
     @Override
     public void updateShoot(){
         spellCards.get(0).update();
+    }
+
+    @Override
+    public void onDeath(){
+        spellCards.removeIndex(0);
+        callUpdateSpellcardName();
+    }
+
+    public SpellCard currentSpellcard(){
+        return spellCards.get(0);
+    }
+
+    public void callUpdateSpellcardName(){
+        BossEffects.getInstance().spellEffect.startSpell(currentSpellcard().name);
     }
 	
 	@Override
