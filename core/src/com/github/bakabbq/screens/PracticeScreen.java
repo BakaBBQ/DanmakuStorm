@@ -346,7 +346,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
 
     void renderUI() {
         uiRenderer.render(game.uiBatch);
-        bossEffects.drawHpBar(boss,game.uiBatch);
+        //bossEffects.drawHpBar(boss,game.uiBatch);
         bossEffects.spellEffect.update();
 
         //  getFontBank().arial.draw(game.uiBatch,"1 / 15", 100, 100);

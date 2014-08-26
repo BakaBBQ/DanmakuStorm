@@ -156,6 +156,10 @@ public class EnemyShooter extends BulletShooter {
         }
     }
 
+    public void spawnSlave(EnemyShooter slave){
+        ground.addEnemy(slave);
+    }
+
     public void dispose(){
         ground.getWorld().destroyBody(enemyBody);
     }
