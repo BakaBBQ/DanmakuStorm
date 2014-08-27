@@ -110,12 +110,15 @@ public class Bullet {
     public void setSpeed(float angle, float speed) {
         aimAt(angle);
         float forceAngle = (angle + 270f) / 180f * (float) Math.PI;
-        body.applyLinearImpulse(MathUtils.cos(forceAngle) * speed, MathUtils.sin(forceAngle) * speed, body.getPosition().x, body.getPosition().y, true);
+        //body.applyLinearImpulse(MathUtils.cos(forceAngle) * speed, MathUtils.sin(forceAngle) * speed, body.getPosition().x, body.getPosition().y, true);
+        body.setLinearVelocity(speed * MathUtils.cos(forceAngle),speed * MathUtils.sin(forceAngle));
+
     }
 
     public void setSpeed(float speed) {
         float forceAngle = (body.getAngle() + 270f) / 180f * (float) Math.PI;
-        body.applyLinearImpulse(MathUtils.cos(forceAngle) * speed, MathUtils.sin(forceAngle) * speed, body.getPosition().x, body.getPosition().y, true);
+        //body.applyLinearImpulse(MathUtils.cos(forceAngle) * speed, MathUtils.sin(forceAngle) * speed, body.getPosition().x, body.getPosition().y, true);
+        body.setLinearVelocity(speed * MathUtils.cos(forceAngle),speed * MathUtils.sin(forceAngle));
     }
 
     public void update() {
