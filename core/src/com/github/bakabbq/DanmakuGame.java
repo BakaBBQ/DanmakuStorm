@@ -54,6 +54,7 @@ public class DanmakuGame extends Game {
 
         fontBank = new FontBank();
 
+
         //Object meow = JRubyClassLoader.loadClass("test.rb");
 
 
@@ -78,8 +79,7 @@ public class DanmakuGame extends Game {
         camera.update();
         Gdx.gl.glViewport((int) viewport.x, (int) viewport.y,
                 (int) viewport.width, (int) viewport.height);
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         batch.setProjectionMatrix(camera.combined);
         super.render();
         updateScreenshot();

@@ -3,18 +3,30 @@ package com.github.bakabbq.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.loaders.ModelLoader;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g3d.Environment;
+import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.ModelBatch;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
+import com.badlogic.gdx.graphics.g3d.loader.ObjLoader;
+import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.github.bakabbq.*;
 import com.github.bakabbq.audio.AudioBank;
 import com.github.bakabbq.audio.MusicBox;
+import com.github.bakabbq.background.DecalBackground;
 import com.github.bakabbq.background.ThBackground;
 import com.github.bakabbq.bullets.Bullet;
 import com.github.bakabbq.bullets.BulletDef;
@@ -61,7 +73,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
     //Background SpriteBatch
     SpriteBatch backgroundBatch;
     //Background stuff
-    ThBackground background;
+    DecalBackground background;
     //Particle Effect Stuffs
     ParticleEffectPool particleEffectPool;
     Array<ParticleEffectPool.PooledEffect> pooledEffects = new Array();
@@ -78,6 +90,16 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
     private boolean paused;
 
 
+
+
+
+    public Environment environment;
+    public PerspectiveCamera cam;
+    public CameraInputController camController;
+    public ModelBatch modelBatch;
+    public Model model;
+    public ModelInstance instance;
+
     public PracticeScreen(DanmakuGame game, DanmakuScene scene) {
         this.game = game;
         this.scene = scene;
@@ -92,6 +114,31 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
         initScene();
         initParticle();
         setupZoom();
+
+        //cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+
+
+
+        modelBatch = new ModelBatch();
+        environment = new Environment();
+        environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
+        environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
+
+        cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        cam.position.set(1f, 1f, 1f);
+        cam.lookAt(0,0,0);
+        cam.near = 1f;
+        cam.far = 300f;
+        cam.update();
+
+        ModelLoader loader = new ObjLoader();
+        model = loader.loadModel(Gdx.files.internal("models/ship.obj"));
+        instance = new ModelInstance(model);
+
+        camController = new CameraInputController(cam);
+        Gdx.input.setInputProcessor(camController);
+
     }
 
     void initUiContainer() {
@@ -134,7 +181,8 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
         boss.setY(62);
         bosses.add(boss);
 
-        background = new ThBackground(this);
+        //background = new ThBackground(this);
+        background = new DecalBackground(this);
         bossEffects = BossEffects.getInstance();
 
 
@@ -167,11 +215,17 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
     @Override
     public void render(float delta) {
         long start;
+        camController.update();
         start = System.currentTimeMillis();
         backgroundBatch.begin();
-        background.update(backgroundBatch);
+        background.setCam(cam);
+        //background.decalLoop();
+        //background.update(backgroundBatch);
         bossEffects.update(boss, backgroundBatch);
         backgroundBatch.end();
+
+
+
         game.batch.begin();
 
         renderShooters();
@@ -195,6 +249,9 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
 
         debugValues.updateInterval = System.currentTimeMillis() - start;
 
+        modelBatch.begin(cam);
+        modelBatch.render(instance, environment);
+        modelBatch.end();
     }
 
     void renderShooters() {
