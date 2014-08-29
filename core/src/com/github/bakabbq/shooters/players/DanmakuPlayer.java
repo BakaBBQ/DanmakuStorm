@@ -16,6 +16,7 @@ import com.github.bakabbq.effects.SlowEffect;
  * Created by LBQ on 5/28/14.
  */
 public class DanmakuPlayer {
+
     public static Vector2[][] option_positions = new Vector2[][]{
             {new Vector2(0, -20f)},
             {new Vector2(-20, -15f), new Vector2(20, -15f)},

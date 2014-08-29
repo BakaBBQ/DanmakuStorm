@@ -87,6 +87,7 @@ class BaseScript
 end
 
 java_import com.github.bakabbq.shooters.EnemyShooter
+
 class BossSlave < EnemyShooter
   def initialize(owner)
     super(owner.ground)
@@ -102,3 +103,4 @@ end
 module BulletDB
 	
 end
+

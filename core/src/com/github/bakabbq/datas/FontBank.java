@@ -12,12 +12,15 @@ public class FontBank {
     public BitmapFont log;
     public BitmapFont arial;
     public BitmapFont digital;
+    public BitmapFont calisto;
     public FontBank(){
         yuMincho = new BitmapFont(Gdx.files.internal("fonts/YuMincho.fnt"));
         savoye = new BitmapFont(Gdx.files.internal("fonts/savoye_let.fnt"));
         log = loadFont("log.fnt");
         arial = loadFont("arial.fnt");
         digital = loadFont("digital.fnt");
+        calisto = loadFont("calisto.fnt");
+
     }
 
     BitmapFont loadFont(String str){

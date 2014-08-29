@@ -130,5 +130,22 @@ public class ThBoss extends EnemyShooter {
 		return circle;
 	}
 
+    public int getScHp(){
+        return currentSpellcard().hp;
+    }
+
+    public float getScHpRatio(){
+        return ((float)currentSpellcard().hp) / currentSpellcard().maxHp();
+    }
+
+    @Override
+    public void receiveDamage(int dmg){
+        //Gdx.app.log("Enemy", "Recieving " + dmg + " Dmg, rest " + (this.hp - dmg));
+        currentSpellcard().hp -= dmg;
+        if(currentSpellcard().hp <= 0){
+            onDeath();
+        }
+    }
+
 
 }

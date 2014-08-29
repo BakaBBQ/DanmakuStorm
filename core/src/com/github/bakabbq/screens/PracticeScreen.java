@@ -35,6 +35,7 @@ import com.github.bakabbq.bullets.PlayerBullet;
 import com.github.bakabbq.datas.FontBank;
 import com.github.bakabbq.datas.ScreenshotTaker;
 import com.github.bakabbq.effects.BossEffects;
+import com.github.bakabbq.effects.SlaveParticleEffect;
 import com.github.bakabbq.effects.ThEffect;
 import com.github.bakabbq.shooters.BulletShooter;
 import com.github.bakabbq.shooters.EnemyShooter;
@@ -42,6 +43,7 @@ import com.github.bakabbq.shooters.bosses.ThBoss;
 import com.github.bakabbq.shooters.bosses.kanako.BossKanako;
 import com.github.bakabbq.shooters.players.DanmakuOption;
 import com.github.bakabbq.shooters.players.DanmakuPlayer;
+import com.github.bakabbq.shooters.players.PlayerGrazeCounter;
 
 import java.io.InputStream;
 import java.util.Date;
@@ -75,6 +77,8 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
     SpriteBatch backgroundBatch;
 
 
+
+
     AssetManager manager;
     //Background stuff
     DecalBackground background;
@@ -90,6 +94,9 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
     DebugValues debugValues;
     ThBoss boss;
     private boolean paused;
+
+
+    Array<SlaveParticleEffect> slaveParticles = new Array<SlaveParticleEffect>();
 
 
 
@@ -118,12 +125,6 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
         initScene();
         initParticle();
         setupZoom();
-
-        //cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
-
-
-
 
 
         cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -189,8 +190,6 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
         //background = new ThBackground(this);
         background = new DecalBackground(this);
         bossEffects = BossEffects.getInstance();
-
-
         DanmakuPlayer player = new DanmakuPlayer(this);
         player.setPos(237 / 10, 30 / 5);
         players.add(player);
@@ -219,6 +218,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
      */
     @Override
     public void render(float delta) {
+
         long start;
 
         camController.update();
@@ -231,9 +231,9 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
 
         //background.update(backgroundBatch);
         bossEffects.update(boss, backgroundBatch);
+        renderParticles(delta);
+
         backgroundBatch.end();
-
-
 
         game.batch.begin();
 
@@ -243,13 +243,25 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
 
 
         game.batch.end();
+
+        backgroundBatch.begin();
+        renderSlaveParticles();
+        backgroundBatch.end();
+        bossEffects.drawHpBar(boss,game.uiBatch);
         game.uiBatch.begin();
         renderUI();
         game.uiBatch.end();
+
         debugValues.renderInterval = System.currentTimeMillis() - start;
         start = System.currentTimeMillis();
         update();
         debugValues.updateInterval = System.currentTimeMillis() - start;
+    }
+
+    void renderSlaveParticles(){
+        for(SlaveParticleEffect singleParticle : slaveParticles){
+            singleParticle.particle.draw(backgroundBatch, 0.9f);
+        }
     }
 
     void renderShooters() {
@@ -257,7 +269,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
         //there should really be some kind of method called getBatch, shouldn't there=-=
         for (EnemyShooter singleEnemy : enemies) {
             if (singleEnemy.isSlave()) {
-                createEffect(singleEnemy.getX() + 5, singleEnemy.getY() + 6);
+                slaveParticles.add(new SlaveParticleEffect(singleEnemy.getX() + 5,singleEnemy.getY() + 6));
             } else {
                 game.batch.draw(
                         singleEnemy.texture,
@@ -389,7 +401,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
 
     void renderParticles(float delta) {
         for (ParticleEffectPool.PooledEffect singleEffect : pooledEffects) {
-            singleEffect.draw(game.batch, delta);
+            singleEffect.draw(backgroundBatch, delta);
             if (singleEffect.isComplete()) {
                 singleEffect.free();
                 pooledEffects.removeValue(singleEffect, true);
@@ -399,8 +411,10 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
 
     void renderUI() {
         uiRenderer.render(game.uiBatch);
-        //bossEffects.drawHpBar(boss,game.uiBatch);
+
         bossEffects.spellEffect.update();
+        int graze = getPlayer().grazeCnt;
+        getFontBank().calisto.draw(game.uiBatch,"" + graze, 515, 480 - 205);
 
         //  getFontBank().arial.draw(game.uiBatch,"1 / 15", 100, 100);
         renderFps();
@@ -455,6 +469,12 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
             singleEffect.update();
             if (singleEffect.disposeFlag)
                 effects.removeValue(singleEffect, true);
+        }
+
+        for (SlaveParticleEffect singleParticle : slaveParticles){
+            singleParticle.update();
+            if(singleParticle.canDispose())
+                slaveParticles.removeValue(singleParticle, true);
         }
         removeGarbageBullets();
         world.step(1 / 60f, 6, 2);
@@ -515,6 +535,10 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
 
     public void addItem(float x, float y) {
         return;
+    }
+
+    public void clearBullets(){
+        bullets.clear();
     }
 
     public BulletShooter addShooter(BulletShooter bs, float x, float y) {
@@ -595,7 +619,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
 
     void createEffect(float x, float y) {
         ParticleEffectPool.PooledEffect effect = particleEffectPool.obtain();
-        effect.setPosition(100, 100);
+        effect.setPosition(x, y);
         pooledEffects.add(effect);
     }
 

@@ -16,6 +16,7 @@ public class BossKanako extends ThBoss{
     public BossKanako(IDanmakuWorld ground) {
         super(ground);
         stateId = StateHelper.IDLE;
+        this.hp = 8000;
     }
 
 
@@ -26,10 +27,7 @@ public class BossKanako extends ThBoss{
 
     @Override
     public void initSpellCards() {
-        //
-        //spellCards.add(new spellCard1(this));
-        //spellCards.add(new JRubySpellCard(this, BulletScript.load("TestScript")));
-        spellCards.add(new NonSpell1(this));
+        spellCards.add(new JRubySpellCard(this, BulletScript.load("TestScript")));
     }
 
     @Override

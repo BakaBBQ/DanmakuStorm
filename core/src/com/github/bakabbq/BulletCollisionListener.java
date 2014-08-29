@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.*;
 import com.github.bakabbq.bullets.Bullet;
 import com.github.bakabbq.bullets.PlayerBullet;
+import com.github.bakabbq.screens.PracticeScreen;
 import com.github.bakabbq.shooters.EnemyShooter;
 import com.github.bakabbq.shooters.players.PlayerGrazeCounter;
 
@@ -31,6 +32,8 @@ public class BulletCollisionListener implements ContactListener {
     }
 
     public void increasePlayerGraze(Bullet bullet){
+        ((PracticeScreen) DanmakuGame.getInstance().currentScreen).getPlayer().grazeCnt++;
+        Gdx.app.log("PlayerGraze", "" + ((PracticeScreen) DanmakuGame.getInstance().currentScreen).getPlayer().grazeCnt++);
         if(bullet.canGraze())
             bullet.onGraze();
     }
@@ -70,7 +73,7 @@ public class BulletCollisionListener implements ContactListener {
         if(bodyA.getUserData() instanceof EnemyShooter && bodyB.getUserData() instanceof PlayerBullet && ((PlayerBullet) bodyB.getUserData()).stillCollide()){
             ((PlayerBullet) bodyB.getUserData()).collided = true;
             int dmg = ((PlayerBullet) bodyB.getUserData()).damage;
-            ((EnemyShooter) bodyA.getUserData()).recieveDamage(dmg);
+            ((EnemyShooter) bodyA.getUserData()).receiveDamage(dmg);
 
             contact.setEnabled(false);
         }
@@ -78,7 +81,7 @@ public class BulletCollisionListener implements ContactListener {
         if(bodyB.getUserData() instanceof EnemyShooter && bodyA.getUserData() instanceof PlayerBullet && ((PlayerBullet) bodyA.getUserData()).stillCollide()){
             ((PlayerBullet) bodyA.getUserData()).collided = true;
             int dmg = ((PlayerBullet) bodyA.getUserData()).damage;
-            ((EnemyShooter) bodyB.getUserData()).recieveDamage(dmg);
+            ((EnemyShooter) bodyB.getUserData()).receiveDamage(dmg);
             contact.setEnabled(false);
         }
 

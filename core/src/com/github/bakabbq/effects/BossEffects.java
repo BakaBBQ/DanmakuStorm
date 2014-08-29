@@ -20,6 +20,8 @@ public class BossEffects {
     //Shape Renderer - for drawing health bar
     ShapeRenderer shapeRenderer;
     public SpellEffect spellEffect;
+
+    Texture hpTexture;
     public int timer;
 
     private static BossEffects instance;
@@ -29,29 +31,33 @@ public class BossEffects {
         return instance;
     }
     private BossEffects(){
-        rotatingHexagram = new Sprite(new TextureRegion(new Texture(Gdx.files.internal("bullets/system.png")), 128, 64 + 16, 128, 128));
+        //rotatingHexagram = new Sprite(new TextureRegion(new Texture(Gdx.files.internal("bullets/system.png")), 128, 64 + 16, 128, 128));
+        rotatingHexagram = new Sprite(new Texture("effects/hexagram.png"));
         rotatingHexagram.setOriginCenter();
         shapeRenderer = new ShapeRenderer();
         spellEffect = new SpellEffect(DanmakuGame.getInstance());
         timer = 0;
+
+        hpTexture = new Texture("menus/hpBar.png");
     }
 
     public void update(ThBoss boss, SpriteBatch batch){
         if(boss == null)
             return;
         timer++;
-        rotatingHexagram.rotate(1f + Math.abs((60 - timer % 120) * 3) / 60f);
-        rotatingHexagram.setScale((1f + MathUtils.sin(timer / 20f)*0.2f) * 2);
+
+        rotatingHexagram.setScale(1f + MathUtils.sinDeg(timer * 3) * 0.1f);
+        rotatingHexagram.rotate(6f * rotatingHexagram.getScaleX());
         //Completely Magical
-        rotatingHexagram.setPosition(boss.getX() * 5 + 54,boss.getY() * 5 - 8);
-        rotatingHexagram.draw(batch,1f - Math.abs(MathUtils.sin(timer / 20f)*0.2f));
-        //spellEffect.update();
+        rotatingHexagram.setPosition(boss.getX() * 5 - 10,boss.getY() * 5 - 72);
+        float opacity = Math.min(1f / rotatingHexagram.getScaleX(), 1f) * 0.7f;
+        rotatingHexagram.draw(batch,opacity);
     }
 
     public void drawHpBar(ThBoss boss, SpriteBatch batch){
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(252/255f,158/255f,126/255f,1);
-        shapeRenderer.rect(60,455,355,2);
+        shapeRenderer.rect(60,455,355 * boss.getScHpRatio(),2);
         shapeRenderer.end();
     }
 }

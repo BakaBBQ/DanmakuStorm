@@ -11,11 +11,17 @@ public class SpellCard {
     public ThBoss owner;
     public boolean spell = false;
     public int timer;
+    public int hp;
 
     public SpellCard(ThBoss owner) {
         this.owner = owner;
         this.timer = 0;
+        this.hp = maxHp();
         updateAttributes();
+    }
+
+    public int maxHp(){
+        return 1600;
     }
 
     public float getTimeOut(){

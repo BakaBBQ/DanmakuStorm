@@ -20,7 +20,7 @@ public class BackgroundCloud {
         else
             tr = new TextureRegion(BackgroundCloud.cloudTexture);
         decal = Decal.newDecal(tr, true);
-        decal.setPosition(MathUtils.random(5,30), y, 60);
+        decal.setPosition(MathUtils.random(5,40), y, 60);
         decal.rotateX(10);
     }
 

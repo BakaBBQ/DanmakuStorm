@@ -11,16 +11,24 @@ java_import com.github.bakabbq.bullets.BulletKunai
 class TestSlave < BossSlave
   def initialize(owner)
     super(owner)
-    
-    @big_circle = com.github.bakabbq.bullets.BulletBigCircle.new(0)
+    @big_circle = com.github.bakabbq.bullets.BulletTriangle.new(0)
+  end
+  
+  def isSlave
+    return true
   end
   
   def updateShoot
-    if(timer % 30 ==0 )
+    if(timer % 60 ==0 )
       
-      nway_shoot(@big_circle,8,0,80)
+      nway_shoot(@big_circle,8,timer % 360,8)
     end
-    self.enemyBody.applyLinearImpulse(0,10,16,16,true);
+    
+    if timer >= 800
+      onDeath
+    end
+    
+    self.enemyBody.applyLinearImpulse(0,-20,16,16,true);
     
   end
 end
@@ -37,7 +45,15 @@ class TestScript < BaseScript
     def update
     	super
         every 20.frames do
-            nway_shoot(@kunai, 10, timer % 360, 14)
         end
+        
+        every 140.frames do
+          
+          slave = TestSlave.new(self)
+          slave.setX(self.getX)
+          slave.setY(self.getY)
+          spawnSlave(slave)
+        end
+        
     end
 end

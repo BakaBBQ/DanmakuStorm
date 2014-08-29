@@ -45,7 +45,6 @@ public class PlayerGrazeCounter {
     }
 
     public void update(){
-        //Gdx.app.log("Sensor", "Current Pos " + body.getPosition());
         this.body.setTransform(player.playerBody.getPosition(), 0);
     }
 }

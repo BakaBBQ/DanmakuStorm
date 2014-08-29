@@ -14,10 +14,7 @@ import com.github.bakabbq.bullets.BulletDef;
  */
 public class EnemyShooter extends BulletShooter {
     public Texture enemySheet = new Texture(Gdx.files.internal("enemy.png"));
-
     public int colorId;
-
-
     public int hp;
 
     public int stateId; //state id: 0 => staying at the same position,  1 => moving left, 2 => moving right
@@ -148,8 +145,7 @@ public class EnemyShooter extends BulletShooter {
         this.dead = true;
     }
 
-    public void recieveDamage(int dmg){
-        //Gdx.app.log("Enemy", "Recieving " + dmg + " Dmg, rest " + (this.hp - dmg));
+    public void receiveDamage(int dmg){
         this.hp -= dmg;
         if(this.hp <= 0){
             onDeath();
