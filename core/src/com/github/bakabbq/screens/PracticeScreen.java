@@ -3,7 +3,9 @@ package com.github.bakabbq.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.ModelLoader;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
@@ -16,8 +18,6 @@ import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
-import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.loader.ObjLoader;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.math.Vector2;
@@ -43,6 +43,7 @@ import com.github.bakabbq.shooters.bosses.kanako.BossKanako;
 import com.github.bakabbq.shooters.players.DanmakuOption;
 import com.github.bakabbq.shooters.players.DanmakuPlayer;
 
+import java.io.InputStream;
 import java.util.Date;
 
 /**
@@ -72,6 +73,9 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
     MusicBox musicBox;
     //Background SpriteBatch
     SpriteBatch backgroundBatch;
+
+
+    AssetManager manager;
     //Background stuff
     DecalBackground background;
     //Particle Effect Stuffs
@@ -85,8 +89,6 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
     MainUiRenderer uiRenderer;
     DebugValues debugValues;
     ThBoss boss;
-    /**
-     */
     private boolean paused;
 
 
@@ -101,6 +103,8 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
     public ModelInstance instance;
 
     public PracticeScreen(DanmakuGame game, DanmakuScene scene) {
+        manager = new AssetManager();
+        manager.load("models/testObj.obj", Model.class);
         this.game = game;
         this.scene = scene;
         JRubyClassLoader.init();
@@ -120,21 +124,22 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
 
 
 
-        modelBatch = new ModelBatch();
-        environment = new Environment();
-        environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
-        environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
+
 
         cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        cam.position.set(1f, 1f, 1f);
-        cam.lookAt(0,0,0);
-        cam.near = 1f;
-        cam.far = 300f;
+        cam.position.set(60f, -60f, 240f);
+        cam.lookAt(60,0,0);
+        cam.near = 10f;
+        cam.far = 600f;
         cam.update();
 
-        ModelLoader loader = new ObjLoader();
-        model = loader.loadModel(Gdx.files.internal("models/ship.obj"));
-        instance = new ModelInstance(model);
+        ModelLoader loader;
+        loader = new ObjLoader();
+
+
+        //model = loader.loadModel(Gdx.files.internal());
+       // model = manager.get("models/testObj.obj", Model.class);
+        //instance = new ModelInstance(model);
 
         camController = new CameraInputController(cam);
         Gdx.input.setInputProcessor(camController);
@@ -215,11 +220,15 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
     @Override
     public void render(float delta) {
         long start;
+
         camController.update();
-        start = System.currentTimeMillis();
-        backgroundBatch.begin();
         background.setCam(cam);
-        //background.decalLoop();
+        background.decalLoop();
+
+        start = System.currentTimeMillis();
+
+        backgroundBatch.begin();
+
         //background.update(backgroundBatch);
         bossEffects.update(boss, backgroundBatch);
         backgroundBatch.end();
@@ -234,24 +243,13 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
 
 
         game.batch.end();
-
-        //Gdx.gl.glViewport((int) game.viewport.x, (int) game.viewport.y,
-        //(int) game.viewport.width, (int) game.viewport.height);
         game.uiBatch.begin();
-        //bossEffects.drawHpBar(bosses.first(),game.uiBatch);
         renderUI();
-
         game.uiBatch.end();
         debugValues.renderInterval = System.currentTimeMillis() - start;
         start = System.currentTimeMillis();
         update();
-
-
         debugValues.updateInterval = System.currentTimeMillis() - start;
-
-        modelBatch.begin(cam);
-        modelBatch.render(instance, environment);
-        modelBatch.end();
     }
 
     void renderShooters() {
@@ -354,8 +352,6 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
 
             game.batch.setColor(c.r, c.g, c.b, ((float) singleBullet.getAlpha()) / 255f);
             renderSingleBullet(singleBullet);
-
-
         }
         game.batch.setColor(c.r, c.g, c.b, 1);
     }
