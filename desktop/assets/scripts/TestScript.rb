@@ -8,6 +8,14 @@ java_import com.github.bakabbq.bullets.BulletGunshot
 java_import com.github.bakabbq.bullets.BulletTriangle
 java_import com.github.bakabbq.bullets.BulletKunai
 
+
+
+=begin
+BOSS_NAME = "Kanako"
+BACKGROUND = ""
+NAME = "Complete Test"
+
+=end
 class TestSlave < BossSlave
   def initialize(owner)
     super(owner)

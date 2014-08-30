@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import com.github.bakabbq.background.ThBackground;
 import com.github.bakabbq.datas.ScreenshotTaker;
+import com.github.bakabbq.screens.DaySelectionScreen;
 import com.github.bakabbq.screens.PracticeScreen;
 import com.github.bakabbq.screens.SigScreen;
 import com.github.bakabbq.screens.TitleScreen;
@@ -26,8 +27,7 @@ import com.github.bakabbq.datas.FontBank;
 public class DanmakuGame extends Game {
     private static final int VIRTUAL_WIDTH = 640;
     private static final int VIRTUAL_HEIGHT = 480;
-    private static final float ASPECT_RATIO =
-            (float) VIRTUAL_WIDTH / (float) VIRTUAL_HEIGHT;
+    private static final float ASPECT_RATIO = (float) VIRTUAL_WIDTH / (float) VIRTUAL_HEIGHT;
     //I just realized that there is something called Singleton
     private static DanmakuGame instance;
     public SpriteBatch batch;
@@ -62,7 +62,7 @@ public class DanmakuGame extends Game {
         PracticeScreen screen;
         DanmakuScene scene = new DanmakuScene(TestSanae.class, TestSpellCard.class, ThBackground.class);
 
-        boolean titleDebug = false;
+        boolean titleDebug = true;
         if(titleDebug)
             currentScreen = new SigScreen(this);
         else
@@ -108,6 +108,11 @@ public class DanmakuGame extends Game {
 
     public void switchToTitle(){
         currentScreen = new TitleScreen(this);
+        this.setScreen(currentScreen);
+    }
+
+    public void switchToSelection(){
+        currentScreen = new DaySelectionScreen();
         this.setScreen(currentScreen);
     }
     public void updateScreenshot(){

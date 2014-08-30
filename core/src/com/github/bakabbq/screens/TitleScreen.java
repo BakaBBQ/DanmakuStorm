@@ -54,6 +54,7 @@ public class TitleScreen implements Screen{
         if(Gdx.input.isKeyPressed(Input.Keys.Z)){
             switch(titleChoices.choiceId){
                 case 0:
+                    game.switchToSelection();
                     break;
                 case 1:
                     break;

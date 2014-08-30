@@ -1,0 +1,8 @@
+{
+    "name": "Day1",
+    "location": "Moriya Shrine",
+    "scripts": [
+        "TestScript",
+        "EmptyScript"
+    ]
+}
