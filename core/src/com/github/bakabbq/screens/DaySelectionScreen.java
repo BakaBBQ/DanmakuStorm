@@ -22,6 +22,7 @@ public class DaySelectionScreen implements Screen{
     Texture curtain;
     int timer;
     Array<StageData> stages;
+    BufferedChoice bufferedChoice;
 
     int currentChoiceId;
     public DaySelectionScreen(){
@@ -33,6 +34,7 @@ public class DaySelectionScreen implements Screen{
         stages = StageData.parseAllStages(new File("stage_infos"));
         Gdx.app.log("Json", ""+stages.size);
         currentChoiceId = 0;
+        bufferedChoice = new BufferedChoice(stages.size, 0);
     }
 
     @Override
@@ -42,6 +44,7 @@ public class DaySelectionScreen implements Screen{
         trueRendering();
         game.batch.end();
         updateKeys();
+        bufferedChoice.update();
     }
 
     public void trueRendering(){
