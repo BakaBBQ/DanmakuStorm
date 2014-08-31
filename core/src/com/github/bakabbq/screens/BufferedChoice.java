@@ -41,7 +41,7 @@ public class BufferedChoice {
             if (choiceId == maxChoices - 1)
                 choiceId = 0;
             else
-                choiceId--;
+                choiceId++;
             bufferTimer = bufferTime();
         }
     }

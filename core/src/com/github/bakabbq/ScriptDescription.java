@@ -1,8 +1,8 @@
 package com.github.bakabbq;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-import com.github.bakabbq.shooters.bosses.ThBoss;
+import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.JsonValue;
 import com.github.bakabbq.tools.JIniFile;
 
 /**
@@ -22,11 +22,12 @@ public class ScriptDescription {
     }
 
     public ScriptDescription(String filename){
-        Gdx.app.log("filename", filename);
+        JsonReader reader = new JsonReader();
+        String config = Gdx.files.internal(filename).readString();
+        JsonValue value = reader.parse(config);
+        bossName = value.getString("boss_name", "Kanako");
+        spellName = value.getString("spell_name", "");
+        scriptAuthor = value.getString("author", "NoName");
         this.filename = filename;
-        ini = new JIniFile(filename);
-        bossName = ini.ReadString("ScriptProperties", "boss_name","");
-        spellName = ini.ReadString("ScriptProperties", "spell_name","");
-        scriptAuthor = ini.ReadString("ScriptProperties", "author","");
     }
 }

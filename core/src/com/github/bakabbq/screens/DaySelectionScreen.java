@@ -3,6 +3,7 @@ package com.github.bakabbq.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Array;
 import com.github.bakabbq.DanmakuGame;
@@ -55,27 +56,34 @@ public class DaySelectionScreen implements Screen{
     }
 
     public void renderStageSelection(){
+
         int i;
 
         i = 0;
         for(StageData singleData : stages){
             i++;
-            game.fontBank.arial.draw(game.batch,singleData.name,100, 100);
+            Color c;
+            c = game.batch.getColor();
+            float o;
+            Gdx.app.log("Choice", "" + bufferedChoice.choiceId);
+            if (bufferedChoice.choiceId == i)
+                o = 1f;
+            else
+                o = 0.6f;
+            game.batch.setColor(c.r, c.g, c.b, o);
+            game.fontBank.trajanPro.draw(game.batch, singleData.name, 50, 450 - 40 * i);
             int j = 0;
             for(ScriptDescription sd : singleData.scripts){
                 j++;
                 game.fontBank.arial.draw(game.batch, sd.bossName + " " + sd.spellName, 200, 400 - 30* j);
             }
+            game.batch.setColor(c.r, c.g, c.b, 1);
         }
     }
 
     public void updateKeys(){
         if(Gdx.input.isKeyPressed(Input.Keys.X)){
             game.switchToTitle();
-        }
-
-        if(Gdx.input.isKeyPressed(Input.Keys.UP)){
-
         }
     }
 
