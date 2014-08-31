@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Array;
 import com.github.bakabbq.DanmakuGame;
+import com.github.bakabbq.ScriptDescription;
 import com.github.bakabbq.screens.dayselection.StageData;
 import com.github.bakabbq.screens.title.BackgroundSprite;
 
@@ -20,13 +21,18 @@ public class DaySelectionScreen implements Screen{
     AllblackSprite allblackSprite;
     Texture curtain;
     int timer;
+    Array<StageData> stages;
+
+    int currentChoiceId;
     public DaySelectionScreen(){
         game = DanmakuGame.getInstance();
         bgSprite = new BackgroundSprite();
         allblackSprite = new AllblackSprite();
         curtain = new Texture("title/blackCurtain.png");
         timer = 0;
-        Array<StageData> stages = StageData.parseAllStages(new File("stage_infos"));
+        stages = StageData.parseAllStages(new File("stage_infos"));
+        Gdx.app.log("Json", ""+stages.size);
+        currentChoiceId = 0;
     }
 
     @Override
@@ -42,11 +48,31 @@ public class DaySelectionScreen implements Screen{
         bgSprite.update(game.batch);
         game.batch.draw(curtain,0,0);
         allblackSprite.draw(game.batch,Math.max(30 - timer,0)/30f);
+        renderStageSelection();
+    }
+
+    public void renderStageSelection(){
+        int i;
+
+        i = 0;
+        for(StageData singleData : stages){
+            i++;
+            game.fontBank.arial.draw(game.batch,singleData.name,100, 100);
+            int j = 0;
+            for(ScriptDescription sd : singleData.scripts){
+                j++;
+                game.fontBank.arial.draw(game.batch, sd.bossName + " " + sd.spellName, 200, 400 - 30* j);
+            }
+        }
     }
 
     public void updateKeys(){
         if(Gdx.input.isKeyPressed(Input.Keys.X)){
             game.switchToTitle();
+        }
+
+        if(Gdx.input.isKeyPressed(Input.Keys.UP)){
+
         }
     }
 

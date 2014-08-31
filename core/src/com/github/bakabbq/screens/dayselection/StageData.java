@@ -51,7 +51,8 @@ public class StageData {
             Gdx.app.log("json", sStr);
         }
         for (String singleScriptName : scriptNames){
-            scripts.add(new ScriptDescription("scripts/"+singleScriptName));
+            ScriptDescription sd = new ScriptDescription("scripts/"+singleScriptName + ".ini");
+            scripts.add(sd);
         }
     }
 }
