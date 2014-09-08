@@ -11,18 +11,18 @@ public class ScoreBoard {
 
     public String hiScoreText;
     public String scoreText;
-    public ScoreBoard(){
+
+    public ScoreBoard() {
         hiScore = 0;
         score = 0;
         graze = 0;
-
         increaseScore(0);
     }
 
-    public void increaseScore(int x){
+    public void increaseScore(int x) {
         score += x;
-        scoreText = String.format("%08d", score);
-        if(score > hiScore){
+        scoreText = String.format("%011d", score);
+        if (score >= hiScore) {
             hiScore = score;
             hiScoreText = scoreText;
         }

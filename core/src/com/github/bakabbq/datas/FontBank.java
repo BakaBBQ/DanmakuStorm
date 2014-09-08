@@ -13,7 +13,10 @@ public class FontBank {
     public BitmapFont arial;
     public BitmapFont digital;
     public BitmapFont calisto;
+    public BitmapFont calistoBig;
     public BitmapFont trajanPro;
+    public BitmapFont scoreInfo;
+    public BitmapFont spellName;
 
     public FontBank() {
         yuMincho = new BitmapFont(Gdx.files.internal("fonts/YuMincho.fnt"));
@@ -23,6 +26,9 @@ public class FontBank {
         digital = loadFont("digital.fnt");
         calisto = loadFont("calisto.fnt");
         trajanPro = loadFont("trajanPro.fnt");
+        scoreInfo = loadFont("scoreInfo.fnt");
+        calistoBig = loadFont("calistoBig.fnt");
+        spellName = loadFont("spellFont.fnt");
     }
 
     BitmapFont loadFont(String str) {

@@ -5,9 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.ModelLoader;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
@@ -27,25 +25,26 @@ import com.github.bakabbq.*;
 import com.github.bakabbq.audio.AudioBank;
 import com.github.bakabbq.audio.MusicBox;
 import com.github.bakabbq.background.DecalBackground;
-import com.github.bakabbq.background.ThBackground;
 import com.github.bakabbq.bullets.Bullet;
 import com.github.bakabbq.bullets.BulletDef;
 import com.github.bakabbq.bullets.Laser;
 import com.github.bakabbq.bullets.PlayerBullet;
 import com.github.bakabbq.datas.FontBank;
+import com.github.bakabbq.datas.GameData;
+import com.github.bakabbq.datas.ScoreBoard;
 import com.github.bakabbq.datas.ScreenshotTaker;
 import com.github.bakabbq.effects.BossEffects;
 import com.github.bakabbq.effects.SlaveParticleEffect;
 import com.github.bakabbq.effects.ThEffect;
+import com.github.bakabbq.screens.dayselection.StageData;
 import com.github.bakabbq.shooters.BulletShooter;
 import com.github.bakabbq.shooters.EnemyShooter;
+import com.github.bakabbq.shooters.bosses.JsonBoss;
 import com.github.bakabbq.shooters.bosses.ThBoss;
-import com.github.bakabbq.shooters.bosses.kanako.BossKanako;
 import com.github.bakabbq.shooters.players.DanmakuOption;
 import com.github.bakabbq.shooters.players.DanmakuPlayer;
-import com.github.bakabbq.shooters.players.PlayerGrazeCounter;
+import com.github.bakabbq.spellcards.JRubySpellCard;
 
-import java.io.InputStream;
 import java.util.Date;
 
 /**
@@ -60,6 +59,12 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
     //Box2d stuffs
     public World world;
     public BulletCollisionListener collisionListener;
+    public Environment environment;
+    public PerspectiveCamera cam;
+    public CameraInputController camController;
+    public ModelBatch modelBatch;
+    public Model model;
+    public ModelInstance instance;
     //the code definitely looks ugly down there
     DanmakuGame game; // game object, essential for rendering
     DanmakuScene scene; // the scene, tool class
@@ -75,39 +80,28 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
     MusicBox musicBox;
     //Background SpriteBatch
     SpriteBatch backgroundBatch;
-
-
-
-
     AssetManager manager;
     //Background stuff
     DecalBackground background;
     //Particle Effect Stuffs
     ParticleEffectPool particleEffectPool;
     Array<ParticleEffectPool.PooledEffect> pooledEffects = new Array();
-
     //BossEffect - yeah.. stupid ThEffect
     BossEffects bossEffects;
-
     Date gameTimer;
     MainUiRenderer uiRenderer;
     DebugValues debugValues;
     ThBoss boss;
-    private boolean paused;
-
-
     Array<SlaveParticleEffect> slaveParticles = new Array<SlaveParticleEffect>();
+    /**
+     * Called when the screen should render itself.
+     *
+     * @param delta The time in seconds since the last render.
+     */
 
-
-
-
-
-    public Environment environment;
-    public PerspectiveCamera cam;
-    public CameraInputController camController;
-    public ModelBatch modelBatch;
-    public Model model;
-    public ModelInstance instance;
+    int timer;
+    int currentSpellIndex;
+    private boolean paused;
 
     public PracticeScreen(DanmakuGame game, DanmakuScene scene) {
         manager = new AssetManager();
@@ -125,22 +119,18 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
         initScene();
         initParticle();
         setupZoom();
+        onSpellClear();
 
 
         cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         cam.position.set(60f, -60f, 240f);
-        cam.lookAt(60,0,0);
+        cam.lookAt(60, 0, 0);
         cam.near = 10f;
         cam.far = 600f;
         cam.update();
 
         ModelLoader loader;
         loader = new ObjLoader();
-
-
-        //model = loader.loadModel(Gdx.files.internal());
-       // model = manager.get("models/testObj.obj", Model.class);
-        //instance = new ModelInstance(model);
 
         camController = new CameraInputController(cam);
         Gdx.input.setInputProcessor(camController);
@@ -149,6 +139,14 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
 
     void initUiContainer() {
         uiRenderer = new MainUiRenderer();
+    }
+
+    public PracticeData getPracticeData() {
+        return PracticeData.getInstance();
+    }
+
+    public StageData getStageData() {
+        return getPracticeData().stageData;
     }
 
     void initParticle() {
@@ -182,17 +180,28 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
         collisionListener = new BulletCollisionListener();
         world.setContactListener(collisionListener);
 
-        boss = new BossKanako(this);
-        boss.setX(23);
-        boss.setY(62);
-        bosses.add(boss);
-
-        //background = new ThBackground(this);
         background = new DecalBackground(this);
         bossEffects = BossEffects.getInstance();
         DanmakuPlayer player = new DanmakuPlayer(this);
         player.setPos(237 / 10, 30 / 5);
         players.add(player);
+
+    }
+
+    public ScoreBoard getStageScoreboard() {
+        return GameData.getInstance().getScoreBoard(getStageData().name);
+    }
+
+    public void increaseScore(int x) {
+        getStageScoreboard().increaseScore(x);
+    }
+
+    public String getScoreText() {
+        return getStageScoreboard().scoreText;
+    }
+
+    public String getHiScoreText() {
+        return getStageScoreboard().hiScoreText;
     }
 
     void initAudioComponents() {
@@ -211,16 +220,10 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
         game.camera.update();
     }
 
-    /**
-     * Called when the screen should render itself.
-     *
-     * @param delta The time in seconds since the last render.
-     */
     @Override
     public void render(float delta) {
 
         long start;
-
         camController.update();
         background.setCam(cam);
         background.decalLoop();
@@ -230,7 +233,10 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
         backgroundBatch.begin();
 
         //background.update(backgroundBatch);
-        bossEffects.update(boss, backgroundBatch);
+
+        for (ThBoss singleBoss : bosses) {
+            bossEffects.update(singleBoss, backgroundBatch);
+        }
         renderParticles(delta);
 
         backgroundBatch.end();
@@ -247,7 +253,10 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
         backgroundBatch.begin();
         renderSlaveParticles();
         backgroundBatch.end();
-        bossEffects.drawHpBar(boss,game.uiBatch);
+
+        for (ThBoss singleBoss : bosses) {
+            bossEffects.drawHpBar(singleBoss, game.uiBatch);
+        }
         game.uiBatch.begin();
         renderUI();
         game.uiBatch.end();
@@ -256,10 +265,15 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
         start = System.currentTimeMillis();
         update();
         debugValues.updateInterval = System.currentTimeMillis() - start;
+
+
+        timer++;
+        if (timer % 3 == 0)
+            increaseScore(10);
     }
 
     void renderSlaveParticles(){
-        for(SlaveParticleEffect singleParticle : slaveParticles){
+        for (SlaveParticleEffect singleParticle : slaveParticles) {
             singleParticle.particle.draw(backgroundBatch, 0.9f);
         }
     }
@@ -269,7 +283,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
         //there should really be some kind of method called getBatch, shouldn't there=-=
         for (EnemyShooter singleEnemy : enemies) {
             if (singleEnemy.isSlave()) {
-                slaveParticles.add(new SlaveParticleEffect(singleEnemy.getX() + 5,singleEnemy.getY() + 6));
+                slaveParticles.add(new SlaveParticleEffect(singleEnemy.getX() + 5, singleEnemy.getY() + 6));
             } else {
                 game.batch.draw(
                         singleEnemy.texture,
@@ -414,10 +428,20 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
 
         bossEffects.spellEffect.update();
         int graze = getPlayer().grazeCnt;
-        getFontBank().calisto.draw(game.uiBatch,"" + graze, 515, 480 - 205);
-
-        //  getFontBank().arial.draw(game.uiBatch,"1 / 15", 100, 100);
+        getFontBank().calisto.draw(game.uiBatch, "" + graze, 515, 480 - 205);
+        getFontBank().calisto.draw(game.uiBatch, getScoreText(), 515, 480 - 172);
+        getFontBank().calisto.draw(game.uiBatch, getHiScoreText(), 515, 480 - 152);
+        renderTime();
         renderFps();
+    }
+
+    void renderTime() {
+        int minutes = (timer / 60);
+        int trueMinutes = (timer / 60) % 60;
+        int hours = minutes / 60;
+        int trueHours = hours + 7;
+        String timeText = String.format("%02d", trueHours) + ":" + String.format("%02d", trueMinutes);
+        getFontBank().calistoBig.draw(game.uiBatch, timeText, 465, 480 - 60);
     }
 
     void renderFps() {
@@ -471,9 +495,9 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
                 effects.removeValue(singleEffect, true);
         }
 
-        for (SlaveParticleEffect singleParticle : slaveParticles){
+        for (SlaveParticleEffect singleParticle : slaveParticles) {
             singleParticle.update();
-            if(singleParticle.canDispose())
+            if (singleParticle.canDispose())
                 slaveParticles.removeValue(singleParticle, true);
         }
         removeGarbageBullets();
@@ -482,6 +506,32 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
 
         //updateScreenshot();
 
+    }
+
+    public void onSpellClear() {
+        if (bosses.size == 0) {
+            JsonBoss newBoss = new JsonBoss(this, getStageData().scripts.get(currentSpellIndex).bossName);
+            String filename = getStageData().scripts.get(currentSpellIndex).scriptFilename();
+            newBoss.spellCards.add(new JRubySpellCard(newBoss, BulletScript.load(filename)));
+            bosses.add(newBoss);
+            newBoss.onActive();
+            bossEffects.spellEffect.startSpell(getStageData().scripts.get(currentSpellIndex).spellName);
+        } else {
+            currentSpellIndex++;
+            if (getStageData().scripts.get(currentSpellIndex).bossName == bosses.get(0).name) {
+                // when the next spell has the same owner
+                bosses.get(0).spellCards.clear();
+                bosses.get(0).spellCards.add(new JRubySpellCard(bosses.get(0), BulletScript.load(getStageData().scripts.get(currentSpellIndex).filename)));
+                bosses.get(0).onActive();
+            } else {
+                // when not
+                bosses.get(0).spellCards.clear();
+                bosses.get(0).onLeave();
+                JsonBoss newBoss = new JsonBoss(this, getStageData().scripts.get(currentSpellIndex).bossName);
+                bosses.add(newBoss);
+            }
+
+        }
     }
 
     /**
@@ -650,6 +700,4 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
     public Array<Bullet> getBullets() {
         return bullets;
     }
-
-
 }

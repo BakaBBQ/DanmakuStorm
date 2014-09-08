@@ -7,7 +7,7 @@ import com.github.bakabbq.tools.JIniFile;
 
 /**
  * Created by LBQ on 8/30/14.
- *
+ * <p/>
  * ini files looks more lightweight to me...
  */
 public class ScriptDescription {
@@ -18,10 +18,11 @@ public class ScriptDescription {
     public String filename;
 
     public JIniFile ini;
-    public ScriptDescription(){
+
+    public ScriptDescription() {
     }
 
-    public ScriptDescription(String filename){
+    public ScriptDescription(String filename) {
         JsonReader reader = new JsonReader();
         String config = Gdx.files.internal(filename).readString();
         JsonValue value = reader.parse(config);
@@ -29,5 +30,9 @@ public class ScriptDescription {
         spellName = value.getString("spell_name", "");
         scriptAuthor = value.getString("author", "NoName");
         this.filename = filename;
+    }
+
+    public String scriptFilename() {
+        return this.filename.replaceAll(".json", "");
     }
 }

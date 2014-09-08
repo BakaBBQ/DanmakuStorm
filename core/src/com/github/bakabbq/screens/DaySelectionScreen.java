@@ -16,24 +16,27 @@ import java.io.File;
 /**
  * Created by LBQ on 8/30/14.
  */
-public class DaySelectionScreen implements Screen{
+public class DaySelectionScreen implements Screen {
     DanmakuGame game;
     BackgroundSprite bgSprite;
     AllblackSprite allblackSprite;
     Texture curtain;
     int timer;
     Array<StageData> stages;
+    Texture forestOverlay;
     BufferedChoice bufferedChoice;
 
     int currentChoiceId;
-    public DaySelectionScreen(){
+
+    public DaySelectionScreen() {
         game = DanmakuGame.getInstance();
         bgSprite = new BackgroundSprite();
         allblackSprite = new AllblackSprite();
         curtain = new Texture("title/blackCurtain.png");
+        forestOverlay = new Texture("title/forestOverlay.png");
         timer = 0;
         stages = StageData.parseAllStages(new File("stage_infos"));
-        Gdx.app.log("Json", ""+stages.size);
+        Gdx.app.log("Json", "" + stages.size);
         currentChoiceId = 0;
         bufferedChoice = new BufferedChoice(stages.size, 0);
     }
@@ -48,24 +51,28 @@ public class DaySelectionScreen implements Screen{
         bufferedChoice.update();
     }
 
-    public void trueRendering(){
+    public void trueRendering() {
         bgSprite.update(game.batch);
-        game.batch.draw(curtain,0,0);
-        allblackSprite.draw(game.batch,Math.max(30 - timer,0)/30f);
+        game.batch.draw(forestOverlay, 0, 0);
+        game.batch.draw(curtain, 0, 0);
+
+
         renderStageSelection();
+        allblackSprite.draw(game.batch, Math.max(30 - timer, 0) / 30f);
+
     }
 
-    public void renderStageSelection(){
+    public void renderStageSelection() {
 
         int i;
 
         i = 0;
-        for(StageData singleData : stages){
+        for (StageData singleData : stages) {
             i++;
             Color c;
             c = game.batch.getColor();
             float o;
-            Gdx.app.log("Choice", "" + bufferedChoice.choiceId);
+            //Gdx.app.log("Choice", "" + bufferedChoice.choiceId);
             if (bufferedChoice.choiceId == i)
                 o = 1f;
             else
@@ -73,16 +80,16 @@ public class DaySelectionScreen implements Screen{
             game.batch.setColor(c.r, c.g, c.b, o);
             game.fontBank.trajanPro.draw(game.batch, singleData.name, 50, 450 - 40 * i);
             int j = 0;
-            for(ScriptDescription sd : singleData.scripts){
+            for (ScriptDescription sd : singleData.scripts) {
                 j++;
-                game.fontBank.arial.draw(game.batch, sd.bossName + " " + sd.spellName, 200, 400 - 30* j);
+                game.fontBank.arial.draw(game.batch, sd.bossName + " " + sd.spellName, 200, 400 - 30 * j);
             }
             game.batch.setColor(c.r, c.g, c.b, 1);
         }
     }
 
-    public void updateKeys(){
-        if(Gdx.input.isKeyPressed(Input.Keys.X)){
+    public void updateKeys() {
+        if (Gdx.input.isKeyPressed(Input.Keys.X)) {
             game.switchToTitle();
         }
     }

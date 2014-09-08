@@ -1,4 +1,44 @@
 require 'java'
+java_import com.badlogic.gdx.math.MathUtils;
+module Kernel
+  def library(str)
+    load("./scripts/#{str}.rb")
+  end
+  
+  
+  def cas_to_angle(x, y)
+    return MathUtils.atan2(y,x)
+  end
+  
+end
+
+
+java_import com.github.bakabbq.shooters.bosses.ThBoss
+class ThBoss
+  attr_accessor :slaves
+  def slaves
+    @slaves ||= []
+  end
+  
+  def register_slave(slave)
+    @slaves ||= []
+    @slaves << slave
+  end
+end
+
+java_import com.github.bakabbq.shooters.EnemyShooter
+class EnemyShooter
+  def playerAngle
+    
+  end
+end
+
+
+
+
+#puts $LOAD_PATH
+
+
 class Object
 	def this
 		return self
@@ -50,11 +90,28 @@ class BaseScript
 		@timer += 1
 		update_schedule
 	end
+  
+  def position_set_init
+    direct_position_set(10,140)
+  end
+  
+  def body
+    return owner.enemyBody
+  end
+  
 
 	def velocity_movement(x, y, damping)
 		owner.enemyBody.setLinearDamping(damping)
 		owner.enemyBody.set_linear_velocity(x,y)
 	end
+  
+  
+  def move_to_desired_position
+  end
+  
+
+  
+  
 
 	def direct_position_set(x,y)
 		owner.enemyBody.set_transform(x,y,0)
@@ -94,13 +151,14 @@ class BossSlave < EnemyShooter
     @owner = owner
   end
   
-  def updateShoot
+  def isSlave
+    return true
   end
-  
 end
 
 
 module BulletDB
 	
 end
+library 'BossMovement'
 

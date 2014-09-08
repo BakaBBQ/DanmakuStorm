@@ -12,14 +12,13 @@ public class MainUiRenderer {
     Texture uiText;
 
 
-    public MainUiRenderer(){
+    public MainUiRenderer() {
         frame = new Texture(Gdx.files.internal("menus/front.png"));
         uiText = new Texture(Gdx.files.internal("menus/menuUi.png"));
     }
 
-    public void render(SpriteBatch batch){
-        batch.draw(frame,0,0);
-        batch.draw(uiText,0,0);
-
+    public void render(SpriteBatch batch) {
+        batch.draw(frame, 0, 0);
+        batch.draw(uiText, 0, 0);
     }
 }

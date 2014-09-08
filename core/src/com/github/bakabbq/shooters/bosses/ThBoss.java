@@ -1,25 +1,27 @@
 package com.github.bakabbq.shooters.bosses;
 
-import com.badlogic.gdx.*;
-import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.utils.*;
-import com.github.bakabbq.*;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Shape;
+import com.badlogic.gdx.utils.Array;
+import com.github.bakabbq.IDanmakuWorld;
 import com.github.bakabbq.effects.BossEffects;
-import com.github.bakabbq.effects.SpellEffect;
-import com.github.bakabbq.shooters.*;
-import com.github.bakabbq.spellcards.*;
+import com.github.bakabbq.screens.PracticeScreen;
+import com.github.bakabbq.shooters.EnemyShooter;
+import com.github.bakabbq.spellcards.SpellCard;
 
 /**
  * Created by LBQ on 6/9/14.
- *
+ * <p/>
  * Seems like there is something called Animation in gdx.... .___.
  */
 public class ThBoss extends EnemyShooter {
     public String name = "";
     public Array<SpellCard> spellCards = new Array();
     public Texture mainTexture = new Texture(Gdx.files.internal("bosses/stg5enm.png"));
+
     public ThBoss(IDanmakuWorld ground) {
         super(ground);
         initSpellCards();
@@ -27,26 +29,37 @@ public class ThBoss extends EnemyShooter {
         callUpdateSpellcardName();
     }
 
-    public int updateFrame(){
+    public void onActive() {
+    }
+
+    ; // hook method to be overwritten on the jruby side
+
+    public void onLeave() {
+    }
+
+    ; // hook method ...
+
+    public int updateFrame() {
         return 10;
     }
 
-    public void initMainTexture(){
+    public void initMainTexture() {
         mainTexture = new Texture(Gdx.files.internal("bosses/stg5enm.png"));
     }
 
 
-    public int getTextureY(int rId){
+    public int getTextureY(int rId) {
         return rId * 64;
     }
 
 
-    public int getTextureHeight(int rId){
-        if(rId <= 1)
+    public int getTextureHeight(int rId) {
+        if (rId <= 1)
             return 64;
         else
             return 64 + 16;
     }
+
     //ThBoss has a modified state:  state id: 0 => staying at the same position,  1 => moving left, 2 => moving right, 3 => casting
     /*
     ThBoss States
@@ -63,7 +76,7 @@ public class ThBoss extends EnemyShooter {
         boolean flip = false;
 
         //Yes, Magic Indeed
-        switch(stateId) {
+        switch (stateId) {
             case 0:
                 rId = 0;
                 cId = (stateTimer > 3 ? (0 + stateTimer % 4) : (stateTimer % 4));
@@ -86,7 +99,7 @@ public class ThBoss extends EnemyShooter {
         this.initMainTexture();
         int textureCellWidth = this.mainTexture.getWidth() / 4;
         TextureRegion resultTexture = new TextureRegion(mainTexture, cId * textureCellWidth, getTextureY(rId), textureCellWidth, getTextureHeight(rId));
-        if(flip)
+        if (flip)
             resultTexture.flip(true, false); // flip x, not y
 
         this.texture = resultTexture;
@@ -97,55 +110,66 @@ public class ThBoss extends EnemyShooter {
         //use spellCards.add
     }
 
-    public void smoothMovement(int forceX, int forceY, int damping){
+    public void smoothMovement(int forceX, int forceY, int damping) {
         this.enemyBody.setLinearDamping(damping);
-        this.enemyBody.applyLinearImpulse(forceX, forceY, this.enemyBody.getLocalCenter().x,this.enemyBody.getLocalCenter().y, true);
+        this.enemyBody.applyLinearImpulse(forceX, forceY, this.enemyBody.getLocalCenter().x, this.enemyBody.getLocalCenter().y, true);
     }
 
 
-
     @Override
-    public void updateShoot(){
+    public void updateShoot() {
+        if (notFinished())
+            return;
         spellCards.get(0).update();
     }
 
     @Override
-    public void onDeath(){
+    public void onDeath() {
         spellCards.removeIndex(0);
         callUpdateSpellcardName();
     }
 
-    public SpellCard currentSpellcard(){
+    public SpellCard currentSpellcard() {
+        if (spellCards.size == 0)
+            return null;
         return spellCards.get(0);
     }
 
-    public void callUpdateSpellcardName(){
+    public void callUpdateSpellcardName() {
+        if (currentSpellcard() == null)
+            return;
         BossEffects.getInstance().spellEffect.startSpell(currentSpellcard().name);
-    }
-	
-	@Override
-	public Shape getBodyShape(){
-		CircleShape circle = new CircleShape();
-        circle.setRadius(4f);
-		return circle;
-	}
-
-    public int getScHp(){
-        return currentSpellcard().hp;
-    }
-
-    public float getScHpRatio(){
-        return ((float)currentSpellcard().hp) / currentSpellcard().maxHp();
     }
 
     @Override
-    public void receiveDamage(int dmg){
+    public Shape getBodyShape() {
+        CircleShape circle = new CircleShape();
+        circle.setRadius(4f);
+        return circle;
+    }
+
+    public int getScHp() {
+        return currentSpellcard().hp;
+    }
+
+    public float getScHpRatio() {
+        if (notFinished())
+            return 0;
+        return ((float) currentSpellcard().hp) / currentSpellcard().maxHp();
+    }
+
+    @Override
+    public void receiveDamage(int dmg) {
         //Gdx.app.log("Enemy", "Recieving " + dmg + " Dmg, rest " + (this.hp - dmg));
         currentSpellcard().hp -= dmg;
-        if(currentSpellcard().hp <= 0){
+        if (currentSpellcard().hp <= 0) {
+            ((PracticeScreen) ground).onSpellClear();
             onDeath();
+
         }
     }
 
-
+    public boolean notFinished() {
+        return currentSpellcard() == null;
+    }
 }

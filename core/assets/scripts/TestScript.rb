@@ -8,13 +8,13 @@ java_import com.github.bakabbq.bullets.BulletGunshot
 java_import com.github.bakabbq.bullets.BulletTriangle
 java_import com.github.bakabbq.bullets.BulletKunai
 
-
-
-
 class TestSlave < BossSlave
-  def initialize(owner)
+  def initialize(owner, angle, mirror)
     super(owner)
-    @big_circle = com.github.bakabbq.bullets.BulletTriangle.new(0)
+    @red_amulet = BulletAmulets.new(Bullet.COLOR_BLUE)
+    @blue_amulet = BulletAmulets.new(Bullet.COLOR_PURPLE)
+    @angle = angle
+    @mirror = mirror
   end
   
   def isSlave
@@ -22,18 +22,17 @@ class TestSlave < BossSlave
   end
   
   def updateShoot
-    if(timer % 60 ==0 )
-      
-      nway_shoot(@big_circle,8,timer % 360,8)
+    angle_affix = timer % 360
+    angle_affix = 360 - timer % 360 if @mirror
+    if(timer % 20 ==0 )
+      shoot(@red_amulet, angle_affix + @angle, 8)
     end
     
-    if timer >= 800
-      onDeath
+    if(timer % 25 == 0)
+      shoot(@blue_amulet, angle_affix + 45 + @angle, 8)
     end
-    
-    self.enemyBody.applyLinearImpulse(0,-20,16,16,true);
-    
   end
+  
 end
 
 class TestScript < BaseScript
@@ -44,19 +43,88 @@ class TestScript < BaseScript
 		@bigCircle = BulletBigCircle.new(0)
 		@kunai = BulletKunai.new(3);
 	end
-
-    def update
-    	super
-        every 20.frames do
+  
+  def update
+  	super
+    #puts moving?
+    if(@switch.nil?)
+      move_to_desired_position
+      @switch = 1
+    end
+    return if moving?
+    
+    if(@slave_called.nil?)
+      call_slaves
+      @slave_called = 1
+    end
+    
+    every 60.frames do
+      nway_shoot(@amulet,8,timer % 360,8)
+      #move_to_pos 10, 30, 2
+    end
+      
+  end
+  
+  def call_slaves
+    
+    
+    slave_ld = TestSlave.new(self,315, true)
+    slave_rd = TestSlave.new(self,45, false)
+    slave_lu = TestSlave.new(self,215, true)
+    slave_ru = TestSlave.new(self,135, false)
+    cur_x = cur_pos.x
+    cur_y = cur_pos.y
+    
+    dis = 10
+    slave_ld.direct_position_set(cur_x - dis, cur_y - dis)
+    slave_rd.direct_position_set(cur_x + dis, cur_y - dis)
+    slave_lu.direct_position_set(cur_x - dis, cur_y + dis)
+    slave_ru.direct_position_set(cur_x + dis, cur_y + dis)
+    @slaves = [slave_ld, slave_rd, slave_lu, slave_ru]
+    @slaves.each do |s|
+      register_slave(s)
+      spawn_slave(s)
+    end
+    
+  end
+  
+    
+    def on_active
+      # mostly_used
+      #move_to_pos 10, 30, 2
+    end
+    
+    def move_to_desired_position
+      puts cas_to_angle(1,1)
+      if(owner.slaves)
+      
+        to_delete = []
+        owner.slaves.each do |s|
+          s.receiveDamage(1000000)
+          owner.slaves.delete s
+          puts "wheee"
         end
-        
+      end
+    
+      puts owner.slaves.length
+      position_set_init
+      move_to_uppercenter
+    end
+    
+    
+    
+    
+    
+    
+    
+    
+=begin
         every 140.frames do
-          
           slave = TestSlave.new(self)
           slave.setX(self.getX)
           slave.setY(self.getY)
           spawnSlave(slave)
         end
-        
-    end
+=end
+    
 end

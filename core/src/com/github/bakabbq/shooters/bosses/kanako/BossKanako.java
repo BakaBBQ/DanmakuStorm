@@ -7,12 +7,11 @@ import com.github.bakabbq.IDanmakuWorld;
 import com.github.bakabbq.datas.StateHelper;
 import com.github.bakabbq.shooters.bosses.ThBoss;
 import com.github.bakabbq.spellcards.JRubySpellCard;
-import com.github.bakabbq.spellcards.ScWindGodRad;
 
 /**
  * Created by LBQ on 8/2/14.
  */
-public class BossKanako extends ThBoss{
+public class BossKanako extends ThBoss {
     public BossKanako(IDanmakuWorld ground) {
         super(ground);
         stateId = StateHelper.IDLE;
@@ -21,7 +20,7 @@ public class BossKanako extends ThBoss{
 
 
     @Override
-    public int updateFrame(){
+    public int updateFrame() {
         return 4;
     }
 
@@ -31,7 +30,7 @@ public class BossKanako extends ThBoss{
     }
 
     @Override
-    public void initMainTexture(){
+    public void initMainTexture() {
         mainTexture = new Texture(Gdx.files.internal("bosses/stg6enm.png"));
     }
 }

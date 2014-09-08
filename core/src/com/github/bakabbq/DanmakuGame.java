@@ -10,8 +10,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-
 import com.github.bakabbq.background.ThBackground;
+import com.github.bakabbq.datas.FontBank;
 import com.github.bakabbq.datas.ScreenshotTaker;
 import com.github.bakabbq.screens.DaySelectionScreen;
 import com.github.bakabbq.screens.PracticeScreen;
@@ -19,7 +19,6 @@ import com.github.bakabbq.screens.SigScreen;
 import com.github.bakabbq.screens.TitleScreen;
 import com.github.bakabbq.shooters.bosses.testsanae.TestSanae;
 import com.github.bakabbq.shooters.bosses.testsanae.TestSpellCard;
-import com.github.bakabbq.datas.FontBank;
 
 /**
  * Created by LBQ on 7/4/14.
@@ -40,12 +39,13 @@ public class DanmakuGame extends Game {
 
     public boolean paused;
 
-    public static DanmakuGame getInstance(){
-        if(instance == null)
+    public static DanmakuGame getInstance() {
+        if (instance == null)
             instance = new DanmakuGame();
         return instance;
     }
-    public void create(){
+
+    public void create() {
         batch = new SpriteBatch();
         uiBatch = new SpriteBatch();
         assetManager = new AssetManager();
@@ -58,23 +58,19 @@ public class DanmakuGame extends Game {
         //Object meow = JRubyClassLoader.loadClass("test.rb");
 
 
-
         PracticeScreen screen;
         DanmakuScene scene = new DanmakuScene(TestSanae.class, TestSpellCard.class, ThBackground.class);
 
-        boolean titleDebug = true;
-        if(titleDebug)
+        boolean titleDebug = false;
+        if (titleDebug)
             currentScreen = new SigScreen(this);
         else
             currentScreen = new PracticeScreen(this, scene);
-
-        //currentScreen = new TitleScreen(this);
-        //Main
-        this.setScreen( (currentScreen) );
+        this.setScreen((currentScreen));
     }
 
     public void render() {
-        if(paused)
+        if (paused)
             return;
         camera.update();
         Gdx.gl.glViewport((int) viewport.x, (int) viewport.y,
@@ -86,7 +82,7 @@ public class DanmakuGame extends Game {
     }
 
     @Override
-    public void resize(int width, int height){
+    public void resize(int width, int height) {
         float aspectRatio = (float) width / (float) height;
         float scale = 1f;
         Vector2 crop = new Vector2(0f, 0f);
@@ -106,21 +102,22 @@ public class DanmakuGame extends Game {
 
     }
 
-    public void switchToTitle(){
+    public void switchToTitle() {
         currentScreen = new TitleScreen(this);
         this.setScreen(currentScreen);
     }
 
-    public void switchToSelection(){
+    public void switchToSelection() {
         currentScreen = new DaySelectionScreen();
         this.setScreen(currentScreen);
     }
-    public void updateScreenshot(){
-        if(Gdx.input.isKeyPressed(Input.Keys.P))
+
+    public void updateScreenshot() {
+        if (Gdx.input.isKeyPressed(Input.Keys.P))
             ScreenshotTaker.saveScreenshot();
     }
 
-    public void dispose(){
+    public void dispose() {
         batch.dispose();
     }
 }
