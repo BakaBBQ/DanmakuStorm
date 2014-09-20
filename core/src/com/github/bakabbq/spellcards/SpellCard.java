@@ -12,6 +12,7 @@ public class SpellCard {
     public boolean spell = false;
     public int timer;
     public int hp;
+    public int clearTimer;
 
     public SpellCard(ThBoss owner) {
         this.owner = owner;
@@ -20,24 +21,25 @@ public class SpellCard {
         updateAttributes();
     }
 
-    public int maxHp(){
+    public int maxHp() {
         return 1600;
     }
 
-    public float getTimeOut(){
-        return timeOut - (float)timer / 60f;
+    public float getTimeOut() {
+        return timeOut - (float) timer / 60f;
     }
 
-    public float getRoundedTimeOut(){
+    public float getRoundedTimeOut() {
         return Math.round(getTimeOut() * 100) / 100;
     }
 
-    public void updateAttributes(){
+    public void updateAttributes() {
         // to be overwritten
     }
 
     public void update() {
         timer++;
+        clearTimer++;
         mainLoop();
     }
 
@@ -46,11 +48,11 @@ public class SpellCard {
     }
 
 
-    public float relX(float xPlus){
+    public float relX(float xPlus) {
         return owner.getX() + xPlus;
     }
 
-    public float relY(float yPlus){
+    public float relY(float yPlus) {
         return owner.getY() + yPlus;
     }
 }

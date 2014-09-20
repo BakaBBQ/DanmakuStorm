@@ -70,6 +70,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
     public CameraInputController camController;
     public ModelBatch modelBatch;
     public Model model;
+    public int memoryTime; // used to determine
     //the code definitely looks ugly down there
     DanmakuGame game; // game object, essential for rendering
     DanmakuScene scene; // the scene, tool class
@@ -514,6 +515,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
             if (singleParticle.canDispose())
                 slaveParticles.removeValue(singleParticle, true);
         }
+        updateSpellTimeOut();
         removeGarbageBullets();
 
 
@@ -550,7 +552,13 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
         bossEffects.spellEffect.startSpell(getStageData().scripts.get(currentSpellIndex).spellName);
     }
 
+    void updateSpellTimeOut() {
+        if (timer - memoryTime >= 3600)
+            onSpellClear();
+    }
+
     public void onSpellClear() {
+        memoryTime = timer;
         if (bosses.size == 0) {
             inviteNewJsonBoss();
         } else {

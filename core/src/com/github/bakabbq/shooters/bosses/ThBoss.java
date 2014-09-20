@@ -127,7 +127,12 @@ public class ThBoss extends EnemyShooter {
             switchSpellTimer--;
             return;
         }
+        updateTimerOut();
         spellCards.get(0).update();
+    }
+
+    public void updateTimerOut() {
+
     }
 
     public void switchSpellTimerAfterSpellBreak() {
@@ -135,9 +140,9 @@ public class ThBoss extends EnemyShooter {
     }
 
 
-
     @Override
     public void onDeath() {
+        ((PracticeScreen) ground).onSpellClear();
         spellCards.removeIndex(0);
         callUpdateSpellcardName();
         switchSpellTimerAfterSpellBreak();
@@ -184,7 +189,7 @@ public class ThBoss extends EnemyShooter {
             return;
         currentSpellcard().hp -= dmg;
         if (currentSpellcard().hp <= 0) {
-            ((PracticeScreen) ground).onSpellClear();
+
             onDeath();
         }
     }

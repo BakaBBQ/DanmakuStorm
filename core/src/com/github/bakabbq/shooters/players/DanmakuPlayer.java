@@ -9,7 +9,8 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.github.bakabbq.BulletCollisionListener;
 import com.github.bakabbq.IDanmakuWorld;
-import com.github.bakabbq.bullets.*;
+import com.github.bakabbq.bullets.BulletDef;
+import com.github.bakabbq.bullets.PlayerBullet;
 import com.github.bakabbq.effects.SlowEffect;
 
 /**
@@ -40,10 +41,10 @@ public class DanmakuPlayer {
     public int grazeCnt;
     public int power;
     public boolean slowMode = false; // this is quite useless since this updates every frame.__.
+    public int invincibleTimer;
     int timer;
     int moveState; // 0 => still, 2 => down, 4 => left, 6 => right, 8 => up
     int moveTimer;
-
     PlayerGrazeCounter grazeCounter;
 
     public DanmakuPlayer(IDanmakuWorld ground) {
@@ -61,6 +62,16 @@ public class DanmakuPlayer {
 
 
         grazeCounter = new PlayerGrazeCounter(this);
+    }
+
+    public boolean isInvincible() {
+        return invincibleTimer <= 0;
+    }
+
+    public void updateInvincible() {
+        invincibleTimer--;
+        if (invincibleTimer >= -1)
+            invincibleTimer = 0;
     }
 
     public void addOption() {
@@ -103,6 +114,7 @@ public class DanmakuPlayer {
         if (this.timer % 3 == 0)
             moveTimer++;
         updateControls();
+        updateInvincible();
         //ground.controlHelper.updatePlayerControl(this);
         updateShoot();
 
