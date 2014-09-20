@@ -30,6 +30,7 @@ public class JsonBoss extends ThBoss {
         oriFilehandle = Gdx.files.internal("bosses/" + spellBossname + ".json");
         JsonValue primaryV = jr.parse(oriFilehandle);
         String assetName = primaryV.getString("asset_name");
+        this.name = primaryV.getString("name");
         author = primaryV.getString("author");
         mainTexture = new Texture(Gdx.files.internal("bosses/" + assetName));
         //mainTexture = new Texture(Gdx.files.internal("bosses/stg6enm.png"));

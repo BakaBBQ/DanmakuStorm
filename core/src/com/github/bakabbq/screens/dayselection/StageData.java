@@ -1,6 +1,5 @@
 package com.github.bakabbq.screens.dayselection;
 
-import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonReader;
@@ -11,15 +10,17 @@ import java.io.File;
 
 /**
  * Created by LBQ on 8/30/14.
- *
+ * <p/>
  * Json Format Stage Datas
  */
 public class StageData {
     public String name;
     public String location;
     public Array<ScriptDescription> scripts;
-    public StageData(String path, int nothing){
-        this(Gdx.files.getFileHandle(path, Files.FileType.Absolute).readString());
+
+    public StageData(String path, int nothing) {
+        //this(Gdx.files.getFileHandle(path, Files.FileType.Absolute).readString());
+        this(Gdx.files.internal(path).readString());
     }
 
     public StageData(String str) {

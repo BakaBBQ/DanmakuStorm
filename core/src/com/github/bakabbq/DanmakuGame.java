@@ -65,7 +65,7 @@ public class DanmakuGame extends Game {
         if (titleDebug)
             currentScreen = new SigScreen(this);
         else
-            currentScreen = new PracticeScreen(this, scene);
+            currentScreen = PracticeScreen.getInstance();
         this.setScreen((currentScreen));
     }
 

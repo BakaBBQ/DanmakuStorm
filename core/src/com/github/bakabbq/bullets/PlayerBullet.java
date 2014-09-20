@@ -25,7 +25,7 @@ public class PlayerBullet extends Bullet {
         body = world.createBody(bodydef);
         FixtureDef fd = bd.fixtureD;
         fd.filter.categoryBits = BulletCollisionListener.ENEMY_BULLET;
-        fd.filter.maskBits = (short)(BulletCollisionListener.ENEMY | 0x001);
+        fd.filter.maskBits = (short) (BulletCollisionListener.ENEMY | 0x001);
         this.fixture = body.createFixture(fd);
         body.setTransform(x, y, angle);
         body.setUserData(this);
@@ -33,23 +33,29 @@ public class PlayerBullet extends Bullet {
         bd.fixtureD.density = 0.4f;
         bd.fixtureD.friction = 0.5f;
         bd.fixtureD.filter.categoryBits = BulletCollisionListener.PLAYER_BULLET;
-        bd.fixtureD.filter.maskBits =(short) (BulletCollisionListener.ENEMY | 0x001);
+        bd.fixtureD.filter.maskBits = (short) (BulletCollisionListener.ENEMY | 0x001);
         this.fixture = body.createFixture(bd.fixtureD);
         body.setLinearDamping(0f);
         body.setTransform(x, y, angle);
         initDamage();
+        this.grazed = true;
+    }
+
+    public void onGraze() {
+        return;
     }
 
 
     @Override
-    public boolean hasCreationEffect(){
-        return false;
-    }
-    public boolean canGraze(){
+    public boolean hasCreationEffect() {
         return false;
     }
 
-    public void initDamage(){
-        this.damage  = 4;
+    public boolean canGraze() {
+        return false;
+    }
+
+    public void initDamage() {
+        this.damage = 4;
     }
 }

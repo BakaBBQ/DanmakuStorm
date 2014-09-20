@@ -15,22 +15,22 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
-import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.loader.ObjLoader;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.github.bakabbq.*;
 import com.github.bakabbq.audio.AudioBank;
 import com.github.bakabbq.audio.MusicBox;
 import com.github.bakabbq.background.DecalBackground;
+import com.github.bakabbq.background.ThBackground;
 import com.github.bakabbq.bullets.Bullet;
 import com.github.bakabbq.bullets.BulletDef;
 import com.github.bakabbq.bullets.Laser;
 import com.github.bakabbq.bullets.PlayerBullet;
 import com.github.bakabbq.datas.FontBank;
-import com.github.bakabbq.datas.GameData;
 import com.github.bakabbq.datas.ScoreBoard;
 import com.github.bakabbq.datas.ScreenshotTaker;
 import com.github.bakabbq.effects.BossEffects;
@@ -41,6 +41,8 @@ import com.github.bakabbq.shooters.BulletShooter;
 import com.github.bakabbq.shooters.EnemyShooter;
 import com.github.bakabbq.shooters.bosses.JsonBoss;
 import com.github.bakabbq.shooters.bosses.ThBoss;
+import com.github.bakabbq.shooters.bosses.testsanae.TestSanae;
+import com.github.bakabbq.shooters.bosses.testsanae.TestSpellCard;
 import com.github.bakabbq.shooters.players.DanmakuOption;
 import com.github.bakabbq.shooters.players.DanmakuPlayer;
 import com.github.bakabbq.spellcards.JRubySpellCard;
@@ -52,9 +54,13 @@ import java.util.Date;
  *
  * PracticeScreen - The Main Screen of The Game
  * initialized with a scene to practice
+ *
+ *
+ * Now uses a singleton pattern to make it far more simple =-=
  */
 public class PracticeScreen implements Screen, IDanmakuWorld {
 
+    private static PracticeScreen instance;
     public Array<Bullet> bullets; // array containing all bullets
     //Box2d stuffs
     public World world;
@@ -64,7 +70,6 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
     public CameraInputController camController;
     public ModelBatch modelBatch;
     public Model model;
-    public ModelInstance instance;
     //the code definitely looks ugly down there
     DanmakuGame game; // game object, essential for rendering
     DanmakuScene scene; // the scene, tool class
@@ -101,15 +106,19 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
 
     int timer;
     int currentSpellIndex;
+    //GameData.getInstance().getScoreBoard(getStageData().name)
+    ScoreBoard sb = new ScoreBoard();
+    Array<Body> toDispose = new Array<Body>();
     private boolean paused;
 
-    public PracticeScreen(DanmakuGame game, DanmakuScene scene) {
+    private PracticeScreen() {
         manager = new AssetManager();
-        manager.load("models/testObj.obj", Model.class);
-        this.game = game;
-        this.scene = scene;
+        //manager.load("models/testObj.obj", Model.class);
+        this.game = DanmakuGame.getInstance();
+        this.scene = new DanmakuScene(TestSanae.class, TestSpellCard.class, ThBackground.class);
         JRubyClassLoader.init();
         JRubyClassLoader.loadLibrary("BaseScript");
+
 
         backgroundBatch = new SpriteBatch();
         initUiContainer();
@@ -135,6 +144,12 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
         camController = new CameraInputController(cam);
         Gdx.input.setInputProcessor(camController);
 
+    }
+
+    public static PracticeScreen getInstance() {
+        if (instance == null)
+            instance = new PracticeScreen();
+        return instance;
     }
 
     void initUiContainer() {
@@ -189,7 +204,7 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
     }
 
     public ScoreBoard getStageScoreboard() {
-        return GameData.getInstance().getScoreBoard(getStageData().name);
+        return sb;
     }
 
     public void increaseScore(int x) {
@@ -222,7 +237,6 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
 
     @Override
     public void render(float delta) {
-
         long start;
         camController.update();
         background.setCam(cam);
@@ -429,8 +443,8 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
         bossEffects.spellEffect.update();
         int graze = getPlayer().grazeCnt;
         getFontBank().calisto.draw(game.uiBatch, "" + graze, 515, 480 - 205);
-        getFontBank().calisto.draw(game.uiBatch, getScoreText(), 515, 480 - 172);
-        getFontBank().calisto.draw(game.uiBatch, getHiScoreText(), 515, 480 - 152);
+        getFontBank().calisto.draw(game.uiBatch, getScoreText(), 515, 480 - 170);
+        getFontBank().calisto.draw(game.uiBatch, getHiScoreText(), 515, 480 - 150);
         renderTime();
         renderFps();
     }
@@ -501,6 +515,10 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
                 slaveParticles.removeValue(singleParticle, true);
         }
         removeGarbageBullets();
+
+
+        for (Body body : toDispose)
+            body.setTransform(100, 100, 0);
         world.step(1 / 60f, 6, 2);
 
 
@@ -508,25 +526,48 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
 
     }
 
+    public void switchToNextSpellcard() {
+        Gdx.app.log("Test", "2");
+        // when the next spell has the same owner
+        //bosses.get(0).spellCards.clear();
+        bosses.get(0).spellCards.add(new JRubySpellCard(bosses.get(0), BulletScript.load(getStageData().scripts.get(currentSpellIndex).scriptFilename())));
+        Gdx.app.log("Test", "3");
+        //bosses.get(0).spellCards.removeIndex(0);
+        Gdx.app.log("Test", "4");
+        bosses.get(0).onActive();
+        Gdx.app.log("Test", "5");
+        Gdx.app.log("", "" + bosses.get(0).spellCards.size);
+        bossEffects.spellEffect.startSpell(getStageData().scripts.get(currentSpellIndex).spellName);
+    }
+
+    public void inviteNewJsonBoss() {
+        JsonBoss newBoss = new JsonBoss(this, getStageData().scripts.get(currentSpellIndex).bossName);
+        newBoss.enemyBody.setTransform(10, 140, 0);
+        String filename = getStageData().scripts.get(currentSpellIndex).scriptFilename();
+        newBoss.spellCards.add(new JRubySpellCard(newBoss, BulletScript.load(getStageData().scripts.get(currentSpellIndex).scriptFilename())));
+        bosses.add(newBoss);
+        newBoss.onActive();
+        bossEffects.spellEffect.startSpell(getStageData().scripts.get(currentSpellIndex).spellName);
+    }
+
     public void onSpellClear() {
         if (bosses.size == 0) {
-            JsonBoss newBoss = new JsonBoss(this, getStageData().scripts.get(currentSpellIndex).bossName);
-            String filename = getStageData().scripts.get(currentSpellIndex).scriptFilename();
-            newBoss.spellCards.add(new JRubySpellCard(newBoss, BulletScript.load(filename)));
-            bosses.add(newBoss);
-            newBoss.onActive();
-            bossEffects.spellEffect.startSpell(getStageData().scripts.get(currentSpellIndex).spellName);
+            inviteNewJsonBoss();
         } else {
+            clearBullets();
             currentSpellIndex++;
-            if (getStageData().scripts.get(currentSpellIndex).bossName == bosses.get(0).name) {
-                // when the next spell has the same owner
-                bosses.get(0).spellCards.clear();
-                bosses.get(0).spellCards.add(new JRubySpellCard(bosses.get(0), BulletScript.load(getStageData().scripts.get(currentSpellIndex).filename)));
-                bosses.get(0).onActive();
+            Gdx.app.log("", getStageData().scripts.get(currentSpellIndex).bossName);
+            Gdx.app.log("", bosses.get(0).name);
+
+            if (getStageData().scripts.get(currentSpellIndex).bossName.contains(bosses.get(0).name)) {
+                switchToNextSpellcard();
             } else {
+                Gdx.app.log("Test", "6");
                 // when not
                 bosses.get(0).spellCards.clear();
+                Gdx.app.log("Test", "7");
                 bosses.get(0).onLeave();
+                Gdx.app.log("Test", "8");
                 JsonBoss newBoss = new JsonBoss(this, getStageData().scripts.get(currentSpellIndex).bossName);
                 bosses.add(newBoss);
             }
@@ -588,6 +629,11 @@ public class PracticeScreen implements Screen, IDanmakuWorld {
     }
 
     public void clearBullets(){
+
+        for (Bullet singleBullet : bullets) {
+            toDispose.add(singleBullet.body);
+        }
+
         bullets.clear();
     }
 

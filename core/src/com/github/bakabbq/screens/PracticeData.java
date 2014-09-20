@@ -1,8 +1,7 @@
 package com.github.bakabbq.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.github.bakabbq.screens.dayselection.StageData;
-
-import java.io.File;
 
 /**
  * Created by LBQ on 9/6/14.
@@ -12,7 +11,8 @@ public class PracticeData {
     public StageData stageData;
 
     private PracticeData() {
-        stageData = StageData.parseAllStages(new File("stage_infos")).first();
+        Gdx.app.log("Folder?", "" + Gdx.files.internal("stage_infos/").isDirectory());
+        stageData = StageData.parseAllStages(Gdx.files.internal("stage_infos/").file().getAbsoluteFile()).first();
     }
 
     public static PracticeData getInstance() {

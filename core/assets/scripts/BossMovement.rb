@@ -1,6 +1,6 @@
 #Library : BossMovement
 require 'java'
-library 'Aliases'
+#library 'Aliases'
 java_import com.github.bakabbq.shooters.bosses.ThBoss
 java_import com.github.bakabbq.shooters.EnemyShooter
 module BossMovement

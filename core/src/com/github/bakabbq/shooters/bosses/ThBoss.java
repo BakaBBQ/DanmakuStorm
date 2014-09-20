@@ -21,12 +21,15 @@ public class ThBoss extends EnemyShooter {
     public String name = "";
     public Array<SpellCard> spellCards = new Array();
     public Texture mainTexture = new Texture(Gdx.files.internal("bosses/stg5enm.png"));
+    public boolean invincible;
+    public int switchSpellTimer;
 
     public ThBoss(IDanmakuWorld ground) {
         super(ground);
         initSpellCards();
         initMainTexture();
         callUpdateSpellcardName();
+        switchSpellTimer = 0;
     }
 
     public void onActive() {
@@ -120,13 +123,24 @@ public class ThBoss extends EnemyShooter {
     public void updateShoot() {
         if (notFinished())
             return;
+        if (switchSpellTimer > 0) {
+            switchSpellTimer--;
+            return;
+        }
         spellCards.get(0).update();
     }
+
+    public void switchSpellTimerAfterSpellBreak() {
+        switchSpellTimer = 180;
+    }
+
+
 
     @Override
     public void onDeath() {
         spellCards.removeIndex(0);
         callUpdateSpellcardName();
+        switchSpellTimerAfterSpellBreak();
     }
 
     public SpellCard currentSpellcard() {
@@ -158,14 +172,20 @@ public class ThBoss extends EnemyShooter {
         return ((float) currentSpellcard().hp) / currentSpellcard().maxHp();
     }
 
+    public boolean isInvincible() {
+        if (switchSpellTimer > 0)
+            return true;
+        return false;
+    }
+
     @Override
     public void receiveDamage(int dmg) {
-        //Gdx.app.log("Enemy", "Recieving " + dmg + " Dmg, rest " + (this.hp - dmg));
+        if (isInvincible())
+            return;
         currentSpellcard().hp -= dmg;
         if (currentSpellcard().hp <= 0) {
             ((PracticeScreen) ground).onSpellClear();
             onDeath();
-
         }
     }
 

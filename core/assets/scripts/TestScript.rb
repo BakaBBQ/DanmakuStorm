@@ -97,7 +97,6 @@ class TestScript < BaseScript
     def move_to_desired_position
       puts cas_to_angle(1,1)
       if(owner.slaves)
-      
         to_delete = []
         owner.slaves.each do |s|
           s.receiveDamage(1000000)
@@ -107,7 +106,7 @@ class TestScript < BaseScript
       end
     
       puts owner.slaves.length
-      position_set_init
+      #position_set_init
       move_to_uppercenter
     end
     

@@ -16,6 +16,7 @@ public class BossKanako extends ThBoss {
         super(ground);
         stateId = StateHelper.IDLE;
         this.hp = 8000;
+        this.name = "Kanako";
     }
 
 
